@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>무기고(lee_main) 에이전트 실습 가이드</title>
+  
+  <!-- Google Fonts: Inter & Outfit -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <style>
+    /* CSS Variables & Theme */
+    :root {
+      --bg-color: #0f172a;
+      --card-bg: rgba(30, 41, 59, 0.7);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --primary: #8b5cf6;
+      --primary-hover: #a78bfa;
+      --secondary: #3b82f6;
+      --accent: #10b981;
+      --glow-color: rgba(139, 92, 246, 0.15);
+      
+      --gradient-title: linear-gradient(135deg, #a78bfa 0%, #3b82f6 100%);
+      --gradient-card: linear-gradient(135deg, rgba(30, 41, 59, 0.9) 0%, rgba(15, 23, 42, 0.9) 100%);
+      
+      --font-outfit: 'Outfit', 'Inter', sans-serif;
+      --font-inter: 'Inter', sans-serif;
+    }
+
+    /* Reset & Base Styles */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      font-family: var(--font-inter);
+      line-height: 1.6;
+      padding: 2rem 1rem;
+      background-image: 
+        radial-gradient(at 0% 0%, rgba(139, 92, 246, 0.08) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(59, 130, 246, 0.08) 0px, transparent 50%);
+      background-attachment: fixed;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    /* Header Section */
+    header {
+      text-align: center;
+      margin-bottom: 3.5rem;
+      position: relative;
+    }
+
+    h1 {
+      font-family: var(--font-outfit);
+      font-size: 2.8rem;
+      font-weight: 800;
+      background: var(--gradient-title);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 0.5rem;
+      letter-spacing: -0.03em;
+    }
+
+    .subtitle {
+      font-size: 1.15rem;
+      color: var(--text-muted);
+      max-width: 600px;
+      margin: 0 auto 1.5rem auto;
+      font-weight: 300;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 0.35rem 0.9rem;
+      background-color: rgba(139, 92, 246, 0.15);
+      border: 1px solid rgba(139, 92, 246, 0.3);
+      color: var(--primary-hover);
+      border-radius: 50px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+    }
+
+    /* Main Layout Grid */
+    .grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 2rem;
+    }
+
+    @media (max-width: 900px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Cards & Modules Styling */
+    .card {
+      background: var(--gradient-card);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 2.2rem;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      margin-bottom: 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      border-color: rgba(139, 92, 246, 0.25);
+      box-shadow: 0 15px 40px var(--glow-color);
+    }
+
+    h2 {
+      font-family: var(--font-outfit);
+      font-size: 1.6rem;
+      margin-bottom: 1.2rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      padding-bottom: 0.75rem;
+    }
+
+    p {
+      color: var(--text-muted);
+      margin-bottom: 1.2rem;
+      font-size: 0.98rem;
+    }
+
+    /* Interactive Tabs for soul.md, agent.md, user.md */
+    .tabs-container {
+      margin: 1.5rem 0;
+    }
+
+    .tab-buttons {
+      display: flex;
+      gap: 0.5rem;
+      background: rgba(15, 23, 42, 0.5);
+      padding: 0.4rem;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      margin-bottom: 1.5rem;
+    }
+
+    .tab-btn {
+      flex: 1;
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      padding: 0.75rem 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      font-family: var(--font-outfit);
+      font-weight: 500;
+      font-size: 0.95rem;
+      transition: all 0.2s ease;
+      text-align: center;
+    }
+
+    .tab-btn:hover {
+      color: var(--text-main);
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    .tab-btn.active {
+      color: var(--text-main);
+      background: var(--primary);
+      box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+    }
+
+    .tab-pane {
+      display: none;
+      animation: fadeIn 0.4s ease forwards;
+    }
+
+    .tab-pane.active {
+      display: block;
+    }
+
+    .meta-box {
+      background: rgba(15, 23, 42, 0.4);
+      border-left: 4px solid var(--primary);
+      padding: 1.2rem;
+      border-radius: 0 12px 12px 0;
+      margin-bottom: 1.2rem;
+    }
+
+    .meta-box.agent { border-left-color: var(--secondary); }
+    .meta-box.user { border-left-color: var(--accent); }
+
+    .meta-box h3 {
+      font-size: 1.1rem;
+      margin-bottom: 0.4rem;
+      font-family: var(--font-outfit);
+    }
+
+    /* List & Checkbox styling */
+    ul.checklist {
+      list-style: none;
+    }
+
+    ul.checklist li {
+      position: relative;
+      padding-left: 1.8rem;
+      margin-bottom: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    ul.checklist li::before {
+      content: '✓';
+      position: absolute;
+      left: 0.2rem;
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    /* Directory Visualizer */
+    .dir-tree {
+      background: rgba(15, 23, 42, 0.6);
+      font-family: monospace;
+      padding: 1.2rem;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      font-size: 0.9rem;
+      overflow-x: auto;
+      white-space: pre;
+      color: #38bdf8;
+    }
+
+    .dir-comment {
+      color: #64748b;
+    }
+
+    /* Step Indicator styling */
+    .step-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .step-item {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .step-number {
+      background: var(--primary);
+      color: var(--text-main);
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      flex-shrink: 0;
+      box-shadow: 0 4px 10px rgba(139, 92, 246, 0.3);
+    }
+
+    .step-content h4 {
+      font-family: var(--font-outfit);
+      font-size: 1.05rem;
+      margin-bottom: 0.25rem;
+    }
+
+    /* Code Block design */
+    pre.code-block {
+      background: #020617;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      padding: 1.2rem;
+      border-radius: 12px;
+      font-size: 0.88rem;
+      overflow-x: auto;
+      margin: 1rem 0;
+      color: #cbd5e1;
+    }
+
+    .highlight {
+      color: #f472b6;
+    }
+
+    /* Footer styling */
+    footer {
+      text-align: center;
+      padding: 3rem 0 1rem 0;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      margin-top: 4rem;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    footer a {
+      color: var(--primary-hover);
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+
+    footer a:hover {
+      color: var(--text-main);
+    }
+
+    /* Animation Definitions */
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    
+    <!-- Header -->
+    <header>
+      <div class="badge">오늘의 에이전트 실습</div>
+      <h1>무기고 (Arsenal) 가이드</h1>
+      <p class="subtitle">개인 AI 에이전트를 나만의 행동강령과 전용 지식으로 무장시키고, 협업 에이전트 생태계를 구축하는 핵심 워크스페이스입니다.</p>
+    </header>
+
+    <!-- Main Content Grid -->
+    <div class="grid">
+      
+      <!-- Left Column: Core Guides -->
+      <div class="main-content">
+        
+        <!-- Welcome Card -->
+        <div class="card">
+          <h2>👋 배포의 말씀 & 감사</h2>
+          <p>
+            본 패키지는 여러분이 인공지능을 부리는 단순 프롬프트 사용자를 넘어, <strong>나만의 맞춤형 AI 참모진(Agent Agency)</strong>을 설계하고 지휘하는 리더로 성장하도록 돕기 위해 만들어졌습니다.
+          </p>
+          <p>
+            이 멋진 아키텍처의 밑바탕이 되어준 오픈소스 <strong>에이전트 하네스(Agent Harness)</strong> 시스템에 깊은 감사를 표합니다. 하네스 팀의 선구적인 설계 덕분에 개발자는 에이전트에게 상황별 전문 지식을 공급하고 안전하게 코드를 자동 생성 및 제어할 수 있게 되었습니다.
+          </p>
+        </div>
+
+        <!-- 3 Pillars Profile Card (Interactive) -->
+        <div class="card">
+          <h2>🏛️ 에이전트를 길들이는 3대 기틀 (MD 프로필)</h2>
+          <p>에이전트는 단순 대화만으로 완성되지 않습니다. 워크스페이스 내에 아래의 세 가지 파일들을 적절히 설정해 두면, 에이전트가 본인의 성향과 임무에 완벽하게 적응합니다.</p>
+          
+          <div class="tabs-container">
+            <!-- Tab Buttons -->
+            <div class="tab-buttons">
+              <button class="tab-btn active" onclick="switchTab(event, 'soul-tab')">soul.md</button>
+              <button class="tab-btn" onclick="switchTab(event, 'agent-tab')">agent.md</button>
+              <button class="tab-btn" onclick="switchTab(event, 'user-tab')">user.md</button>
+            </div>
+
+            <!-- Tab Panes -->
+            <div id="soul-tab" class="tab-pane active">
+              <div class="meta-box">
+                <h3>🎭 soul.md (에이전트의 영혼 / 행동 규칙)</h3>
+                <p>에이전트가 일할 때 가질 <strong>기본 성격, 가치관, 절대 타협하지 말아야 할 규범</strong>들을 설정합니다.</p>
+              </div>
+              <ul class="checklist">
+                <li>에이전트가 어떤 페르소나로 대화할 것인가 설정 (예: 꼼꼼한 피드백형, 간결한 실행형)</li>
+                <li>오류를 발견했을 때 대처하는 태도 명시</li>
+                <li>개발 시 절대 지켜야 할 우선순위 선언</li>
+              </ul>
+            </div>
+
+            <div id="agent-tab" class="tab-pane">
+              <div class="meta-box agent">
+                <h3>👥 agent.md (동료 / 조직도)</h3>
+                <p>워크스페이스 내에서 <strong>여러 에이전트가 활동할 때 서로의 역할 분담과 인계 규칙</strong>을 관리합니다.</p>
+              </div>
+              <ul class="checklist">
+                <li>기획 사령관, 개발 사령관 등 목적에 따른 역할의 세분화</li>
+                <li>작업 흐름을 인계받아 작업할 때 로그를 작성하고 동기화하는 규칙</li>
+                <li>API 비용 초과나 예기치 않은 위험 발생 시의 공동 대책 수립</li>
+              </ul>
+            </div>
+
+            <div id="user-tab" class="tab-pane">
+              <div class="meta-box user">
+                <h3>🎯 user.md (사용자의 의도 / 코딩 컨벤션)</h3>
+                <p><strong>사용자의 OS 환경, 코딩 취향, 그리고 에이전트에게 기대하는 소통 스타일</strong>을 사전에 명시합니다.</p>
+              </div>
+              <ul class="checklist">
+                <li>Windows / macOS / Linux 등 타겟 OS의 빌드 옵션 조율</li>
+                <li>선호하는 디자인 취향 (예: HSL 다크 테마, Outfit 폰트, 미려한 그라데이션)</li>
+                <li>선호하는 개발 스택 및 코딩 컨벤션 (예: 카멜 케이스, 모듈형 설계)</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Skills Card -->
+        <div class="card">
+          <h2>🛠️ 전문 지식 주입장치: 스킬(Skill)</h2>
+          <p>
+            에이전트에게 <strong>"에러를 디버깅하는 방법"</strong> 또는 <strong>"특정 라이브러리를 사용해 프론트를 구성하는 방법"</strong> 등, 특정 주제에 대한 상세 지식을 공급할 때 사용하는 기능입니다.
+          </p>
+          <div class="meta-box">
+            <h3>📂 스킬 파일의 구조</h3>
+            <p>스킬 파일은 최상단의 YAML Frontmatter 메타데이터와 마크다운 본문으로 나뉩니다.</p>
+          </div>
+          
+          <pre class="code-block">
+---
+<span class="highlight">name:</span> python-linter
+<span class="highlight">description:</span> Python 코드 오류를 정밀 점검하고 포맷팅할 때 사용되는 스킬입니다.
+---
+
+# 🐍 Python 코드 검증 가이드
+본 스킬이 트리거되면 다음 체크리스트를 준수하여 오류를 정정합니다...
+</pre>
+
+          <p>에이전트는 사용자가 내린 요청 메시지를 분석한 뒤, <code>description</code>에 명시된 내용이 해당 작업과 어울린다고 판단하면 이 스킬 가이드를 <strong>컨텍스트에 자동으로 장착</strong>해 작업을 수행합니다.</p>
+        </div>
+
+      </div>
+
+      <!-- Right Column: Sidebar (Structure & Step guide) -->
+      <div class="sidebar">
+        
+        <!-- Directory Layout -->
+        <div class="card">
+          <h2>📂 폴더 구조도</h2>
+          <p>본 실습 키트는 다음 폴더 구조를 갖추어 실습하게 됩니다.</p>
+          <div class="dir-tree">lee_main/
+├── <span style="color: #a78bfa;">.agents/</span>
+│   └── skills/
+│       └── <span style="color: #3b82f6;">basic-harness/</span>
+│           └── <span style="color: #10b981;">SKILL.md</span> <span class="dir-comment">(스킬 가이드)</span>
+├── <span style="color: #cbd5e1;">.env.example</span> <span class="dir-comment">(설정 예시)</span>
+├── <span style="color: #cbd5e1;">.gitignore</span> <span class="dir-comment">(깃 제외 목록)</span>
+├── <span style="color: #10b981;">README.md</span> <span class="dir-comment">(안내서)</span>
+├── <span style="color: #10b981;">instruction.html</span> <span class="dir-comment">(본 설명서)</span>
+├── <span style="color: #cbd5e1;">soul.md</span> <span class="dir-comment">(행동 강령 실습)</span>
+├── <span style="color: #cbd5e1;">agent.md</span> <span class="dir-comment">(조직도 실습)</span>
+└── <span style="color: #cbd5e1;">user.md</span> <span class="dir-comment">(취향 등록 실습)</span></div>
+        </div>
+
+        <!-- Practice Steps -->
+        <div class="card">
+          <h2>🚀 실습 진행 순서</h2>
+          <div class="step-list">
+            
+            <div class="step-item">
+              <div class="step-number">1</div>
+              <div class="step-content">
+                <h4>환경 설정 하기</h4>
+                <p><code>.env.example</code>을 복사해 <code>.env</code>를 만들고 실제 API 키를 입력합니다.</p>
+              </div>
+            </div>
+
+            <div class="step-item">
+              <div class="step-number">2</div>
+              <div class="step-content">
+                <h4>나만의 프로필 작성</h4>
+                <p><code>soul.md</code>와 <code>user.md</code>를 수정하여 여러분과 여러분의 에이전트 정체성을 선언하세요.</p>
+              </div>
+            </div>
+
+            <div class="step-item">
+              <div class="step-number">3</div>
+              <div class="step-content">
+                <h4>커스텀 스킬 제작</h4>
+                <p><code>.agents/skills/</code> 폴더 아래에 새 디렉토리와 <code>SKILL.md</code>를 만들고 에이전트에게 작업을 시켜보세요.</p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- Footer -->
+    <footer>
+      <p>&copy; 2026 무기고(Arsenal) 교육 세션. All rights reserved.</p>
+      <p>Created under <a href="https://github.com/dlgodnr5-png/server-colonel" target="_blank">무기고 사령부</a> | Powered by Agent Harness</p>
+    </footer>
+
+  </div>
+
+  <!-- JavaScript for Tabs -->
+  <script>
+    function switchTab(evt, tabId) {
+      // Get all tab panes and hide them
+      const tabPanes = document.querySelectorAll('.tab-pane');
+      tabPanes.forEach(pane => pane.classList.remove('active'));
+
+      // Get all tab buttons and remove active class
+      const tabButtons = document.querySelectorAll('.tab-btn');
+      tabButtons.forEach(btn => btn.classList.remove('active'));
+
+      // Show the selected tab and add active class to clicked button
+      document.getElementById(tabId).classList.add('active');
+      evt.currentTarget.classList.add('active');
+    }
+  </script>
+</body>
+</html>
