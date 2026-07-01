@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>산빛 자연치유 약초 힐링 허브</title>
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="농사로 및 파주 산빛약초꽃차의 건강 노하우를 담은 자연치유 약초 백과, 약선 힐링차, 미디어 콘텐츠를 만나보세요.">
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <div class="logo-area">
+      <div class="logo-icon">
+        <i class="fa-solid fa-leaf"></i>
+      </div>
+      <div class="logo-text">
+        <h1 id="header-brand-title">자연치유 약초 힐링 허브</h1>
+        <p id="header-brand-subtitle">Nature & Healing Tea Center</p>
+      </div>
+    </div>
+
+    <!-- Google Login / User Profile Area -->
+    <div class="auth-area" id="auth-ui-container">
+      <!-- JavaScript will dynamically render login button or user profile here -->
+    </div>
+  </header>
+
+  <!-- NAVIGATION MENU -->
+  <nav class="menu-bar">
+    <ul class="nav-links" id="main-nav-links">
+      <li data-target="home" class="active"><a href="#home"><i class="fa-solid fa-house"></i> 홈</a></li>
+      <li data-target="encyclopedia"><a href="#encyclopedia"><i class="fa-solid fa-book-open"></i> 약초 백과</a></li>
+      <li data-target="teas"><a href="#teas"><i class="fa-solid fa-mug-hot"></i> 약선 힐링차</a></li>
+      <li data-target="community"><a href="#community"><i class="fa-solid fa-users"></i> 커뮤니티</a></li>
+      <li data-target="media"><a href="#media"><i class="fa-solid fa-circle-play"></i> 힐링 미디어</a></li>
+      <li data-target="pricing"><a href="#pricing"><i class="fa-solid fa-gem"></i> 멤버십 요금제</a></li>
+      <!-- Admin Panel Menu (Only visible to admin) -->
+      <li data-target="admin" id="nav-admin-link" style="display: none;"><a href="#admin" style="color: #e74c3c; font-weight: 700;"><i class="fa-solid fa-toolbox"></i> 관리자 패널</a></li>
+    </ul>
+  </nav>
+
+  <!-- MAIN APP VIEW CONTAINER -->
+  <main class="container" id="app-view-container">
+    <!-- Dynamic page content will be injected here by app.js -->
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-grid">
+      <div class="footer-col">
+        <h4>자연치유 약초 힐링 허브</h4>
+        <p>본 서비스는 농촌진흥청 '농사로'의 공공 정보와 파주시 '산빛약초꽃차'의 자연치유 다도 정신을 본받아, 바쁜 현대인들에게 자연 속 약초의 강인한 생명력과 정갈한 힐링 차 문화를 큐레이션합니다.</p>
+      </div>
+      <div class="footer-col">
+        <h4>핵심 메뉴</h4>
+        <ul class="footer-links">
+          <li><a href="#encyclopedia">약초 사전</a></li>
+          <li><a href="#teas">약선 힐링차 상품</a></li>
+          <li><a href="#media">미디어 가이드</a></li>
+          <li><a href="#pricing">멤버십 요금제 안내</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>고객 지원</h4>
+        <p>향후 개발 완료되는 산빛 수제 약선힐링차는 쿠팡 파트너스 샵 및 구매대행 서비스를 통해 집 앞까지 배송받으실 수 있습니다.</p>
+        <p><i class="fa-solid fa-envelope"></i> <span class="footer-email">contact@nature.com</span></p>
+        <p><i class="fa-solid fa-phone"></i> <span class="footer-phone">031-940-1234</span></p>
+      </div>
+      <div class="footer-col">
+        <h4>이용 약관</h4>
+        <ul class="footer-links">
+          <li><a href="#">개인정보처리방침</a></li>
+          <li><a href="#">서비스 이용약관</a></li>
+          <li><a href="#">구매대행 책임고지</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 자연치유 약초 힐링 허브. All Rights Reserved. (파주 산빛 다도원 제휴)</p>
+      <p>Designed with Nature & Care</p>
+    </div>
+  </footer>
+
+  <!-- ==================================================== -->
+  /* MODALS CONTAINER                                     */
+  <!-- ==================================================== -->
+
+  <!-- 1. Google Auth Simulation Modal -->
+  <div class="modal-overlay" id="google-login-modal">
+    <div class="modal-container">
+      <button class="modal-close-btn" onclick="UI.closeModal('google-login-modal')">&times;</button>
+      <h3 class="modal-title"><i class="fa-brands fa-google" style="color: #4285F4;"></i> Google 계정으로 로그인</h3>
+      <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px;">연동할 구글 계정을 선택하거나 관리자 계정으로 접속해보세요.</p>
+      
+      <div class="google-accounts-list">
+        <!-- Admin Profile -->
+        <div class="google-account-item" onclick="Auth.simulateGoogleLogin('admin@nature.com', '관리자')">
+          <div class="google-avatar" style="background: var(--primary-color); color: white;">管</div>
+          <div class="google-acc-details">
+            <span class="google-acc-name">관리자 (Admin)</span>
+            <span class="google-acc-email">admin@nature.com (관리자 대시보드 자동 연동)</span>
+          </div>
+        </div>
+        <!-- Sample User 1 -->
+        <div class="google-account-item" onclick="Auth.simulateGoogleLogin('hong@naver.com', '홍길동')">
+          <div class="google-avatar">홍</div>
+          <div class="google-acc-details">
+            <span class="google-acc-name">홍길동 (Gold 회원)</span>
+            <span class="google-acc-email">hong@naver.com</span>
+          </div>
+        </div>
+        <!-- Sample User 2 -->
+        <div class="google-account-item" onclick="Auth.simulateGoogleLogin('kim@gmail.com', '김철수')">
+          <div class="google-avatar">김</div>
+          <div class="google-acc-details">
+            <span class="google-acc-name">김철수 (Silver 회원)</span>
+            <span class="google-acc-email">kim@gmail.com</span>
+          </div>
+        </div>
+      </div>
+      
+      <div style="border-top: 1px solid rgba(0,0,0,0.08); padding-top: 20px;">
+        <h4 style="font-size: 0.9rem; margin-bottom: 10px; color: var(--primary-color);">새로운 이메일로 가입/로그인하기</h4>
+        <div style="display: flex; gap: 10px;">
+          <input type="email" id="custom-google-email" placeholder="example@gmail.com" style="flex: 1; padding: 10px; border: 1px solid #ccc; border-radius: var(--border-radius-sm); outline: none;">
+          <button class="btn-primary" style="padding: 10px 20px; font-size: 0.85rem;" onclick="Auth.simulateCustomLogin()">접속</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. Universal Detail View Modal (for Herbs or Teas) -->
+  <div class="modal-overlay" id="detail-modal">
+    <div class="modal-container" style="max-width: 750px;">
+      <button class="modal-close-btn" onclick="UI.closeModal('detail-modal')">&times;</button>
+      <div id="detail-modal-body">
+        <!-- Content injected dynamically -->
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. Community Post Write / Edit Modal -->
+  <div class="modal-overlay" id="community-modal">
+    <div class="modal-container">
+      <button class="modal-close-btn" onclick="UI.closeModal('community-modal')">&times;</button>
+      <h3 class="modal-title" id="community-modal-title">글 작성하기</h3>
+      <form id="community-post-form" onsubmit="event.preventDefault();">
+        <input type="hidden" id="post-id-input">
+        <div class="form-group">
+          <label for="post-title-input">제목</label>
+          <input type="text" id="post-title-input" required placeholder="제목을 입력하세요">
+        </div>
+        <div class="form-group">
+          <label for="post-content-input">내용</label>
+          <textarea id="post-content-input" required rows="8" placeholder="자연치유 체험담이나 질문 내용을 상세히 적어주세요."></textarea>
+        </div>
+        <div style="display: flex; justify-content: flex-end; gap: 10px;">
+          <button type="button" class="btn-secondary" onclick="UI.closeModal('community-modal')">취소</button>
+          <button type="button" class="btn-primary" id="btn-save-post" onclick="Community.savePost()">등록</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 4. Agent Purchase Request Modal (구매대행 신청) -->
+  <div class="modal-overlay" id="agent-buy-modal">
+    <div class="modal-container">
+      <button class="modal-close-btn" onclick="UI.closeModal('agent-buy-modal')">&times;</button>
+      <h3 class="modal-title">약선 힐링차 구매대행 신청서</h3>
+      <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 20px;">파주 산빛원 가마 덖음 수제 힐링차 구매대행을 요청합니다. 신청서를 제출하시면 대행 계약 파트너가 쿠팡샵 결제 링크 및 안내 전화를 드립니다.</p>
+      
+      <form id="agent-buy-form" onsubmit="event.preventDefault();">
+        <input type="hidden" id="buy-product-id">
+        <div class="form-group">
+          <label>상품명</label>
+          <input type="text" id="buy-product-name" readonly style="background: #f0f0f0;">
+        </div>
+        <div class="form-group">
+          <label>상품 가격</label>
+          <input type="text" id="buy-product-price" readonly style="background: #f0f0f0;">
+        </div>
+        <div class="form-group">
+          <label for="buy-user-name">신청자 성함</label>
+          <input type="text" id="buy-user-name" required placeholder="성함을 입력하세요">
+        </div>
+        <div class="form-group">
+          <label for="buy-user-phone">연락처</label>
+          <input type="text" id="buy-user-phone" required placeholder="예: 010-1234-5678">
+        </div>
+        <div class="form-group">
+          <label for="buy-user-address">배송지 주소</label>
+          <input type="text" id="buy-user-address" required placeholder="배송 받으실 주소를 입력하세요">
+        </div>
+        <div class="form-group">
+          <label for="buy-user-notes">요청사항 (선택)</label>
+          <textarea id="buy-user-notes" rows="3" placeholder="예: 선물용 포장 요청, 특정 알레르기 성분 제외 문의 등"></textarea>
+        </div>
+        <div style="display: flex; justify-content: flex-end; gap: 10px;">
+          <button type="button" class="btn-secondary" onclick="UI.closeModal('agent-buy-modal')">취소</button>
+          <button type="button" class="btn-primary" onclick="Teas.submitAgentBuy()">구매대행 신청하기</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="db.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
