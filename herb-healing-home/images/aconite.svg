@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#18181b" />
+      <stop offset="50%" stop-color="#27272a" />
+      <stop offset="100%" stop-color="#09090b" />
+    </linearGradient>
+
+    <radialGradient id="plateGrad" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#3f3f46" />
+      <stop offset="85%" stop-color="#27272a" />
+      <stop offset="100%" stop-color="#18181b" />
+    </radialGradient>
+
+    <!-- 흑순편 (검은빛 윤기 나는 법제 부자 절편) -->
+    <radialGradient id="heekSoonGrad" cx="40%" cy="40%" r="60%">
+      <stop offset="0%" stop-color="#52525b" />
+      <stop offset="50%" stop-color="#27272a" />
+      <stop offset="85%" stop-color="#18181b" />
+      <stop offset="100%" stop-color="#09090b" />
+    </radialGradient>
+
+    <!-- 백부편 (반투명 우유빛 황갈색 절편) -->
+    <radialGradient id="baekBuGrad" cx="45%" cy="45%" r="55%">
+      <stop offset="0%" stop-color="#FEF08A" />
+      <stop offset="50%" stop-color="#EAB308" />
+      <stop offset="85%" stop-color="#CA8A04" />
+      <stop offset="100%" stop-color="#854D0E" />
+    </radialGradient>
+
+    <filter id="dropShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="12" stdDeviation="15" flood-color="#000000" flood-opacity="0.6"/>
+    </filter>
+  </defs>
+
+  <!-- 배경 -->
+  <rect width="800" height="600" fill="url(#bgGrad)" />
+
+  <!-- 배경 트레이 -->
+  <ellipse cx="400" cy="330" rx="330" ry="210" fill="url(#plateGrad)" filter="url(#dropShadow)" stroke="#52525b" stroke-width="3"/>
+  <ellipse cx="400" cy="330" rx="310" ry="190" fill="none" stroke="#3f3f46" stroke-width="1.5" stroke-dasharray="6,4"/>
+
+  <!-- 타이틀 -->
+  <text x="400" y="55" text-anchor="middle" fill="#E4E4E7" font-family="'Noto Serif KR', serif" font-size="28" font-weight="700" letter-spacing="2">약재 사전 조사 : 부자 (附子 / 포부자)</text>
+  <text x="400" y="85" text-anchor="middle" fill="#A1A1AA" font-family="sans-serif" font-size="14" letter-spacing="1">Aconiti Lateralis Radix Preparata | Aconitum carmichaeli Debeaux</text>
+  <line x1="250" y1="98" x2="550" y2="98" stroke="#A1A1AA" stroke-width="1" opacity="0.4"/>
+
+  <!-- 법제 부자 약재 그래픽 (흑순편 & 백부편 절편 조각들) -->
+  <g filter="url(#dropShadow)">
+    
+    <!-- 흑순편 1 (중앙 대표 흑갈색 법제 절편) -->
+    <path d="M 320,220 C 370,200 450,220 480,260 C 510,300 490,370 430,400 C 370,430 300,390 280,330 C 260,270 280,230 320,220 Z" fill="url(#heekSoonGrad)" stroke="#71717a" stroke-width="2.5"/>
+    <!-- 절편 표면 은은한 광택 결 -->
+    <path d="M 330,240 C 390,230 440,250 460,280 M 310,270 C 360,260 440,290 450,340 M 310,320 C 350,330 410,360 430,380" stroke="#a1a1aa" stroke-width="1" fill="none" opacity="0.4"/>
+
+    <!-- 백부편 2 (우측 노르스름한 법제 절편) -->
+    <path d="M 450,280 C 490,260 550,270 570,310 C 590,350 570,390 530,410 C 490,425 450,390 440,350 Z" fill="url(#baekBuGrad)" stroke="#A16207" stroke-width="2" opacity="0.9"/>
+    <path d="M 470,290 C 510,285 540,300 550,330 M 460,330 C 490,335 530,360 540,380" stroke="#FEF08A" stroke-width="1" fill="none" opacity="0.5"/>
+
+    <!-- 흑순편 3 (좌측 작은 법제 절편) -->
+    <path d="M 230,280 C 260,260 300,275 310,310 C 320,345 300,375 270,380 C 240,385 210,360 215,320 Z" fill="url(#heekSoonGrad)" stroke="#52525b" stroke-width="2"/>
+    <path d="M 240,295 C 270,290 290,310 295,335" stroke="#a1a1aa" stroke-width="1" fill="none" opacity="0.3"/>
+
+    <!-- 백부편 4 (상단 포부자 절편) -->
+    <path d="M 370,180 C 400,165 440,175 450,205 C 460,235 430,255 400,250 C 370,245 350,215 370,180 Z" fill="url(#baekBuGrad)" stroke="#CA8A04" stroke-width="1.5"/>
+
+    <!-- 법제 필인 뱃지 마크 -->
+    <circle cx="260" cy="220" r="28" fill="#18181b" stroke="#E4E4E7" stroke-width="1.5"/>
+    <text x="260" y="225" text-anchor="middle" fill="#E4E4E7" font-family="'Noto Sans KR', sans-serif" font-size="12" font-weight="700">법제(法製)</text>
+  </g>
+
+  <!-- 약재 전문가 설명 캡션 뱃지 -->
+  <rect x="150" y="480" width="500" height="75" rx="10" fill="#18181b" opacity="0.9" stroke="#E4E4E7" stroke-width="1.5"/>
+  <text x="400" y="508" text-anchor="middle" fill="#E4E4E7" font-family="'Noto Sans KR', sans-serif" font-size="15" font-weight="700">★ 본초학 전문가 감수 포인트</text>
+  <text x="400" y="533" text-anchor="middle" fill="#E4E4E7" font-family="'Noto Sans KR', sans-serif" font-size="13">부자는 독성 제거를 위해 반드시 포제(법제)를 거치며, 흑순편·백부편 절편 형태로 유통됩니다.</text>
+</svg>

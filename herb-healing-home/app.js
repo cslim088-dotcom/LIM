@@ -54,8 +54,8 @@ function updateBrandText() {
   // 푸터 이메일/전화번호 연동
   const footerEmailEl = document.querySelector('.footer-email');
   const footerPhoneEl = document.querySelector('.footer-phone');
-  if (footerEmailEl) footerEmailEl.innerText = state.settings.contactEmail || 'contact@nature.com';
-  if (footerPhoneEl) footerPhoneEl.innerText = state.settings.contactPhone || '031-940-1234';
+    if (footerEmailEl) footerEmailEl.innerText = state.settings.contactEmail || 'tksqlc08@gmail.com';
+  if (footerPhoneEl) footerPhoneEl.innerText = state.settings.contactPhone || '031-942-0545(산빛약초꽃차)';
 }
 
 // 3. 라우터 구현
@@ -97,11 +97,23 @@ function router() {
     case 'teas':
       renderTeas(appContainer);
       break;
+    case 'academy':
+      renderAcademy(appContainer);
+      break;
     case 'community':
       renderCommunity(appContainer);
       break;
+    case 'location':
+      renderLocation(appContainer);
+      break;
     case 'media':
       renderMedia(appContainer);
+      break;
+    case 'barefoot':
+      renderBarefoot(appContainer);
+      break;
+    case 'meditation':
+      renderMeditation(appContainer);
       break;
     case 'pricing':
       renderPricing(appContainer);
@@ -136,7 +148,7 @@ function renderHome(container) {
         </div>
       </div>
       <div class="hero-image">
-        <img src="https://images.unsplash.com/photo-1597481499750-3e6b22637e12?auto=format&fit=crop&w=800&q=80" alt="힐링꽃차 우려내기">
+        <img src="images/premium_tea_box.jpg" alt="산빛 수제 약선차">
         <div class="hero-badge">
           <i class="fa-solid fa-hand-holding-heart"></i>
           <span>자연에서 온<br>치유의 생명력</span>
@@ -187,8 +199,75 @@ function renderHome(container) {
     `;
   });
 
+  // 연구원 소개 섹션
+  const aboutHtml = `
+    <section class="about-section" style="margin-bottom: 5rem;">
+      <div class="section-title-wrap">
+        <h2 class="section-title">산빛약초꽃차문화연구원 소개</h2>
+        <p class="section-subtitle">자연의 생명력과 치유를 연구하는 10년의 여정</p>
+      </div>
+      
+      <div class="about-grid">
+        <div class="about-image-container">
+          <img src="images/about_institute.jpg" alt="산빛약초꽃차문화연구원 전경" class="about-img">
+          <div class="about-experience-badge">
+            <span class="exp-num">10+</span>
+            <span class="exp-text">약초 및 꽃차<br>연구 경력</span>
+          </div>
+        </div>
+        
+        <div class="about-details">
+          <div class="about-desc-card">
+            <p class="about-main-text">
+              산빛약초꽃차문화연구원은 10여년 넘게 약초와 꽃차에 대해 연구를 해오고 있고, 이를 실생활에 활용할 수 있도록 연구, 개발, 교육을 하고 있으며 자연치유분야를 활용해 사람들의 건강과 치유에 대해서도 연구, 개발하는 연구원입니다.
+            </p>
+          </div>
+          
+          <div class="about-info-cards">
+            <!-- 전문 연구진 -->
+            <div class="about-info-card">
+              <div class="info-card-icon"><i class="fa-solid fa-user-doctor"></i></div>
+              <div class="info-card-content">
+                <h4>전문 연구진</h4>
+                <ul>
+                  <li><strong>대표원장:</strong> 약선차 전문강사, 꽃차 전문강사 및 보건교육사(3급) 자격증을 보유하고, 대학원에서 자연치유학(보건학 석사)을 전공했습니다.</li>
+                  <li><strong>실장:</strong> 전 약초관리사, 한국약용작물교육협회 교·강사 출신으로 약초에 대한 연구를 10여년 넘게 해오고 있고, 현재 대학원에서 자연치유학을 전공하면서 대표원장과 연구를 함께 하고 있습니다.</li>
+                </ul>
+              </div>
+            </div>
+            
+            <!-- 수제 약선 힐링차 & 카페 -->
+            <div class="about-info-card">
+              <div class="info-card-icon"><i class="fa-solid fa-mug-hot"></i></div>
+              <div class="info-card-content">
+                <h4>산빛약초꽃차 카페 & 수제 차</h4>
+                <p>
+                  산빛약초꽃차문화연구원에서 운영하는 <strong>산빛약초꽃차 카페</strong>에서는 시중에서 판매되고 있는 GMP제품의 한약재(식약처 인정 식·약 공용 한약재)를 깨끗하게 다시 손질하여 수작업(hand made)으로 만든 우슬차, 맑음차, 쌍화차, 바람차, 도라지차, 휘파람차와 정갈하게 손질한 약재와 꽃을 블랜딩하여 만든 혈꽃차, 코꽃차, 눈꽃차 등을 판매하고 있습니다.
+                </p>
+                <p class="accent-p"><i class="fa-solid fa-circle-check"></i> 산빛약초꽃차에서 만들어 판매하는 약선힐링차는 한의학 의서에 있는 기본 방제를 기초로 하여 만든 제품입니다.</p>
+              </div>
+            </div>
+            
+            <!-- 민간자격증 과정 -->
+            <div class="about-info-card">
+              <div class="info-card-icon"><i class="fa-solid fa-graduation-cap"></i></div>
+              <div class="info-card-content">
+                <h4>전문 교육 및 자격증 과정</h4>
+                <p>
+                  아울러 산빛약초꽃차문화연구원에서는 꽃차와 약초교육을 통해 민간자격증인 <strong>‘약초꽃차관리사’</strong>를 제공하고 있는 연구원이기도 합니다.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  `;
+
   homeView.innerHTML = `
     ${heroHtml}
+    
+    ${aboutHtml}
     
     <div style="margin-bottom: 5rem;">
       <div class="section-title-wrap">
@@ -223,8 +302,8 @@ const Encyclopedia = {
     const view = document.createElement('div');
     view.className = 'page-view';
 
-    // 카테고리 탭 리스트 추출
-    const categories = ['전체', '뿌리류', '잎류', '뿌리/잎류', '열매류'];
+    // 카테고리 탭 리스트 추출 (신규 4개 카테고리 포함)
+    const categories = ['전체', '약초꽃류', '뿌리류', '잎류', '뿌리잎류', '열매류', '껍질류', '가지류', '해산물류', '화석류'];
     let filterTabsHtml = '';
     categories.forEach(cat => {
       const activeClass = cat === this.activeCategory ? 'active' : '';
@@ -264,7 +343,10 @@ const Encyclopedia = {
 
     // 카테고리 필터링
     if (this.activeCategory !== '전체') {
-      filtered = filtered.filter(h => h.category === this.activeCategory);
+      filtered = filtered.filter(h => 
+        h.category === this.activeCategory || 
+        (this.activeCategory === '뿌리잎류' && (h.category === '뿌리/잎류' || h.category === '잎/뿌리류'))
+      );
     }
 
     // 키워드 검색 필터링
@@ -286,13 +368,13 @@ const Encyclopedia = {
     filtered.forEach(herb => {
       cardsHtml += `
         <div class="herb-card">
-          <img src="${herb.imageUrl}" alt="${herb.name}" class="herb-card-img">
+          <img src="${herb.imageUrl}" alt="${herb.name}" class="herb-card-img" onerror="this.onerror=null; this.src='images/peony.png';">
           <div class="herb-card-content">
             <span class="herb-card-cat">${herb.category}</span>
             <h3 class="herb-card-title">${herb.name}</h3>
             <span class="herb-card-sci">${herb.scientificName}</span>
             <p class="herb-card-desc">${herb.efficacy}</p>
-            <button class="btn-card-more" onclick="Encyclopedia.openDetail('${herb.id}')">상세 보기 (부작용/복용법) <i class="fa-solid fa-arrow-right"></i></button>
+            <button class="btn-card-more" onclick="Encyclopedia.openDetail('${herb.id}')">효능 & 복용법 보기 <i class="fa-solid fa-arrow-right"></i></button>
           </div>
         </div>
       `;
@@ -320,27 +402,9 @@ const Encyclopedia = {
     const herb = state.herbs.find(h => h.id === id);
     if (!herb) return;
 
-    // 요금제별 정보 등급 제어 데모 (Silver/Gold 전용 고급 정보 제한 시나리오)
-    const isPremiumInfo = herb.name.includes('인삼') || herb.name.includes('구기자');
-    const userPlan = state.currentUser ? state.currentUser.plan : 'Basic';
-
-    let contentHtml = '';
-    if (isPremiumInfo && userPlan === 'Basic') {
-      contentHtml = `
-        <div style="text-align: center; padding: 40px 20px;">
-          <i class="fa-solid fa-lock" style="font-size: 3rem; color: var(--accent-color); margin-bottom: 20px;"></i>
-          <h3 style="font-family: var(--font-title); font-size: 1.6rem; color: var(--primary-color); margin-bottom: 10px;">멤버십 전용 프리미엄 정보</h3>
-          <p style="color: var(--text-muted); margin-bottom: 25px;">'${herb.name}'의 심층 약리작용 및 전문가 처방 레시피는 Silver 등급 이상 요금제 회원만 열람할 수 있습니다.</p>
-          <div style="display: flex; gap: 10px; justify-content: center;">
-            <button class="btn-secondary" onclick="UI.closeModal('detail-modal')">닫기</button>
-            <a href="#pricing" class="btn-primary" onclick="UI.closeModal('detail-modal')">멤버십 가입하기</a>
-          </div>
-        </div>
-      `;
-    } else {
-      contentHtml = `
+    let contentHtml = `
         <div style="display: grid; grid-template-columns: 1fr; gap: 20px;">
-          <img src="${herb.imageUrl}" alt="${herb.name}" style="width: 100%; height: 300px; object-fit: cover; border-radius: var(--border-radius-md);">
+          <img src="${herb.imageUrl}" alt="${herb.name}" style="width: 100%; height: 300px; object-fit: cover; border-radius: var(--border-radius-md);" onerror="this.onerror=null; this.src='images/peony.png';">
           <div>
             <span class="herb-card-cat" style="margin-bottom: 8px;">${herb.category}</span>
             <h2 style="font-family: var(--font-title); font-size: 1.8rem; color: var(--primary-color);">${herb.name}</h2>
@@ -363,7 +427,6 @@ const Encyclopedia = {
           </div>
         </div>
       `;
-    }
 
     const detailContainer = document.getElementById('detail-modal-body');
     detailContainer.innerHTML = contentHtml;
@@ -404,15 +467,170 @@ const Teas = {
       `;
     });
 
+    const processHtml = `
+      <section class="process-section" style="margin-top: 6rem; margin-bottom: 3rem;">
+        <div class="section-title-wrap">
+          <h2 class="section-title">약선힐링차(맑음차) 만드는 과정</h2>
+          <p class="section-subtitle">한의학 의서의 전통 방제를 기초로, 100% 수작업으로 정성껏 만들어지는 과정입니다.</p>
+        </div>
+
+        <div class="process-layout">
+          <!-- 왼쪽: 인트로 소개 및 대표 이미지 -->
+          <div class="process-intro-card">
+            <div class="process-img-wrap">
+              <img src="images/roasting_tea.jpg" alt="100% 수작업 덖음 작업" class="process-main-img">
+              <div class="process-badge">
+                <i class="fa-solid fa-hand-holding-heart"></i>
+                <span>100% 수작업<br>덖음</span>
+              </div>
+            </div>
+            <div class="process-intro-content">
+              <h3>전통 방식과 정성의 만남</h3>
+              <p>산빛약초꽃차에서 제조하여 판매하는 약선힐링차는 한의학 의서에 있는 기본 방제를 기초로 하여 만듭니다. 모든 원재료의 세척, 약재손질, 건조, 덖음, 포장까지 전 과정을 수작업으로 꼼꼼하게 진행하고 있습니다.</p>
+              <div class="process-quote">
+                <i class="fa-solid fa-quote-left"></i>
+                <span>모든 과정이 수작업이다 보니 손이 많이 가지만, 정직한 한 잔의 치유를 위해 타협하지 않습니다.</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 오른쪽: 9단계 타임라인 -->
+          <div class="process-timeline">
+            <!-- 1단계 -->
+            <div class="process-step-card">
+              <div class="step-header">
+                <span class="step-num">01</span>
+                <h4>원지(遠志) 손질</h4>
+              </div>
+              <p class="step-desc">한의서에 기록된 처방대로 정갈하게 약재를 선별하고, 먼저 원지에 대한 전문적인 약재 손질을 시작합니다.</p>
+            </div>
+
+            <!-- 2단계 -->
+            <div class="process-step-card">
+              <div class="step-header">
+                <span class="step-num">02</span>
+                <h4>약재 세척</h4>
+              </div>
+              <p class="step-desc">손질된 원재료 약재들의 미세 먼지와 이물질을 깨끗한 물로 맑게 세척합니다.</p>
+            </div>
+
+            <!-- 3단계 -->
+            <div class="process-step-card">
+              <div class="step-header">
+                <span class="step-num">03</span>
+                <h4>세절 및 1차 건조</h4>
+              </div>
+              <p class="step-desc">약효 성분이 차로 가장 잘 우러나올 수 있도록 잘게 자르는 세절(細切)을 거친 뒤, 다시 꼼꼼하게 건조 작업을 진행합니다.</p>
+            </div>
+
+            <!-- 4단계 -->
+            <div class="process-step-card">
+              <div class="step-header">
+                <span class="step-num">04</span>
+                <h4>석창포(石菖蒲) 손질</h4>
+              </div>
+              <p class="step-desc">두 번째 핵심 약재인 석창포를 원지와 똑같은 공정(손질-세척-세절-건조)으로 정성껏 작업합니다. 석창포는 물가에서 자라기에 고운 흙이나 이물질이 많이 나올 수 있어 더욱 주의 깊게 씻어냅니다.</p>
+            </div>
+
+            <!-- 5단계 -->
+            <div class="process-step-card">
+              <div class="step-header">
+                <span class="step-num">05</span>
+                <h4>복신(茯神) 손질</h4>
+              </div>
+              <p class="step-desc">세 번째로 정신을 안정시키고 속을 보하는 복신에 대한 섬세한 약재 손질과 정교하게 자르는 자르기 작업을 진행합니다. (원래 전통 한의서 방제에 따르면 여기까지의 배합으로 맑음차가 완성됩니다.)</p>
+            </div>
+
+            <!-- 6단계 -->
+            <div class="process-step-card">
+              <div class="step-header">
+                <span class="step-num">06</span>
+                <h4>용안육(龍眼肉) 추가 및 손질</h4>
+              </div>
+              <p class="step-desc">차의 효능을 더욱 높이기 위해 신경 안정과 기력을 보강하는 효과가 탁월한 용안육을 추가로 처방합니다. 용안육에 미세하게 붙어 있는 씨앗들을 수작업으로 완벽하게 제거하고 약효가 고루 우러나도록 세심하게 자릅니다.</p>
+            </div>
+
+            <!-- 7단계 -->
+            <div class="process-step-card">
+              <div class="step-header">
+                <span class="step-num">07</span>
+                <h4>용안육 특수 건조</h4>
+              </div>
+              <p class="step-desc">용안육은 풍부한 보음(補陰) 효과를 지녀 이미 건조된 상품이라도 끈적끈적함이 강합니다. 이를 그대로 차로 만들면 티백 필터에 묻어 나와 품질이 낮아질 수 있으므로, 끈적함을 말려주기 위해 정성어린 2차 건조 작업을 별도로 거칩니다.</p>
+            </div>
+
+            <!-- 8단계 -->
+            <div class="process-step-card">
+              <div class="step-header">
+                <span class="step-num">08</span>
+                <h4>덖음 작업</h4>
+              </div>
+              <p class="step-desc">잘 건조된 약재들을 모아 전통 방식의 덖음(볶음) 과정을 거칩니다. 불 조절과 손맛을 통해 약재 고유의 쓰고 아린 맛은 잡고, 한층 고소하고 깊은 풍미를 더해줍니다. 덖은 직후 약재들은 더욱 깊은 향과 훌륭한 빛깔을 띱니다.</p>
+            </div>
+
+            <!-- 9단계 -->
+            <div class="process-step-card">
+              <div class="step-header">
+                <span class="step-num">09</span>
+                <h4>수분 체크 및 제품 완성</h4>
+              </div>
+              <p class="step-desc">마지막으로 수분이 완전히 제거되었는지 까다롭게 수분 잔여량을 체크합니다. 이 엄격한 검사를 통과한 고품질 약재들만이 최종 <strong>'맑음차'</strong> 상품으로 패키징되어 고객님들께 전해집니다.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    `;
+
     view.innerHTML = `
       <div class="section-title-wrap">
         <h2 class="section-title">약선 힐링차 상품관</h2>
-        <p class="section-subtitle">산빛 다도원에서 수제 가공한 건강차를 쿠팡과 편리한 대행 구매를 통해 제공합니다.</p>
+        <p class="section-subtitle">산빛약초꽃차에서 수제 가공한 건강차를 제공합니다.</p>
       </div>
 
       <div class="cards-grid">
         ${cardsHtml}
+        <!-- 추가 약선힐링차 소개 -->
+        <div class="tea-card intro-tea-card" style="background: linear-gradient(135deg, rgba(30, 63, 32, 0.03), rgba(140, 98, 57, 0.05)); border: 2px dashed rgba(30, 63, 32, 0.2);">
+          <div class="tea-card-img-wrap" style="background: rgba(30, 63, 32, 0.05); display: flex; align-items: center; justify-content: center; height: 240px; overflow: hidden; position: relative;">
+            <img src="images/additional_healing_tea.jpg" alt="추가 약선힐링차 소개" style="width: 100%; height: 100%; object-fit: cover; opacity: 0.85;">
+            <div style="position: absolute; bottom: 15px; left: 15px; background: rgba(30, 63, 32, 0.85); color: white; padding: 4px 10px; border-radius: 4px; font-size: 0.8rem; font-weight: 500;">
+              <i class="fa-solid fa-leaf"></i> 수제 전통차 연구
+            </div>
+          </div>
+          <div class="tea-card-content" style="padding: 25px; display: flex; flex-direction: column; justify-content: space-between; flex: 1;">
+            <div>
+              <h3 class="tea-card-title" style="color: var(--primary-color); border-bottom: 2px solid rgba(30, 63, 32, 0.1); padding-bottom: 8px; margin-bottom: 15px; font-size: 1.3rem;">추가 약선힐링차 소개</h3>
+              <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 12px;">
+                <li style="display: flex; align-items: flex-start; gap: 8px; font-size: 0.92rem; line-height: 1.4; color: var(--text-main);">
+                  <i class="fa-solid fa-circle-check" style="color: var(--secondary-color); margin-top: 4px; font-size: 0.9rem;"></i>
+                  <span>목을 부드럽게 도와주는 <strong>도라지차</strong></span>
+                </li>
+                <li style="display: flex; align-items: flex-start; gap: 8px; font-size: 0.92rem; line-height: 1.4; color: var(--text-main);">
+                  <i class="fa-solid fa-circle-check" style="color: var(--secondary-color); margin-top: 4px; font-size: 0.9rem;"></i>
+                  <span>무릎이 웃는 <strong>우슬차</strong></span>
+                </li>
+                <li style="display: flex; align-items: flex-start; gap: 8px; font-size: 0.92rem; line-height: 1.4; color: var(--text-main);">
+                  <i class="fa-solid fa-circle-check" style="color: var(--secondary-color); margin-top: 4px; font-size: 0.9rem;"></i>
+                  <span>땀을 덜 흐르게 하는 <strong>여름차</strong></span>
+                </li>
+                <li style="display: flex; align-items: flex-start; gap: 8px; font-size: 0.92rem; line-height: 1.4; color: var(--text-main);">
+                  <i class="fa-solid fa-circle-check" style="color: var(--secondary-color); margin-top: 4px; font-size: 0.9rem;"></i>
+                  <span>깜박, 두근거림을 완화하는 <strong>바람차</strong></span>
+                </li>
+                <li style="display: flex; align-items: flex-start; gap: 8px; font-size: 0.92rem; line-height: 1.4; color: var(--text-main);">
+                  <i class="fa-solid fa-circle-check" style="color: var(--secondary-color); margin-top: 4px; font-size: 0.9rem;"></i>
+                  <span>총명탕의 한약 재료로 만든 <strong>맑음차</strong></span>
+                </li>
+              </ul>
+            </div>
+            <p style="font-size: 0.75rem; color: var(--text-muted); text-align: center; margin-top: 20px; border-top: 1px solid rgba(0,0,0,0.05); padding-top: 10px; font-style: italic;">
+              * 추가 소개된 맞춤 약선차는 전화 및 고객지원 이메일로 별도 주문/문의 가능합니다.
+            </p>
+          </div>
+        </div>
       </div>
+
+      ${processHtml}
     `;
 
     container.appendChild(view);
@@ -432,7 +650,7 @@ const Teas = {
     document.getElementById('buy-product-id').value = tea.id;
     document.getElementById('buy-product-name').value = tea.name;
     document.getElementById('buy-product-price').value = `${tea.price.toLocaleString()}원`;
-    document.getElementById('buy-user-name').value = state.currentUser.name || '';
+    document.getElementById('buy-user-name').value = '';
     
     UI.openModal('agent-buy-modal');
   },
@@ -446,7 +664,7 @@ const Teas = {
     const notes = document.getElementById('buy-user-notes').value;
 
     if (!name || !phone || !address) {
-      alert('신청자 성함, 연락처, 주소를 정확히 입력해주세요.');
+      alert('신청자, 연락처, 주소를 정확히 입력해주세요.');
       return;
     }
 
@@ -677,7 +895,7 @@ const Media = {
     view.innerHTML = `
       <div class="section-title-wrap">
         <h2 class="section-title">산빛 힐링 미디어</h2>
-        <p class="section-subtitle">청정 약초 채취 전경과 꽃차 제조 비법, 다도 강좌 동영상을 감상하세요.</p>
+        <p class="section-subtitle">잠시 쉬어 가세요</p>
       </div>
 
       <div class="cards-grid">
@@ -691,6 +909,408 @@ const Media = {
 
 function renderMedia(container) {
   Media.render(container);
+}
+
+// --- ACADEMY PAGE (약초교실) ---
+const Academy = {
+  render(container) {
+    const view = document.createElement('div');
+    view.className = 'page-view';
+
+    view.innerHTML = `
+      <!-- Hero Section -->
+      <div class="hero-section" style="margin-bottom: 3.5rem; background: linear-gradient(135deg, rgba(30,63,32,0.88), rgba(140,98,57,0.78)), url('https://images.unsplash.com/photo-1515003197210-e0cd71810b5f?auto=format&fit=crop&w=1200&q=80') no-repeat center center; background-size: cover; border-radius: var(--border-radius-lg); padding: 5rem 2rem; color: #fff; text-shadow: 0 2px 5px rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center; text-align: center; box-shadow: var(--glass-shadow);">
+        <div style="max-width: 850px; backdrop-filter: blur(10px); background: rgba(0,0,0,0.25); padding: 3rem 2rem; border-radius: var(--border-radius-md); border: 1px solid rgba(255,255,255,0.2);">
+          <span style="background: var(--accent-color); color: #1E3F20; padding: 5px 15px; border-radius: 30px; font-weight: 700; font-size: 0.85rem; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 15px; display: inline-block;">산빛 자연치유 아카데미</span>
+          <h2 style="font-family: var(--font-title); font-size: 2.8rem; margin-bottom: 15px; font-weight: 700; color: #fff; line-height: 1.2;"><i class="fa-solid fa-graduation-cap"></i> 자연의 숨결을 전하는 약초교실</h2>
+          <p style="font-size: 1.15rem; color: rgba(255,255,255,0.9); font-weight: 400; line-height: 1.7; max-width: 700px; margin: 0 auto; font-family: var(--font-body);">우리 땅에서 자라나는 토종 약초와 정갈한 꽃차의 지혜를 체계적으로 배웁니다. 자연치유를 생활화하고, 가족과 이웃의 건강을 지켜주는 든든한 건강 전도사로 거듭나세요.</p>
+        </div>
+      </div>
+
+      <!-- Section 1: 대상별 운영 -->
+      <div class="section-title-wrap">
+        <h2 class="section-title">교육 대상별 과정 운영</h2>
+        <p class="section-subtitle">배움의 깊이와 목적에 맞춰 선택할 수 있는 두 가지 맞춤형 교육 트랙</p>
+      </div>
+
+      <div class="cards-grid" style="grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 30px; margin-bottom: 5rem;">
+        <!-- 취미반 -->
+        <div class="herb-card" style="background: var(--card-bg); backdrop-filter: blur(10px); border: 1px solid var(--glass-border); border-radius: var(--border-radius-md); padding: 35px; transition: var(--transition-smooth); box-shadow: var(--glass-shadow); display: flex; flex-direction: column; gap: 20px; position: relative; overflow: hidden; border-top: 5px solid var(--primary-light);">
+          <div style="position: absolute; right: -20px; top: -20px; font-size: 8rem; color: rgba(30,63,32,0.03); font-weight: 900; pointer-events: none;">01</div>
+          <div style="width: 60px; height: 60px; background: rgba(30,63,32,0.08); border-radius: 15px; display: flex; align-items: center; justify-content: center; color: var(--primary-color); font-size: 1.8rem;">
+            <i class="fa-solid fa-heart"></i>
+          </div>
+          <div>
+            <h3 style="font-family: var(--font-body); font-size: 1.5rem; color: var(--primary-color); font-weight: 700; margin-bottom: 8px;">생활 치유 취미반</h3>
+            <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.6;">약초와 꽃차를 취미로 가볍고 재미있게 배우고 싶은 분들을 위한 과정입니다. 일상 속에서 바로 실천할 수 있는 건강한 습관과 다도 라이프스타일을 배웁니다.</p>
+          </div>
+          <ul style="list-style: none; padding: 0; display: flex; flex-direction: column; gap: 10px; font-size: 0.9rem; color: var(--text-main); margin-top: auto;">
+            <li style="display: flex; align-items: center; gap: 8px;"><i class="fa-solid fa-circle-check" style="color: var(--primary-color);"></i> 약초 및 꽃차 기초 효능 알아보기</li>
+            <li style="display: flex; align-items: center; gap: 8px;"><i class="fa-solid fa-circle-check" style="color: var(--primary-color);"></i> 일상생활 속 차 우림법 및 음용 가이드</li>
+            <li style="display: flex; align-items: center; gap: 8px;"><i class="fa-solid fa-circle-check" style="color: var(--primary-color);"></i> 부담 없는 체험 중심의 소통 수업</li>
+          </ul>
+        </div>
+
+        <!-- 자격증반 -->
+        <div class="herb-card" style="background: var(--card-bg); backdrop-filter: blur(10px); border: 1px solid var(--glass-border); border-radius: var(--border-radius-md); padding: 35px; transition: var(--transition-smooth); box-shadow: var(--glass-shadow); display: flex; flex-direction: column; gap: 20px; position: relative; overflow: hidden; border-top: 5px solid var(--accent-color);">
+          <div style="position: absolute; right: -20px; top: -20px; font-size: 8rem; color: rgba(212,175,55,0.05); font-weight: 900; pointer-events: none;">02</div>
+          <div style="width: 60px; height: 60px; background: rgba(212,175,55,0.1); border-radius: 15px; display: flex; align-items: center; justify-content: center; color: var(--secondary-color); font-size: 1.8rem;">
+            <i class="fa-solid fa-award"></i>
+          </div>
+          <div>
+            <h3 style="font-family: var(--font-body); font-size: 1.5rem; color: var(--secondary-color); font-weight: 700; margin-bottom: 8px;">전문 자격증반 <span style="font-size: 0.75rem; background: var(--accent-color); color: #fff; padding: 2px 8px; border-radius: 10px; vertical-align: middle; margin-left: 5px;">인기</span></h3>
+            <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.6;">약초와 차문화 전문가로서의 역량을 키우는 코스입니다. 초급, 중급, 고급 전 과정을 이수하고 자격시험을 통과하시면 정식 민간 자격증을 취득할 수 있습니다.</p>
+          </div>
+          <ul style="list-style: none; padding: 0; display: flex; flex-direction: column; gap: 10px; font-size: 0.9rem; color: var(--text-main); margin-top: auto;">
+            <li style="display: flex; align-items: center; gap: 8px;"><i class="fa-solid fa-circle-check" style="color: var(--secondary-color);"></i> 초급 · 중급 · 고급의 체계적 연계 커리큘럼</li>
+            <li style="display: flex; align-items: center; gap: 8px;"><i class="fa-solid fa-circle-check" style="color: var(--secondary-color);"></i> 민간 공인 자격증 <strong>‘약초꽃차관리사’</strong> 수여</li>
+            <li style="display: flex; align-items: center; gap: 8px;"><i class="fa-solid fa-circle-check" style="color: var(--secondary-color);"></i> 수료 후 아카데미 강사 및 전문가 활동 연계</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Section 2: 교육 과정 상세 -->
+      <div class="section-title-wrap">
+        <h2 class="section-title">단계별 커리큘럼</h2>
+        <p class="section-subtitle">기초부터 동의보감 비법 전수까지, 산빛만의 깊이 있는 교육 내용</p>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 40px; margin-bottom: 5rem;">
+        <!-- Step 1: 초급 -->
+        <div style="display: grid; grid-template-columns: 100px 1fr; gap: 30px; background: var(--card-bg); border: 1px solid var(--glass-border); border-radius: var(--border-radius-lg); padding: 30px; box-shadow: var(--glass-shadow); align-items: center; transition: var(--transition-smooth);">
+          <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px;">
+            <span style="font-size: 2.2rem; font-weight: 800; color: var(--primary-color);">01</span>
+            <span style="background: rgba(30,63,32,0.08); color: var(--primary-color); font-size: 0.75rem; font-weight: 700; padding: 2px 10px; border-radius: 10px;">초급 과정</span>
+          </div>
+          <div style="border-left: 2px dashed rgba(30,63,32,0.15); padding-left: 30px;">
+            <h4 style="font-size: 1.3rem; font-weight: 700; color: var(--primary-color); margin-bottom: 10px;">생활 약선차 & 꽃차의 첫걸음 (기초 이론 및 실생활 응용)</h4>
+            <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; margin-bottom: 12px;">
+              동양 의학 및 약초 치료의 가장 근간이 되는 기초 원리를 이해하고, 일상 속 건강 증진을 위해 꽃차와 약선차를 실용적으로 활용하는 것을 목표로 합니다.
+            </p>
+            <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 15px;">
+              <span style="background: rgba(30,63,32,0.04); border: 1px solid rgba(30,63,32,0.1); color: var(--text-main); font-size: 0.8rem; padding: 4px 12px; border-radius: 20px;"><i class="fa-solid fa-spa" style="color: var(--primary-color); margin-right: 5px;"></i> 기(氣)와 혈(血)의 균형</span>
+              <span style="background: rgba(30,63,32,0.04); border: 1px solid rgba(30,63,32,0.1); color: var(--text-main); font-size: 0.8rem; padding: 4px 12px; border-radius: 20px;"><i class="fa-solid fa-brain" style="color: var(--primary-color); margin-right: 5px;"></i> 정신 안정 (안신)</span>
+              <span style="background: rgba(30,63,32,0.04); border: 1px solid rgba(30,63,32,0.1); color: var(--text-main); font-size: 0.8rem; padding: 4px 12px; border-radius: 20px;"><i class="fa-solid fa-disease" style="color: var(--primary-color); margin-right: 5px;"></i> 장기별 이로운 약초 (소화 · 관절 · 안/이/비/인후 · 간 · 콩팥)</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 2: 중급 -->
+        <div style="display: grid; grid-template-columns: 100px 1fr; gap: 30px; background: var(--card-bg); border: 1px solid var(--glass-border); border-radius: var(--border-radius-lg); padding: 30px; box-shadow: var(--glass-shadow); align-items: center; transition: var(--transition-smooth);">
+          <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px;">
+            <span style="font-size: 2.2rem; font-weight: 800; color: var(--secondary-color);">02</span>
+            <span style="background: rgba(140,98,57,0.08); color: var(--secondary-color); font-size: 0.75rem; font-weight: 700; padding: 2px 10px; border-radius: 10px;">중급 과정</span>
+          </div>
+          <div style="border-left: 2px dashed rgba(140,98,57,0.15); padding-left: 30px;">
+            <h4 style="font-size: 1.3rem; font-weight: 700; color: var(--secondary-color); margin-bottom: 10px;">가족을 위한 건강 보양차 (쌍화탕 & 십전대보탕과 특화 약재 손질법)</h4>
+            <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; margin-bottom: 12px;">
+              사랑하는 가족들의 면역과 원기 보충을 위해 한방의 정수를 담은 건강 보양차 조제법을 마스터합니다. 약효를 배가시키는 정성 어린 실습이 중심이 됩니다.
+            </p>
+            <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 15px;">
+              <span style="background: rgba(140,98,57,0.04); border: 1px solid rgba(140,98,57,0.15); color: var(--text-main); font-size: 0.8rem; padding: 4px 12px; border-radius: 20px;"><i class="fa-solid fa-mug-hot" style="color: var(--secondary-color); margin-right: 5px;"></i> 쌍화탕 배합 이론 & 조제 실습</span>
+              <span style="background: rgba(140,98,57,0.04); border: 1px solid rgba(140,98,57,0.15); color: var(--text-main); font-size: 0.8rem; padding: 4px 12px; border-radius: 20px;"><i class="fa-solid fa-fire" style="color: var(--secondary-color); margin-right: 5px;"></i> 십전대보탕 원리와 약재 배합</span>
+              <span style="background: rgba(212,175,55,0.08); border: 1px solid rgba(212,175,55,0.3); color: var(--text-main); font-size: 0.8rem; padding: 4px 12px; border-radius: 20px; font-weight: 600;"><i class="fa-solid fa-star" style="color: var(--accent-color); margin-right: 5px;"></i> [독자적 특화] 수제 약재 손질 및 법제 기법</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 3: 고급 -->
+        <div style="display: grid; grid-template-columns: 100px 1fr; gap: 30px; background: var(--card-bg); border: 1px solid var(--glass-border); border-radius: var(--border-radius-lg); padding: 30px; box-shadow: var(--glass-shadow); align-items: center; transition: var(--transition-smooth);">
+          <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px;">
+            <span style="font-size: 2.2rem; font-weight: 800; color: var(--accent-color);">03</span>
+            <span style="background: rgba(212,175,55,0.1); color: var(--secondary-color); font-size: 0.75rem; font-weight: 700; padding: 2px 10px; border-radius: 10px;">고급 과정</span>
+          </div>
+          <div style="border-left: 2px dashed rgba(212,175,55,0.25); padding-left: 30px;">
+            <h4 style="font-size: 1.3rem; font-weight: 700; color: var(--text-main); margin-bottom: 10px;">동의보감 방제학과 현대 응용 (14대 방제 및 자율 가감 처방)</h4>
+            <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; margin-bottom: 12px;">
+              고전 의학의 보고인 동의보감과 한의과대학 필수 과목인 방제학(方劑學)을 이론적 토대로 삼아, 개개인의 체질과 증상에 알맞게 약재를 조절하여 맞춤형 처방을 설계하는 최고급 과정입니다.
+            </p>
+            <div style="margin-top: 15px;">
+              <h5 style="font-size: 0.9rem; font-weight: 700; margin-bottom: 8px; color: var(--primary-color);">주요 학습 14대 방제 및 보약</h5>
+              <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 8px; font-size: 0.82rem; margin-bottom: 15px;">
+                <div style="background: #fff; padding: 6px 10px; border-radius: 6px; border: 1px solid rgba(0,0,0,0.05); text-align: center;">보중익기탕 (補중益氣)</div>
+                <div style="background: #fff; padding: 6px 10px; border-radius: 6px; border: 1px solid rgba(0,0,0,0.05); text-align: center;">육미지황탕 (六味地黃)</div>
+                <div style="background: #fff; padding: 6px 10px; border-radius: 6px; border: 1px solid rgba(0,0,0,0.05); text-align: center;">생맥산 (生脈散)</div>
+                <div style="background: #fff; padding: 6px 10px; border-radius: 6px; border: 1px solid rgba(0,0,0,0.05); text-align: center;">귀비탕 (歸脾湯)</div>
+                <div style="background: #fff; padding: 6px 10px; border-radius: 6px; border: 1px solid rgba(0,0,0,0.05); text-align: center;">감맥대조탕 (甘麥大棗)</div>
+                <div style="background: #fff; padding: 6px 10px; border-radius: 6px; border: 1px solid rgba(0,0,0,0.05); text-align: center;">구미강활탕 (九味羌活)</div>
+                <div style="background: #fff; padding: 6px 10px; border-radius: 6px; border: 1px solid rgba(0,0,0,0.05); text-align: center;">황련해독탕 (黃連解毒)</div>
+                <div style="background: #fff; padding: 6px 10px; border-radius: 6px; border: 1px solid rgba(0,0,0,0.05); text-align: center;">오적산 (五積散)</div>
+                <div style="background: #fff; padding: 6px 10px; border-radius: 6px; border: 1px solid rgba(0,0,0,0.05); text-align: center;">당귀사역탕 (當歸四逆)</div>
+                <div style="background: #fff; padding: 6px 10px; border-radius: 6px; border: 1px solid rgba(0,0,0,0.05); text-align: center;">평위산 (平胃散)</div>
+                <div style="background: #fff; padding: 6px 10px; border-radius: 6px; border: 1px solid rgba(0,0,0,0.05); text-align: center;">소시호탕 (小柴胡湯)</div>
+                <div style="background: #fff; padding: 6px 10px; border-radius: 6px; border: 1px solid rgba(0,0,0,0.05); text-align: center;">소건중탕 (小建中湯)</div>
+                <div style="background: #fff; padding: 6px 10px; border-radius: 6px; border: 1px solid rgba(212,175,55,0.2); border-left: 3px solid var(--accent-color); font-weight: 700; text-align: center; color: var(--secondary-color);">경옥고 (瓊玉膏)</div>
+                <div style="background: #fff; padding: 6px 10px; border-radius: 6px; border: 1px solid rgba(212,175,55,0.2); border-left: 3px solid var(--accent-color); font-weight: 700; text-align: center; color: var(--secondary-color);">공진단 (拱辰丹)</div>
+              </div>
+              <p style="background: rgba(30,63,32,0.03); border-radius: 8px; padding: 12px 15px; font-size: 0.88rem; color: var(--text-main); border-left: 4px solid var(--primary-color);">
+                <i class="fa-solid fa-circle-info" style="color: var(--primary-color); margin-right: 6px;"></i> <strong>방제 가감 처방 교육:</strong> 기본 방제에 안주하지 않고, 증상에 따라 약재 종류나 분량을 직접 추가하거나 줄여서 나만의 특별한 건강 레시피를 만드는 실전 활용법이 병행됩니다.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+
+    container.appendChild(view);
+  }
+};
+
+function renderAcademy(container) {
+  Academy.render(container);
+}
+
+// --- BAREFOOT WALKING PAGE ---
+const Barefoot = {
+  render(container) {
+    const view = document.createElement('div');
+    view.className = 'page-view';
+
+    view.innerHTML = `
+      <div class="hero-section" style="margin-bottom: 3.5rem; background: linear-gradient(135deg, rgba(30,63,32,0.85), rgba(45,94,48,0.75)), url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1200&q=80') no-repeat center center; background-size: cover; border-radius: var(--border-radius-lg); padding: 4.5rem 2rem; color: #fff; text-shadow: 0 2px 5px rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center; text-align: center; box-shadow: var(--glass-shadow);">
+        <div style="max-width: 800px; backdrop-filter: blur(8px); background: rgba(0,0,0,0.2); padding: 2.5rem; border-radius: var(--border-radius-md); border: 1px solid rgba(255,255,255,0.15);">
+          <h2 style="font-family: var(--font-title); font-size: 2.6rem; margin-bottom: 12px; font-weight: 700; color: #fff;"><i class="fa-solid fa-shoe-prints"></i> 대지와 통하는 치유, 맨발걷기</h2>
+          <p style="font-size: 1.2rem; color: rgba(255,255,255,0.95); font-weight: 400; line-height: 1.6; font-family: var(--font-body);">인공의 신발을 벗고 땅을 딛는 순간, 대지의 무한한 음이온 에너지와 치유력이 체내로 직접 스며듭니다.</p>
+        </div>
+      </div>
+
+      <div class="section-title-wrap">
+        <h2 class="section-title">맨발걷기(어싱, Earthing)의 3대 치유 효능</h2>
+        <p class="section-subtitle">자연과 직접 맞닿아 신체의 균형을 되찾는 천연 면역 치유법</p>
+      </div>
+
+      <div class="cards-grid" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); margin-bottom: 4rem;">
+        <!-- Card 1 -->
+        <div class="herb-card" style="background: var(--card-bg); backdrop-filter: blur(10px); border: 1px solid var(--glass-border); border-radius: var(--border-radius-md); padding: 30px; transition: var(--transition-smooth); box-shadow: var(--glass-shadow); display: flex; flex-direction: column; gap: 15px; text-align: center; align-items: center;">
+          <div style="width: 70px; height: 70px; background: rgba(30,63,32,0.08); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--primary-color); font-size: 2rem; margin-bottom: 5px;">
+            <i class="fa-solid fa-leaf"></i>
+          </div>
+          <h3 style="font-family: var(--font-title); font-size: 1.4rem; color: var(--primary-color); font-weight: 700;">항염증 및 어싱(Earthing) 효과</h3>
+          <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; text-align: justify; text-justify: inter-word;">지구 표면의 자유전자가 체내로 흡수되어 만성 질환과 노화의 원인이 되는 유해 활성산소를 중화시키고 체내 염증 수치를 혁신적으로 낮춰줍니다.</p>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="herb-card" style="background: var(--card-bg); backdrop-filter: blur(10px); border: 1px solid var(--glass-border); border-radius: var(--border-radius-md); padding: 30px; transition: var(--transition-smooth); box-shadow: var(--glass-shadow); display: flex; flex-direction: column; gap: 15px; text-align: center; align-items: center;">
+          <div style="width: 70px; height: 70px; background: rgba(140,98,57,0.08); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--secondary-color); font-size: 2rem; margin-bottom: 5px;">
+            <i class="fa-solid fa-heart-pulse"></i>
+          </div>
+          <h3 style="font-family: var(--font-title); font-size: 1.4rem; color: var(--secondary-color); font-weight: 700;">천연 전신 지압 효과</h3>
+          <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; text-align: justify; text-justify: inter-word;">맨발로 걸으며 흙과 돌, 모래의 불규칙한 돌기들이 발바닥의 60여 개 반사구와 자율신경을 자극하여 혈액 순환을 개선하고 신진대사를 왕성하게 만듭니다.</p>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="herb-card" style="background: var(--card-bg); backdrop-filter: blur(10px); border: 1px solid var(--glass-border); border-radius: var(--border-radius-md); padding: 30px; transition: var(--transition-smooth); box-shadow: var(--glass-shadow); display: flex; flex-direction: column; gap: 15px; text-align: center; align-items: center;">
+          <div style="width: 70px; height: 70px; background: rgba(212,175,55,0.08); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--accent-color); font-size: 2rem; margin-bottom: 5px;">
+            <i class="fa-solid fa-moon"></i>
+          </div>
+          <h3 style="font-family: var(--font-title); font-size: 1.4rem; color: var(--text-main); font-weight: 700;">신경 안정 및 불면증 극복</h3>
+          <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; text-align: justify; text-justify: inter-word;">지구와의 접촉이 수면 및 스트레스 조절 호르몬인 코르티솔 분비를 정상화하여 스트레스 수치를 완화하고 깊은 수면(숙면)을 유도합니다.</p>
+        </div>
+      </div>
+
+      <!-- Roadmap -->
+      <div style="margin-bottom: 4rem; background: #fff; padding: 40px; border-radius: var(--border-radius-lg); box-shadow: var(--glass-shadow); border: 1px solid var(--glass-border);">
+        <h3 style="font-family: var(--font-title); font-size: 1.7rem; color: var(--primary-color); margin-bottom: 30px; text-align: center; font-weight:700;"><i class="fa-solid fa-route"></i> 안전하고 올바른 맨발걷기 3단계</h3>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 30px;">
+          <!-- Step 1 -->
+          <div style="position: relative; padding-top: 20px;">
+            <div style="position: absolute; top: -15px; left: 0; background: var(--primary-color); color:#fff; width:35px; height:35px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:1.1rem; box-shadow:0 3px 6px rgba(0,0,0,0.16);">1</div>
+            <h4 style="font-family: var(--font-title); font-size: 1.15rem; color: var(--primary-color); margin-bottom: 10px; font-weight:700; border-bottom:1px solid rgba(0,0,0,0.06); padding-bottom:5px;">안전한 흙길 탐색</h4>
+            <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.6;">돌멩이나 깨진 유리가 없는 정돈된 황토 전용길, 부드러운 잔디, 숲길 혹은 바닷가 모래사장 등에서 시작하는 것이 가장 안전합니다.</p>
+          </div>
+          <!-- Step 2 -->
+          <div style="position: relative; padding-top: 20px;">
+            <div style="position: absolute; top: -15px; left: 0; background: var(--secondary-color); color:#fff; width:35px; height:35px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:1.1rem; box-shadow:0 3px 6px rgba(0,0,0,0.16);">2</div>
+            <h4 style="font-family: var(--font-title); font-size: 1.15rem; color: var(--secondary-color); margin-bottom: 10px; font-weight:700; border-bottom:1px solid rgba(0,0,0,0.06); padding-bottom:5px;">바른 보행 자세</h4>
+            <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.6;">시선은 전방 3~4미터를 응시해 장애물을 감지하고, 발뒤꿈치부터 지면에 닿은 뒤 발바닥 전체, 발가락 순서로 힘이 흐르도록 걷습니다.</p>
+          </div>
+          <!-- Step 3 -->
+          <div style="position: relative; padding-top: 20px;">
+            <div style="position: absolute; top: -15px; left: 0; background: var(--accent-color); color:#fff; width:35px; height:35px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:1.1rem; box-shadow:0 3px 6px rgba(0,0,0,0.16);">3</div>
+            <h4 style="font-family: var(--font-title); font-size: 1.15rem; color: var(--text-main); margin-bottom: 10px; font-weight:700; border-bottom:1px solid rgba(0,0,0,0.06); padding-bottom:5px;">철저한 마무리 세척</h4>
+            <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.6;">보행을 마친 직후에는 찬물이나 미온수로 발을 깨끗이 씻어내고 꼼꼼하게 건조한 뒤, 보습제를 발라 피부 건조 현상을 예방합니다.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Indoor Earthing Section -->
+      <div style="margin-bottom: 4rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 40px; align-items: center; background: #fff; padding: 40px; border-radius: var(--border-radius-lg); box-shadow: var(--glass-shadow); border: 1px solid var(--glass-border);">
+        <div style="border-radius: var(--border-radius-md); overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.08);">
+          <img src="images/indoor_earthing.jpg" alt="실내 황토볼 어싱 체험" style="width: 100%; height: auto; display: block; object-fit: cover;">
+        </div>
+        <div>
+          <span style="font-size: 0.85rem; background: var(--primary-color); color: #fff; padding: 4px 10px; border-radius: 20px; font-weight:700; font-family: var(--font-body);">실내 어싱 테라피</span>
+          <h3 style="font-family: var(--font-title); font-size: 1.8rem; color: var(--primary-color); margin: 10px 0 15px 0; font-weight:700;">사계절 홈 어싱: 황토볼 지압 프로그램</h3>
+          <p style="font-size: 0.95rem; color: var(--text-main); line-height: 1.7; margin-bottom: 15px; text-align: justify; text-justify: inter-word;">
+            기온 변화가 심한 계절이나 외부 활동이 어려운 날에도 실내에서 쾌적하게 자연 치유를 이어갈 수 있는 **산빛 실내 황토볼 어싱 지압 체험**입니다. 
+            원적외선이 풍부한 천연 생황토를 동글동글하게 빚어 건조한 황토볼 베드에 발을 담그고 딛음으로써, 발바닥 전체의 경혈을 고르게 지압하고 전신의 혈액 순환과 기초 체온을 따뜻하게 유지해 줍니다.
+          </p>
+          <ul style="list-style: none; padding: 0; font-size: 0.9rem; color: var(--text-muted); display: flex; flex-direction: column; gap: 8px;">
+            <li><i class="fa-solid fa-circle-check" style="color: var(--primary-color); margin-right: 8px;"></i> **100% 순수 천연 황토**로 빚어낸 무독성 황토볼 사용</li>
+            <li><i class="fa-solid fa-circle-check" style="color: var(--primary-color); margin-right: 8px;"></i> 날씨와 공간 제약 없는 **안전하고 청결한 실내 어싱**</li>
+            <li><i class="fa-solid fa-circle-check" style="color: var(--primary-color); margin-right: 8px;"></i> 연구원 명상 지도사의 가이드를 통한 **심신 이완 요법 병행**</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Warning Box -->
+      <div style="background: rgba(231,76,60,0.04); border-left: 5px solid #e74c3c; border-radius: var(--border-radius-md); padding: 25px; display: flex; gap: 20px; align-items: flex-start; box-shadow: 0 4px 15px rgba(231,76,60,0.05); margin-bottom: 2rem;">
+        <div style="color: #e74c3c; font-size: 2rem;"><i class="fa-solid fa-triangle-exclamation"></i></div>
+        <div>
+          <h4 style="color: #e74c3c; font-weight: 700; font-size: 1.1rem; margin-bottom: 6px;">맨발걷기 필수 안전 수칙</h4>
+          <p style="font-size: 0.92rem; color: var(--text-main); line-height: 1.7;">
+            발바닥에 크고 작은 상처가 있을 때는 세균 감염(파상풍 등) 우려가 크므로 맨발 걷기를 삼가십시오. 
+            특히 <strong>당뇨 환자</strong>의 경우 신경 손상 및 미세 상처로 인한 당뇨병성 족부궤양 위험이 있으므로 맨발 노출을 최소화하고, 어싱 슈즈나 가죽 접지 신발을 활용하시는 것을 강력히 권장합니다.
+          </p>
+        </div>
+      </div>
+    `;
+
+    container.appendChild(view);
+  }
+};
+
+function renderBarefoot(container) {
+  Barefoot.render(container);
+}
+
+// --- WALKING MEDITATION PAGE ---
+const Meditation = {
+  render(container) {
+    const view = document.createElement('div');
+    view.className = 'page-view';
+
+    view.innerHTML = `
+      <div class="hero-section" style="margin-bottom: 3.5rem; background: linear-gradient(135deg, rgba(140,98,57,0.85), rgba(30,63,32,0.75)), url('https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=1200&q=80') no-repeat center center; background-size: cover; border-radius: var(--border-radius-lg); padding: 4.5rem 2rem; color: #fff; text-shadow: 0 2px 5px rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center; text-align: center; box-shadow: var(--glass-shadow);">
+        <div style="max-width: 800px; backdrop-filter: blur(8px); background: rgba(0,0,0,0.25); padding: 2.5rem; border-radius: var(--border-radius-md); border: 1px solid rgba(255,255,255,0.15);">
+          <h2 style="font-family: var(--font-title); font-size: 2.6rem; margin-bottom: 12px; font-weight: 700; color: #fff;"><i class="fa-solid fa-spa"></i> 걸음속에 깃드는 평온, 걷기명상</h2>
+          <p style="font-size: 1.2rem; color: rgba(255,255,255,0.95); font-weight: 400; line-height: 1.6; font-family: var(--font-body);">달려가기만 하는 바쁜 일상에서 한 걸음 물러나, 내 발걸음의 감각에 마음을 모으는 움직이는 선(禪) 명상입니다.</p>
+        </div>
+      </div>
+
+      <div class="section-title-wrap">
+        <h2 class="section-title">걷기명상(행선, 行禪)의 4단계 알아차림</h2>
+        <p class="section-subtitle">한 발걸음마다 일어나는 감각의 일어남과 사라짐에 집중하기</p>
+      </div>
+
+      <div class="cards-grid" style="grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); margin-bottom: 4rem;">
+        <!-- Step 1 -->
+        <div class="herb-card" style="background: var(--card-bg); backdrop-filter: blur(10px); border: 1px solid var(--glass-border); border-radius: var(--border-radius-md); padding: 25px; transition: var(--transition-smooth); box-shadow: var(--glass-shadow); display: flex; flex-direction: column; gap: 12px;">
+          <span style="font-size: 0.8rem; background: var(--primary-color); color: #fff; padding: 3px 8px; border-radius: 10px; width: fit-content; font-weight:700;">1단계</span>
+          <h3 style="font-family: var(--font-title); font-size: 1.25rem; color: var(--primary-color); font-weight: 700;"><i class="fa-solid fa-circle-dot"></i> 지면 알아차리기</h3>
+          <p style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.6;">어깨를 내리고 바른 자세로 서서 발바닥 전체가 지구와 맞닿아 체중을 고루 지탱하고 있음을 마음 깊이 인지하며 명상을 시작합니다.</p>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="herb-card" style="background: var(--card-bg); backdrop-filter: blur(10px); border: 1px solid var(--glass-border); border-radius: var(--border-radius-md); padding: 25px; transition: var(--transition-smooth); box-shadow: var(--glass-shadow); display: flex; flex-direction: column; gap: 12px;">
+          <span style="font-size: 0.8rem; background: var(--secondary-color); color: #fff; padding: 3px 8px; border-radius: 10px; width: fit-content; font-weight:700;">2단계</span>
+          <h3 style="font-family: var(--font-title); font-size: 1.25rem; color: var(--secondary-color); font-weight: 700;"><i class="fa-solid fa-arrow-trend-up"></i> 발 들어 올리기</h3>
+          <p style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.6;">뒤꿈치가 먼저 떠오르고 이어서 발바닥 전체, 마지막으로 엄지발가락 끝이 땅에서 가벼워지고 완전히 분리되는 역학적 감각을 조용히 관찰합니다.</p>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="herb-card" style="background: var(--card-bg); backdrop-filter: blur(10px); border: 1px solid var(--glass-border); border-radius: var(--border-radius-md); padding: 25px; transition: var(--transition-smooth); box-shadow: var(--glass-shadow); display: flex; flex-direction: column; gap: 12px;">
+          <span style="font-size: 0.8rem; background: var(--accent-color); color: #fff; padding: 3px 8px; border-radius: 10px; width: fit-content; font-weight:700; color:var(--text-main);">3단계</span>
+          <h3 style="font-family: var(--font-title); font-size: 1.25rem; color: var(--text-main); font-weight: 700;"><i class="fa-solid fa-arrow-right-to-bracket"></i> 앞으로 내딛기</h3>
+          <p style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.6;">들어 올려진 다리가 허공을 가르며 전방으로 천천히 움직일 때, 공기의 감촉, 다리 근육의 팽창과 수축, 균형의 섬세한 이동을 자각합니다.</p>
+        </div>
+
+        <!-- Step 4 -->
+        <div class="herb-card" style="background: var(--card-bg); backdrop-filter: blur(10px); border: 1px solid var(--glass-border); border-radius: var(--border-radius-md); padding: 25px; transition: var(--transition-smooth); box-shadow: var(--glass-shadow); display: flex; flex-direction: column; gap: 12px;">
+          <span style="font-size: 0.8rem; background: #2c3e2b; color: #fff; padding: 3px 8px; border-radius: 10px; width: fit-content; font-weight:700;">4단계</span>
+          <h3 style="font-family: var(--font-title); font-size: 1.25rem; color: #2c3e2b; font-weight: 700;"><i class="fa-solid fa-anchor"></i> 다시 딛기</h3>
+          <p style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.6;">뒤꿈치가 먼저 부드럽게 지면에 닿은 후 발바닥, 발가락 순서로 무거운 체중이 안전하게 다시 땅에 옮겨 가 닿는 압력의 변화에 몰입합니다.</p>
+        </div>
+      </div>
+
+      <!-- Section 3: 양반걷기명상 -->
+      <div class="section-title-wrap" style="margin-top: 5rem;">
+        <h2 class="section-title">산빛 특화: 양반걷기명상</h2>
+        <p class="section-subtitle">틱낫한 스님의 평온과 한국 전통 '양반걸음'의 여유가 융합된 본원 독자 개발 명상법</p>
+      </div>
+
+      <div style="background: linear-gradient(135deg, rgba(30,63,32,0.03), rgba(140,98,57,0.05)); border-radius: var(--border-radius-lg); padding: 40px; border: 1px solid var(--glass-border); box-shadow: var(--glass-shadow); margin-bottom: 4rem; display: grid; grid-template-columns: 1fr 1.2fr; gap: 40px; align-items: center;">
+        <div>
+          <span style="background: var(--accent-color); color: #1E3F20; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 700; margin-bottom: 15px; display: inline-block;">세계 최초 · 본 연구원 독자 명명</span>
+          <h3 style="font-family: var(--font-title); font-size: 1.8rem; color: var(--primary-color); margin-bottom: 15px; font-weight: 700; line-height:1.3;">"만약 틱낫한 스님이<br>한국인이었다면 어떻게 걸으셨을까?"</h3>
+          <p style="color: var(--text-main); font-size: 0.95rem; line-height: 1.7; text-align: justify; margin-bottom: 15px;">
+            양반걷기명상은 본 연구원에서 한국인의 정서와 신체 리듬에 맞추어 독자적으로 연구·개발한 명상법입니다. 
+            오래전 우리 선조들이 걷던 아주 여유롭고 천천히 걷는 <strong>'양반걸음'</strong>에 세계적인 걷기명상 대가 틱낫한 스님의 호흡법을 결합하여, 바쁜 현대인들에게 가장 친근하고 깊은 몰입감을 선사합니다.
+          </p>
+        </div>
+        <div style="background: #fff; padding: 30px; border-radius: var(--border-radius-md); border: 1px solid rgba(0,0,0,0.05); box-shadow: 0 4px 15px rgba(0,0,0,0.02);">
+          <h4 style="font-family: var(--font-body); font-size: 1.15rem; color: var(--secondary-color); font-weight: 700; margin-bottom: 20px; border-bottom: 2px solid rgba(140,98,57,0.15); padding-bottom: 8px;">
+            <i class="fa-solid fa-wind"></i> 양반걷기명상 핵심 실천법
+          </h4>
+          <div style="display: flex; flex-direction: column; gap: 20px;">
+            <!-- Step 1 -->
+            <div style="display: flex; gap: 15px; align-items: flex-start;">
+              <div style="width: 35px; height: 35px; background: rgba(30,63,32,0.08); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--primary-color); font-weight: 700; font-size: 0.9rem; flex-shrink: 0;">1</div>
+              <div>
+                <strong style="color: var(--text-main); font-size: 0.95rem;">발걸음과 호흡의 완벽한 일치</strong>
+                <p style="color: var(--text-muted); font-size: 0.88rem; margin-top: 4px; line-height: 1.5;">숨을 들이쉬고 내쉬는 리듬에 맞춰 한 걸음 한 걸음 여유롭게 내딛습니다.</p>
+              </div>
+            </div>
+            <!-- Step 2 -->
+            <div style="display: flex; gap: 15px; align-items: flex-start;">
+              <div style="width: 35px; height: 35px; background: rgba(30,63,32,0.08); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--primary-color); font-weight: 700; font-size: 0.9rem; flex-shrink: 0;">2</div>
+              <div>
+                <strong style="color: var(--text-main); font-size: 0.95rem;">숨을 들이쉬며 (In)</strong>
+                <p style="color: var(--text-muted); font-size: 0.88rem; margin-top: 4px; line-height: 1.5;">
+                  <strong>초보자:</strong> 두 걸음 천천히 걷기<br>
+                  <strong>숙련자:</strong> 세 걸음 천천히 걷기
+                </p>
+              </div>
+            </div>
+            <!-- Step 3 -->
+            <div style="display: flex; gap: 15px; align-items: flex-start;">
+              <div style="width: 35px; height: 35px; background: rgba(30,63,32,0.08); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--primary-color); font-weight: 700; font-size: 0.9rem; flex-shrink: 0;">3</div>
+              <div>
+                <strong style="color: var(--text-main); font-size: 0.95rem;">숨을 내쉬며 (Out)</strong>
+                <p style="color: var(--text-muted); font-size: 0.88rem; margin-top: 4px; line-height: 1.5;">
+                  <strong>초보자:</strong> 세 걸음 천천히 걷기<br>
+                  <strong>숙련자:</strong> 네 걸음 천천히 걷기
+                </p>
+              </div>
+            </div>
+          </div>
+          <div style="margin-top: 25px; padding: 12px 15px; background: rgba(140,98,57,0.05); border-radius: 8px; border-left: 3px solid var(--secondary-color); font-size: 0.85rem; color: var(--text-main);">
+            <i class="fa-solid fa-quote-left" style="color: var(--secondary-color); margin-right: 5px;"></i>
+            한국 전통의 뒷짐 지거나 편안히 손을 모으고 아주 천천히 걷는 <strong>'양반걸음'</strong>의 템포는 틱낫한 스님의 호흡 주기와 최상의 일치를 보입니다.
+          </div>
+        </div>
+      </div>
+
+      <!-- Practice Tips & Insights -->
+      <div style="background: #fff; border-radius: var(--border-radius-lg); padding: 35px; border: 1px solid var(--glass-border); box-shadow: var(--glass-shadow); margin-bottom: 2rem;">
+        <h3 style="font-family: var(--font-title); font-size: 1.6rem; color: var(--primary-color); margin-bottom: 20px; font-weight:700;"><i class="fa-solid fa-heart"></i> 일상 걷기명상을 위한 유용한 조언</h3>
+        <div style="display: grid; grid-template-columns: 1fr; gap: 15px;">
+          <div style="border-bottom: 1px solid rgba(0,0,0,0.06); padding-bottom:12px;">
+            <strong style="color: var(--primary-color); font-size: 1.05rem;"><i class="fa-solid fa-check"></i> 속도를 늦추십시오</strong>
+            <p style="font-size: 0.9rem; color: var(--text-muted); margin-top: 4px; line-height:1.6;">너무 빠르게 걸으면 발끝의 자잘한 자극을 놓치기 쉽습니다. 호흡 1주기(들숨과 날숨)에 1~2보폭 정도로 아주 천천히 걸어가 봅니다.</p>
+          </div>
+          <div style="border-bottom: 1px solid rgba(0,0,0,0.06); padding-bottom:12px;">
+            <strong style="color: var(--secondary-color); font-size: 1.05rem;"><i class="fa-solid fa-check"></i> 잡념을 다정하게 보내주십시오</strong>
+            <p style="font-size: 0.9rem; color: var(--text-muted); margin-top: 4px; line-height:1.6;">마음에 잡념이나 걱정거리가 떠오를 때 억지로 억누르지 마십시오. '생각이 일어났구나'하고 부드러운 마음으로 명명한 뒤 자연스럽게 보내주고, 곧바로 발바닥과 호흡의 감각으로 되돌아옵니다.</p>
+          </div>
+          <div>
+            <strong style="color: var(--text-main); font-size: 1.05rem;"><i class="fa-solid fa-check"></i> 실내와 일상 생활에서도 가능합니다</strong>
+            <p style="font-size: 0.9rem; color: var(--text-muted); margin-top: 4px; line-height:1.6;">넓은 자연이 없더라도 집안 복도나 사무실 계단, 출퇴근 시 보도를 걷는 잠깐의 시간에도 발바닥에 모든 주의집중을 온전히 다 쏟아붓는 것만으로 훌륭한 걷기명상이 성립됩니다.</p>
+          </div>
+        </div>
+      </div>
+    `;
+
+    container.appendChild(view);
+  }
+};
+
+function renderBarefoot(container) {
+  Barefoot.render(container);
+}
+
+function renderMeditation(container) {
+  Meditation.render(container);
 }
 
 // --- MEMBERSHIP PRICING PAGE ---
@@ -1346,26 +1966,33 @@ const Auth = {
 
   simulateGoogleLogin(email, name) {
     // 1. 유저 DB 내 이메일 존재 유무 매칭
-    let matchedUser = state.users.find(u => u.email === email);
+    let matchedUser = state.users.find(u => u.email.toLowerCase() === email.toLowerCase());
+
+    const isAdminEmail = (email.toLowerCase() === 'tksqlc08@gmail.com');
 
     if (!matchedUser) {
-      // 새로운 계정이면 가입 처리 (기본 Basic plan)
+      // 새로운 계정이면 가입 처리 (tksqlc08@gmail.com은 관리자로 자동 연동)
       matchedUser = {
         id: 'user-' + Date.now(),
         email: email,
-        name: name,
-        role: 'user',
-        plan: 'Basic',
+        name: isAdminEmail ? '관리자' : name,
+        role: isAdminEmail ? 'admin' : 'user',
+        plan: isAdminEmail ? 'Premium' : 'Basic',
         status: 'Active',
         joinedDate: new Date().toISOString().split('T')[0]
       };
       state.users.push(matchedUser);
       Db.saveUsers(state.users);
+    } else if (isAdminEmail && matchedUser.role !== 'admin') {
+      matchedUser.role = 'admin';
+      matchedUser.name = '관리자';
+      matchedUser.plan = 'Premium';
+      Db.saveUsers(state.users);
     }
 
     // 계정 상태 체크
     if (matchedUser.status === 'Suspended') {
-      alert('해당 계정은 관리자에 의해 사용이 정지되었습니다.\n문의: contact@nature.com');
+      alert('해당 계정은 관리자에 의해 사용이 정지되었습니다.\n문의: tksqlc08@gmail.com');
       UI.closeModal('google-login-modal');
       return;
     }
@@ -1429,6 +2056,80 @@ const UI = {
   }
 };
 
+// --- DIRECTIONS (LOCATION) PAGE ---
+const Directions = {
+  render(container) {
+    const view = document.createElement('div');
+    view.className = 'page-view';
+
+    view.innerHTML = `
+      <div class="section-title-wrap">
+        <h2 class="section-title">오시는 길</h2>
+        <p class="section-subtitle">산빛약초꽃차문화연구원은 맑은 공기와 자연이 함께하는 파주에 위치하고 있습니다.</p>
+      </div>
+
+      <div class="location-grid">
+        <!-- 왼쪽: 주소 및 교통편 상세 안내 -->
+        <div class="location-info-card">
+          <div class="info-group">
+            <h3 class="info-title"><i class="fa-solid fa-location-dot"></i> 연구원 주소</h3>
+            <p class="info-text"><strong>도로명 주소:</strong> 경기도 파주시 가재울로 99-26</p>
+          </div>
+
+          <div class="info-group">
+            <h3 class="info-title"><i class="fa-solid fa-phone"></i> 연락처 및 운영시간</h3>
+            <p class="info-text" style="margin-bottom: 5px;"><strong>대표전화:</strong> 031-942-0545</p>
+            <p class="info-text"><strong>운영시간:</strong> 10:30 ~ 20:00 (매주 월요일 휴무)</p>
+          </div>
+
+          <div class="info-group">
+            <h3 class="info-title"><i class="fa-solid fa-bus"></i> 대중교통 이용 안내</h3>
+            <div class="transport-detail" style="margin-bottom: 12px;">
+              <h4 class="transport-sub"><i class="fa-solid fa-train"></i> 지하철 연계 안내</h4>
+              <p>경의중앙선 <strong>운정역 1번 출구</strong> → 마을버스 <strong>074, 070A, 080A번</strong> 탑승 → <strong>두레공원(중) 정류장</strong> 하차 (도보 약 5분)</p>
+            </div>
+            <div class="transport-detail">
+              <h4 class="transport-sub"><i class="fa-solid fa-bus-simple"></i> 주변 정류장 및 버스 노선</h4>
+              <p><strong>두레공원(중) 정류장</strong> 하차 (광역버스 9030, 3100, 1500, M7111 / 시내버스 065, 066, 080번 경유)</p>
+            </div>
+          </div>
+
+          <div class="info-group">
+            <h3 class="info-title"><i class="fa-solid fa-car"></i> 자가용 이용 및 주차</h3>
+            <p class="info-text">네비게이션에 <strong>"산빛약초꽃차"</strong> 또는 <strong>"경기도 파주시 가재울로 99-26"</strong>을 입력하고 찾아오시면 됩니다. 건물 내 전용 주차장에 무료 주차 가능합니다.</p>
+          </div>
+        </div>
+
+        <!-- 오른쪽: 지도 표시 및 길찾기 링크 -->
+        <div class="location-map-card">
+          <div class="map-container">
+            <iframe 
+              src="https://maps.google.com/maps?q=%EA%B2%BD%EA%B8%B0%EB%8F%84%20%ED%8C%8C%EC%A3%BC%EC%8B%9C%20%EA%B0%80%EC%9E%AC%EC%9A%B8%EB%A1%9C%2099-26&t=&z=16&ie=UTF8&iwloc=&output=embed" 
+              allowfullscreen="" 
+              loading="lazy">
+            </iframe>
+          </div>
+          
+          <div class="map-links">
+            <a href="https://map.naver.com/v5/search/%EA%B2%BD%EA%B8%B0%EB%8F%84%20%ED%8C%8C%EC%A3%BC%EC%8B%9C%20%EA%B0%80%EC%9E%AC%EC%9A%B8%EB%A1%9C%2099-26" target="_blank" class="btn-map-link btn-naver">
+              <i class="fa-solid fa-map-marked-alt"></i> 네이버 지도 길찾기
+            </a>
+            <a href="https://map.kakao.com/link/search/%EA%B2%BD%EA%B8%B0%EB%8F%84%20%ED%8C%8C%EC%A3%BC%EC%8B%9C%20%EA%B0%80%EC%9E%AC%EC%9A%B8%EB%A1%9C%2099-26" target="_blank" class="btn-map-link btn-kakao">
+              <i class="fa-solid fa-location-arrow"></i> 카카오맵 길찾기
+            </a>
+          </div>
+        </div>
+      </div>
+    `;
+
+    container.appendChild(view);
+  }
+};
+
+function renderLocation(container) {
+  Directions.render(container);
+}
+
 // 전역 객체 바인딩 (HTML에서 onclick 등으로 호출하기 위함)
 window.Auth = Auth;
 window.UI = UI;
@@ -1437,6 +2138,10 @@ window.Teas = Teas;
 window.Community = Community;
 window.Admin = Admin;
 window.Pricing = Pricing;
+window.Barefoot = Barefoot;
+window.Meditation = Meditation;
+window.Directions = Directions;
+
 
 // 앱 구동 시작
 document.addEventListener('DOMContentLoaded', initApp);
