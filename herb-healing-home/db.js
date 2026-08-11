@@ -672,6 +672,26 @@ const initialHerbs = [
     howToUse: '가공 및 단쇄한 용골 15~30g을 물에 30분 이상 먼저 달인 후 약물을 섭취합니다.',
     imageUrl: 'images/yonggol.jpg',
   },
+  {
+    id: 'herbs-67',
+    name: '우슬꽃 (Achyranthes Flower)',
+    scientificName: 'Achyranthes bidentata Blume var. japonica',
+    category: '약초꽃류',
+    efficacy: '관절과 뼈를 튼튼하게 하고 어혈을 풀며, 약초 꽃차로서 몸을 따뜻하게 하고 혈액 순환을 도우며 피로 회복과 면역 조절에 도움을 줍니다.',
+    sideEffects: '임산부나 자궁 수축 우려가 있는 분은 섭취를 금해야 하며, 꽃가루 알레르기가 있는 분은 주의해야 합니다.',
+    howToUse: '잘 말린 우슬꽃을 덖은 후, 뜨거운 물에 2~3송이를 우려내어 향이 그윽한 꽃차로 음용합니다.',
+    imageUrl: 'images/achyranthes_flower.jpg',
+  },
+  {
+    id: 'herbs-68',
+    name: '선태 (Cicada Slough/매미허물)',
+    scientificName: 'Cryptotympana atrata Fabricius',
+    category: '껍질류',
+    efficacy: '몸 안의 풍열을 발산시키고(소산풍열), 인후통 및 목이 쉰 증상을 개선하며, 소아의 경풍 및 피부 가려움증, 두드러기 완화에 도움을 줍니다.',
+    sideEffects: '체질이 매우 허약하거나 기운이 없는 사람, 임산부는 신중하게 복용해야 합니다.',
+    howToUse: '깨끗이 세척하여 건조된 선태 3~6g을 물 1L에 달여 차로 마시거나, 가루로 내어 미온수에 타서 복용합니다.',
+    imageUrl: 'images/seontae.jpg',
+  },
 ];
 
 // 2. 초기 약선 힐링차 상품 데이터 (쿠팡/구매대행 고려)
