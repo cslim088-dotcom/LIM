@@ -188,7 +188,7 @@ function renderHome(container) {
           <h3 class="tea-card-title">${tea.name}</h3>
           <p class="tea-card-desc">${tea.description}</p>
           <div class="tea-card-actions">
-            <a href="${tea.coupangUrl}" target="_blank" class="btn-coupang"><i class="fa-solid fa-cart-shopping"></i> 쿠팡 구매</a>
+            <a href="${tea.naverUrl}" target="_blank" class="btn-naver-buy"><i class="fa-solid fa-cart-shopping"></i> 네이버 구매</a>
             ${tea.agentBuyAvailable 
               ? `<button class="btn-agent-buy" onclick="Teas.openAgentBuyModal('${tea.id}')"><i class="fa-solid fa-paper-plane"></i> 구매대행</button>` 
               : `<button class="btn-agent-buy btn-disabled" disabled><i class="fa-solid fa-ban"></i> 대행 불가</button>`
@@ -456,7 +456,7 @@ const Teas = {
             <h3 class="tea-card-title">${tea.name}</h3>
             <p class="tea-card-desc">${tea.description}</p>
             <div class="tea-card-actions">
-              <a href="${tea.coupangUrl}" target="_blank" class="btn-coupang"><i class="fa-solid fa-cart-shopping"></i> 쿠팡 구매</a>
+              <a href="${tea.naverUrl}" target="_blank" class="btn-naver-buy"><i class="fa-solid fa-cart-shopping"></i> 네이버 구매</a>
               ${tea.agentBuyAvailable 
                 ? `<button class="btn-agent-buy" onclick="Teas.openAgentBuyModal('${tea.id}')"><i class="fa-solid fa-paper-plane"></i> 구매대행</button>` 
                 : `<button class="btn-agent-buy btn-disabled" disabled><i class="fa-solid fa-ban"></i> 대행 불가</button>`

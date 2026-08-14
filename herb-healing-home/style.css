@@ -671,8 +671,8 @@ nav.menu-bar {
   gap: 10px;
 }
 
-.btn-coupang {
-  background: #ff9900;
+.btn-naver-buy {
+  background: #03C75A;
   color: white !important;
   font-weight: 700;
   text-align: center;
@@ -686,8 +686,8 @@ nav.menu-bar {
   transition: var(--transition-smooth);
 }
 
-.btn-coupang:hover {
-  background: #e68a00;
+.btn-naver-buy:hover {
+  background: #02b34f;
 }
 
 .btn-agent-buy {

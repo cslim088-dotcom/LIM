@@ -694,7 +694,7 @@ const initialHerbs = [
   },
 ];
 
-// 2. 초기 약선 힐링차 상품 데이터 (쿠팡/구매대행 고려)
+// 2. 초기 약선 힐링차 상품 데이터 (네이버 스마트스토어 고려)
 const initialTeas = [
   {
     id: 'tea-1',
@@ -702,7 +702,7 @@ const initialTeas = [
     description: '쌍화차는 당귀, 숙지황, 황기, 계피 등등을 덖어서 만든 것으로 육체피로, 근육통, 감기몸살에 도움을 주는 약선힐링차입니다.',
     price: 40000,
     imageUrl: 'images/ssanghwa.jpg',
-    coupangUrl: 'https://www.coupang.com', // 가상 쿠팡 링크
+    naverUrl: 'https://smartstore.naver.com/sanbitherbflowertea/products/5383403384',
     agentBuyAvailable: true,
   },
   {
@@ -711,7 +711,7 @@ const initialTeas = [
     description: '코꽃차는 목련, 박하, 천궁, 계지 등을 덖어서 만든 것으로 콧물, 코막힘에 도움을 주는 약초꽃차입니다.',
     price: 40000,
     imageUrl: 'images/ko_flower_tea.jpg',
-    coupangUrl: 'https://www.coupang.com',
+    naverUrl: 'https://smartstore.naver.com/sanbitherbflowertea/products/5383425775',
     agentBuyAvailable: true,
   },
   {
@@ -720,7 +720,7 @@ const initialTeas = [
     description: '눈꽃차는 감국, 금잔화 등등을 덖어서 만든 것으로 눈이 뻑뻑하거나 침침할 때 도움을 주는 약초꽃차입니다.',
     price: 40000,
     imageUrl: 'images/nun_flower_tea.jpg',
-    coupangUrl: 'https://www.coupang.com',
+    naverUrl: 'https://smartstore.naver.com/sanbitherbflowertea/products/5383435281',
     agentBuyAvailable: true,
   },
   {
@@ -729,7 +729,7 @@ const initialTeas = [
     description: '혈꽃차는 지황, 당귀, 금은화, 감국 등등을 덖어서 만든 것으로 혈관을 튼튼하게 하고 피를 맑게 하는 데 도움을 주는 약초꽃차입니다.',
     price: 40000,
     imageUrl: 'images/hyeol_flower_tea.jpg',
-    coupangUrl: 'https://www.coupang.com',
+    naverUrl: 'https://smartstore.naver.com/sanbitherbflowertea/products/5383413906',
     agentBuyAvailable: true,
   },
   {
@@ -738,7 +738,7 @@ const initialTeas = [
     description: '휘파람차는 백출, 복령, 당귀, 연자육 등등을 덖어서 만든 것으로 마음을 편하게 하는 데 도움을 주는 약선힐링차입니다.',
     price: 40000,
     imageUrl: 'images/hwiparam_tea.jpg',
-    coupangUrl: 'https://www.coupang.com',
+    naverUrl: 'https://smartstore.naver.com/sanbitherbflowertea/products/10973994172',
     agentBuyAvailable: true,
   }
 ];
@@ -953,7 +953,8 @@ const Db = {
         existing.description = it.description;
         existing.price = it.price;
         existing.imageUrl = it.imageUrl;
-        existing.coupangUrl = it.coupangUrl;
+        existing.naverUrl = it.naverUrl;
+        delete existing.coupangUrl;
         existing.agentBuyAvailable = it.agentBuyAvailable;
         teasUpdated = true;
       }
