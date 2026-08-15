@@ -20,7 +20,7 @@ const initialHerbs = [
     efficacy: '면역력 증진, 피로 개선, 혈소판 응집 억제를 통한 혈액 흐름 개선, 기억력 개선, 항산화 작용.',
     sideEffects: '몸에 열이 너무 많은 사람은 과다 복용 시 두통, 불면, 가슴 답답함이 생길 수 있습니다.',
     howToUse: '물 1L에 건조 인삼 10g을 넣고 약불에서 2시간 정도 달여 하루 2~3회 음용합니다. 삼계탕이나 요리에 첨가해도 좋습니다.',
-    imageUrl: 'images/ginseng.png',
+    imageUrl: 'images/ginseng.jpg',
   },
   {
     id: 'herbs-2',
@@ -30,7 +30,7 @@ const initialHerbs = [
     efficacy: '보혈작용(피를 보충함), 혈액 순환 개선, 부인과 질환(생리통, 생리불순) 완화, 수족냉증 개선.',
     sideEffects: '자궁 수축을 유발할 수 있으므로 임산부는 섭취를 금해야 하며, 설사가 잦은 사람도 주의가 필요합니다.',
     howToUse: '말린 당귀 뿌리 5~10g을 물 1L와 함께 끓여 차로 마십니다. 특유의 은은한 한약 향이 일품입니다.',
-    imageUrl: 'images/angelica.png',
+    imageUrl: 'images/angelica.jpg',
   },
   {
     id: 'herbs-3',
