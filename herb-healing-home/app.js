@@ -39,6 +39,32 @@ function initApp() {
 
   // 글로벌 이벤트 리스너 등록
   Auth.renderAuthUI();
+
+  // 맨 위로 이동 버튼 이벤트 등록
+  initScrollToTop();
+}
+
+// 맨 위로 이동(Scroll to Top) 기능 초기화
+function initScrollToTop() {
+  const scrollTopBtn = document.getElementById('scroll-to-top');
+  if (!scrollTopBtn) return;
+
+  // 일정 높이 이상 스크롤 시 버튼 표시
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 200) {
+      scrollTopBtn.classList.add('show');
+    } else {
+      scrollTopBtn.classList.remove('show');
+    }
+  });
+
+  // 클릭 시 최상단으로 부드럽게 이동
+  scrollTopBtn.addEventListener('click', () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  });
 }
 
 // 브랜드 정보 실시간 업데이트

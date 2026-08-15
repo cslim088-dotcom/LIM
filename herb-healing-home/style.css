@@ -1832,3 +1832,72 @@ footer {
   background: #ebd200;
   transform: translateY(-2px);
 }
+
+/* ==================================================== */
+/* SCROLL TO TOP BUTTON                                */
+/* ==================================================== */
+.scroll-top-btn {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 20px;
+  border-radius: 50px;
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
+  color: #ffffff;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  font-weight: 600;
+  border: 1px solid var(--accent-color);
+  box-shadow: 0 8px 25px rgba(30, 63, 32, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  cursor: pointer;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(20px) scale(0.95);
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  outline: none;
+}
+
+.scroll-top-btn i {
+  font-size: 1rem;
+  transition: transform 0.3s ease;
+}
+
+.scroll-top-btn.show {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0) scale(1);
+}
+
+.scroll-top-btn:hover {
+  background: linear-gradient(135deg, var(--primary-light) 0%, #3d7e41 100%);
+  box-shadow: 0 12px 30px rgba(30, 63, 32, 0.45), 0 0 15px rgba(212, 175, 55, 0.3);
+  transform: translateY(-4px) scale(1.03);
+  border-color: #f1c40f;
+}
+
+.scroll-top-btn:hover i {
+  transform: translateY(-3px);
+}
+
+.scroll-top-btn:active {
+  transform: translateY(-1px) scale(0.98);
+  box-shadow: 0 4px 15px rgba(30, 63, 32, 0.3);
+}
+
+@media (max-width: 768px) {
+  .scroll-top-btn {
+    bottom: 20px;
+    right: 20px;
+    padding: 10px 15px;
+    font-size: 0.85rem;
+    border-radius: 40px;
+  }
+}
+

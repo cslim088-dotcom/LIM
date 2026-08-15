@@ -9,6 +9,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
   <style>
     /* CSS Variables & Theme */
@@ -499,7 +501,63 @@
 
   </div>
 
-  <!-- JavaScript for Tabs -->
+  <!-- Scroll to Top Button -->
+  <button id="scroll-to-top" class="scroll-top-btn" aria-label="맨 위로 이동" title="맨 위로 이동">
+    <i class="fa-solid fa-arrow-up"></i>
+    <span>맨 위로</span>
+  </button>
+
+  <style>
+    .scroll-top-btn {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      z-index: 999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px 20px;
+      border-radius: 50px;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+      color: #ffffff;
+      font-family: var(--font-inter);
+      font-size: 0.95rem;
+      font-weight: 600;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 8px 25px rgba(139, 92, 246, 0.35);
+      backdrop-filter: blur(10px);
+      cursor: pointer;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(20px);
+      transition: all 0.35s ease;
+      outline: none;
+    }
+
+    .scroll-top-btn.show {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    .scroll-top-btn:hover {
+      background: linear-gradient(135deg, var(--primary-hover) 0%, var(--primary) 100%);
+      box-shadow: 0 12px 30px rgba(139, 92, 246, 0.5);
+      transform: translateY(-4px);
+    }
+
+    @media (max-width: 768px) {
+      .scroll-top-btn {
+        bottom: 20px;
+        right: 20px;
+        padding: 10px 16px;
+        font-size: 0.85rem;
+      }
+    }
+  </style>
+
+  <!-- JavaScript for Tabs & Scroll -->
   <script>
     function switchTab(evt, tabId) {
       // Get all tab panes and hide them
@@ -513,6 +571,21 @@
       // Show the selected tab and add active class to clicked button
       document.getElementById(tabId).classList.add('active');
       evt.currentTarget.classList.add('active');
+    }
+
+    // Scroll to Top Logic
+    const scrollTopBtn = document.getElementById('scroll-to-top');
+    if (scrollTopBtn) {
+      window.addEventListener('scroll', () => {
+        if (window.scrollY > 200) {
+          scrollTopBtn.classList.add('show');
+        } else {
+          scrollTopBtn.classList.remove('show');
+        }
+      });
+      scrollTopBtn.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
     }
   </script>
 </body>
