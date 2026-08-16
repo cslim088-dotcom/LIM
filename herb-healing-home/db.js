@@ -782,6 +782,26 @@ const initialHerbs = [
     howToUse: '말린 여주 슬라이스 3~5g(2~3조각)을 따뜻한 물 1L에 우려내어 구수한 여주차로 마시거나 볶아서 차로 음용합니다.',
     imageUrl: 'images/yeoju.jpg',
   },
+  {
+    id: 'herbs-78',
+    name: '독활 (Dokhwal/땅두릅 뿌리)',
+    scientificName: 'Aralia continentalis Kitagawa',
+    category: '뿌리류',
+    efficacy: '관절통·신경통·요통 완화, 풍습 제거(거풍습), 중풍 예방 및 항염 작용, 면역력 강화.',
+    sideEffects: '성질이 따뜻하고 매운 편이므로 체질적으로 열이 지나치게 많거나(음허화왕) 고열 발열 증상이 있는 분은 복용에 주의해야 합니다.',
+    howToUse: '건조 독활 뿌리 10~15g을 물 1.5L에 넣고 약불에서 30~40분간 달여 하루 2~3회 따뜻하게 마십니다. 당귀, 천궁 등과 함께 달여 마셔도 좋습니다.',
+    imageUrl: 'images/dokhwal.jpg',
+  },
+  {
+    id: 'herbs-79',
+    name: '모과 (Quince/목과)',
+    scientificName: 'Chaenomeles sinensis (Thunb.) Koehne',
+    category: '열매류',
+    efficacy: '근육 이완 및 관절통·신경통 완화(서근활락), 소화 증진, 감기 예방 및 기관지염·기침 완화, 피로 회복.',
+    sideEffects: '산도가 높아 위산과다 환자는 공복 복용을 피하며, 섭취 후 치아 보호를 위해 입을 헹궈주는 것이 좋습니다. 또한 소변 양이 감소할 수 있어 주의합니다.',
+    howToUse: '잘 말린 모과 10~15g을 물 1L에 넣고 약불로 30분 정도 달여 따뜻한 차로 음용하거나, 꿀에 재워 모과청으로 우려 마십니다.',
+    imageUrl: 'images/mogwa.jpg',
+  },
 ];
 
 // 2. 초기 약선 힐링차 상품 데이터 (네이버 스마트스토어 고려)
