@@ -163,6 +163,15 @@
       <form id="community-post-form" onsubmit="event.preventDefault();">
         <input type="hidden" id="post-id-input">
         <div class="form-group">
+          <label for="post-category-input">분류</label>
+          <select id="post-category-input" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: var(--border-radius-sm); outline: none;">
+            <option value="체험담">자연치유 체험담</option>
+            <option value="질문/답변">질문 & 답변</option>
+            <option value="힐링차 후기">약선 힐링차 후기</option>
+            <option value="자유수다">자유 이야기</option>
+          </select>
+        </div>
+        <div class="form-group">
           <label for="post-title-input">제목</label>
           <input type="text" id="post-title-input" required placeholder="제목을 입력하세요">
         </div>

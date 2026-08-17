@@ -1012,21 +1012,62 @@ const initialSettings = {
 const initialPosts = [
   {
     id: 'post-1',
+    category: '체험담',
     title: '당귀차 매일 한 잔씩 마신 뒤로 손발이 따뜻해졌어요!',
     content: '평생 수족냉증으로 고생해서 겨울은 물론 여름 에어컨 밑에서도 장갑을 끼고 싶을 정도였는데, 당귀차를 약 3주간 꾸준히 연하게 우려 마셨더니 혈액 순환이 되는 게 느껴집니다. 정말 자연치유의 힘은 대단하네요. 강추합니다!',
     author: '김철수',
     authorEmail: 'kim@gmail.com',
     date: '2026-06-25',
-    comments: 3,
+    views: 42,
+    likes: 12,
+    commentsList: [
+      {
+        id: 'comment-101',
+        author: '홍길동',
+        authorEmail: 'hong@naver.com',
+        content: '저도 당귀차 우려 마셔봐야겠네요! 좋은 체험담 감사합니다.',
+        date: '2026-06-26'
+      },
+      {
+        id: 'comment-102',
+        author: '산빛 관리자',
+        authorEmail: 'tksqlc08@gmail.com',
+        content: '당귀는 림프 및 혈액순환 개선에 으뜸입니다. 꾸준히 드시되 따뜻하게 보온해서 음용해 주세요.',
+        date: '2026-06-26'
+      }
+    ]
   },
   {
     id: 'post-2',
+    category: '질문/답변',
     title: '민들레 뿌리는 볶아서 마시는 건가요?',
     content: '민들레 생뿌리를 그냥 물에 끓여 마셨더니 너무 쓰고 떫어서 먹기 힘들더라고요. 찾아보니 한 번 볶거나 덖어서 차로 우려내면 둥굴레차처럼 고소하다고 하던데 방법이 맞나요? 고수분들의 조언 부탁드립니다.',
     author: '이영희',
     authorEmail: 'lee@daum.net',
     date: '2026-06-28',
-    comments: 1,
+    views: 28,
+    likes: 5,
+    commentsList: [
+      {
+        id: 'comment-103',
+        author: '산빛 대표',
+        authorEmail: 'tksqlc08@gmail.com',
+        content: '네, 민들레 뿌리는 깨끗이 씻어 말린 후 약불에서 노릇하게 덖어내면 쓴맛이 줄고 고소한 커피 대체차(민들레커피)가 됩니다!',
+        date: '2026-06-29'
+      }
+    ]
+  },
+  {
+    id: 'post-3',
+    category: '힐링차 후기',
+    title: '산빛 약선 힐링 가마덖음차 구매후기입니다',
+    content: '파주 산빛 약초원에서 직접 가마덖음한 힐링차를 구매대행 신청해서 받아서 마셔봤는데 향이 정말 깊고 머리가 맑아지네요. 석창포와 구기자 조합 차를 우려 마시니 수면의 질도 훨씬 올라갔습니다.',
+    author: '홍길동',
+    authorEmail: 'hong@naver.com',
+    date: '2026-07-10',
+    views: 65,
+    likes: 18,
+    commentsList: []
   }
 ];
 
@@ -1147,7 +1188,17 @@ const Db = {
       setLocalStorage(STORAGE_KEYS.USERS, users);
     }
 
-    getLocalStorage(STORAGE_KEYS.POSTS, initialPosts);
+    const posts = getLocalStorage(STORAGE_KEYS.POSTS, initialPosts);
+    let postsUpdated = false;
+    posts.forEach(p => {
+      if (!p.category) { p.category = '체험담'; postsUpdated = true; }
+      if (typeof p.views !== 'number') { p.views = 10; postsUpdated = true; }
+      if (typeof p.likes !== 'number') { p.likes = 0; postsUpdated = true; }
+      if (!Array.isArray(p.commentsList)) { p.commentsList = []; postsUpdated = true; }
+    });
+    if (postsUpdated) {
+      setLocalStorage(STORAGE_KEYS.POSTS, posts);
+    }
     const settings = getLocalStorage(STORAGE_KEYS.SETTINGS, initialSettings);
     settings.contactEmail = 'tksqlc08@gmail.com';
     settings.contactPhone = '031-942-0545(산빛약초꽃차)';

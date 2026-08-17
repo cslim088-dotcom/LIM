@@ -722,47 +722,101 @@ function renderTeas(container) {
   Teas.render(container);
 }
 
-// --- COMMUNITY PAGE ---
+// --- COMMUNITY PAGE (자연치유 체험나눔방) ---
 const Community = {
+  currentCategory: '전체',
+  searchQuery: '',
+
   render(container) {
     const view = document.createElement('div');
     view.className = 'page-view';
 
+    // 카테고리 및 검색 필터링 적용
+    const filteredPosts = state.posts.filter(post => {
+      const matchesCategory = (this.currentCategory === '전체') || (post.category === this.currentCategory);
+      const q = this.searchQuery.trim().toLowerCase();
+      const matchesSearch = !q || 
+        post.title.toLowerCase().includes(q) || 
+        post.content.toLowerCase().includes(q) || 
+        (post.author && post.author.toLowerCase().includes(q));
+      return matchesCategory && matchesSearch;
+    });
+
     let tableRowsHtml = '';
-    state.posts.forEach(post => {
+    filteredPosts.forEach(post => {
+      const commentCount = Array.isArray(post.commentsList) ? post.commentsList.length : (post.comments || 0);
+      const viewCount = typeof post.views === 'number' ? post.views : 0;
+      const likeCount = typeof post.likes === 'number' ? post.likes : 0;
+      const categoryTag = post.category || '체험담';
+
       tableRowsHtml += `
         <div class="post-row" onclick="Community.viewPostDetail('${post.id}')">
           <div class="post-main-info">
+            <span class="post-badge">${categoryTag}</span>
             <span class="post-title">${post.title}</span>
-            <span class="post-author"><i class="fa-solid fa-circle-user"></i> ${post.author} (${post.authorEmail})</span>
+            <span class="post-author"><i class="fa-solid fa-circle-user"></i> ${post.author}</span>
           </div>
-          <span class="post-date">${post.date}</span>
-          <span class="post-comments"><i class="fa-regular fa-comment-dots"></i> ${post.comments || 0}</span>
+          <div class="post-meta-right">
+            <span class="post-date">${post.date}</span>
+            <span class="post-stat"><i class="fa-regular fa-eye"></i> ${viewCount}</span>
+            <span class="post-stat"><i class="fa-regular fa-comment-dots"></i> ${commentCount}</span>
+            <span class="post-stat" style="color: #e74c3c;"><i class="fa-regular fa-heart"></i> ${likeCount}</span>
+          </div>
         </div>
       `;
     });
 
+    const categories = ['전체', '체험담', '질문/답변', '힐링차 후기', '자유수다'];
+    const categoryTabsHtml = categories.map(cat => `
+      <button class="filter-btn ${this.currentCategory === cat ? 'active' : ''}" onclick="Community.filterCategory('${cat}')">${cat}</button>
+    `).join('');
+
     view.innerHTML = `
       <div class="section-title-wrap">
         <h2 class="section-title">자연치유 체험 나눔방</h2>
-        <p class="section-subtitle">약초와 꽃차를 활용한 건강 회복 체험담과 질문을 자유롭게 나누어주세요.</p>
+        <p class="section-subtitle">약초와 약선 힐링차를 활용한 건강 회복 체험담과 질문, 나만의 치유 노하우를 자유롭게 전해주세요.</p>
       </div>
 
-      <div class="community-actions">
-        <button class="btn-primary" onclick="Community.openWriteModal()"><i class="fa-solid fa-pen-to-square"></i> 새 글 쓰기</button>
+      <div class="community-header-bar">
+        <div class="category-tabs">
+          ${categoryTabsHtml}
+        </div>
+        <div style="display: flex; gap: 10px; align-items: center;">
+          <div class="search-box">
+            <i class="fa-solid fa-magnifying-glass" style="color: var(--text-muted); margin-right: 8px;"></i>
+            <input type="text" id="community-search-input" placeholder="체험담, 질문, 약초 검색..." value="${this.searchQuery}" onkeyup="Community.handleSearch(event)">
+          </div>
+          <button class="btn-primary" onclick="Community.openWriteModal()"><i class="fa-solid fa-pen-to-square"></i> 글 작성하기</button>
+        </div>
       </div>
 
       <div class="posts-list">
-        <div class="post-row" style="background: rgba(30,63,32,0.08); font-weight: 700; pointer-events: none; border-bottom: 2px solid rgba(30,63,32,0.15);">
-          <div>제목 / 작성자</div>
-          <div style="text-align: center;">작성일</div>
-          <div style="text-align: center;">조회</div>
+        <div class="post-row post-header-row">
+          <div class="post-main-info" style="font-weight: 700; color: var(--primary-color);">분류 / 제목 / 작성자</div>
+          <div class="post-meta-right" style="font-weight: 700; color: var(--primary-color);">
+            <span>작성일</span>
+            <span>조회</span>
+            <span>댓글</span>
+            <span>공감</span>
+          </div>
         </div>
-        ${tableRowsHtml ? tableRowsHtml : '<div style="text-align: center; padding: 40px; color: var(--text-muted);">작성된 게시글이 없습니다.</div>'}
+        ${tableRowsHtml ? tableRowsHtml : '<div style="text-align: center; padding: 50px 20px; color: var(--text-muted); background: white; border-radius: var(--border-radius-md); margin-top: 10px;">검색 결과 및 작성된 게시글이 없습니다. 첫 번째 이야기를 공유해 보세요!</div>'}
       </div>
     `;
 
     container.appendChild(view);
+  },
+
+  filterCategory(cat) {
+    this.currentCategory = cat;
+    router();
+  },
+
+  handleSearch(e) {
+    this.searchQuery = e.target.value;
+    if (e.key === 'Enter') {
+      router();
+    }
   },
 
   openWriteModal() {
@@ -772,8 +826,8 @@ const Community = {
       return;
     }
 
-    // 폼 초기화
     document.getElementById('post-id-input').value = '';
+    document.getElementById('post-category-input').value = '체험담';
     document.getElementById('post-title-input').value = '';
     document.getElementById('post-content-input').value = '';
     document.getElementById('community-modal-title').innerText = '새 글 쓰기';
@@ -782,9 +836,16 @@ const Community = {
   },
 
   savePost() {
+    if (!state.currentUser) {
+      alert('로그인이 필요합니다.');
+      UI.openModal('google-login-modal');
+      return;
+    }
+
     const id = document.getElementById('post-id-input').value;
-    const title = document.getElementById('post-title-input').value;
-    const content = document.getElementById('post-content-input').value;
+    const category = document.getElementById('post-category-input').value || '체험담';
+    const title = document.getElementById('post-title-input').value.trim();
+    const content = document.getElementById('post-content-input').value.trim();
 
     if (!title || !content) {
       alert('제목과 내용을 입력해주세요.');
@@ -792,34 +853,34 @@ const Community = {
     }
 
     if (id) {
-      // 수정 모드
       const postIndex = state.posts.findIndex(p => p.id === id);
       if (postIndex > -1) {
-        // 권한 확인
         if (state.posts[postIndex].authorEmail !== state.currentUser.email && state.currentUser.role !== 'admin') {
           alert('수정 권한이 없습니다.');
           return;
         }
+        state.posts[postIndex].category = category;
         state.posts[postIndex].title = title;
         state.posts[postIndex].content = content;
       }
     } else {
-      // 새 글 모드
       const newPost = {
         id: 'post-' + Date.now(),
+        category: category,
         title: title,
         content: content,
-        author: state.currentUser.name || '무명씨',
+        author: state.currentUser.name || '자연치유 회원',
         authorEmail: state.currentUser.email,
         date: new Date().toISOString().split('T')[0],
-        comments: 0
+        views: 1,
+        likes: 0,
+        commentsList: []
       };
       state.posts.unshift(newPost);
     }
 
     Db.savePosts(state.posts);
     UI.closeModal('community-modal');
-    // 현재 커뮤니티 탭 새로고침
     router();
   },
 
@@ -827,28 +888,105 @@ const Community = {
     const post = state.posts.find(p => p.id === id);
     if (!post) return;
 
-    // 해당 글이 본인 글인지 혹은 관리자 계정인지 체크하여 제어 버튼 노출
+    // 조회수 증가
+    if (typeof post.views !== 'number') post.views = 0;
+    post.views += 1;
+    Db.savePosts(state.posts);
+
+    this.renderDetailModal(post);
+  },
+
+  toggleLike(id) {
+    const post = state.posts.find(p => p.id === id);
+    if (!post) return;
+
+    if (typeof post.likes !== 'number') post.likes = 0;
+    post.likes += 1;
+    Db.savePosts(state.posts);
+
+    this.renderDetailModal(post);
+  },
+
+  renderDetailModal(post) {
     const canEdit = state.currentUser && (state.currentUser.email === post.authorEmail || state.currentUser.role === 'admin');
+    const commentsList = Array.isArray(post.commentsList) ? post.commentsList : [];
+
+    let commentsHtml = '';
+    commentsList.forEach(cmt => {
+      const canDeleteCmt = state.currentUser && (state.currentUser.email === cmt.authorEmail || state.currentUser.role === 'admin');
+      commentsHtml += `
+        <div class="comment-item" style="padding: 12px 0; border-bottom: 1px dashed rgba(0,0,0,0.08);">
+          <div style="display: flex; justify-content: space-between; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 4px;">
+            <span><i class="fa-solid fa-circle-user" style="color: var(--primary-color);"></i> <strong>${cmt.author}</strong> (${cmt.authorEmail || '비공개'})</span>
+            <div>
+              <span style="margin-right: 8px;">${cmt.date}</span>
+              ${canDeleteCmt ? `<button style="background: none; border: none; color: #e74c3c; cursor: pointer; font-size: 0.8rem;" onclick="Community.deleteComment('${post.id}', '${cmt.id}')">삭제</button>` : ''}
+            </div>
+          </div>
+          <div style="font-size: 0.95rem; color: var(--text-main); white-space: pre-line; line-height: 1.5;">${cmt.content}</div>
+        </div>
+      `;
+    });
+
+    const commentFormHtml = state.currentUser ? `
+      <div style="margin-top: 20px; background: rgba(30,63,32,0.04); padding: 15px; border-radius: var(--border-radius-sm);">
+        <label style="font-weight: 700; font-size: 0.9rem; color: var(--primary-color); display: block; margin-bottom: 8px;"><i class="fa-regular fa-comment-dots"></i> 댓글 남기기</label>
+        <textarea id="comment-input-${post.id}" rows="3" placeholder="서로를 배려하는 따뜻한 댓글을 남겨주세요." style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: var(--border-radius-sm); outline: none; font-size: 0.9rem; resize: vertical;"></textarea>
+        <div style="display: flex; justify-content: flex-end; margin-top: 8px;">
+          <button class="btn-primary" style="padding: 6px 16px; font-size: 0.85rem;" onclick="Community.addComment('${post.id}')">댓글 등록</button>
+        </div>
+      </div>
+    ` : `
+      <div style="margin-top: 20px; background: #f8f9fa; padding: 15px; border-radius: var(--border-radius-sm); text-align: center; color: var(--text-muted); font-size: 0.9rem;">
+        댓글을 작성하려면 로그인이 필요합니다.
+        <button class="btn-secondary" style="padding: 4px 12px; font-size: 0.8rem; margin-left: 10px;" onclick="UI.openModal('google-login-modal')">Google 로그인</button>
+      </div>
+    `;
 
     const contentHtml = `
       <div>
-        <h2 style="font-family: var(--font-title); font-size: 1.6rem; color: var(--primary-color); margin-bottom: 10px;">${post.title}</h2>
+        <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 8px;">
+          <span class="post-badge">${post.category || '체험담'}</span>
+          <span style="font-size: 0.85rem; color: var(--text-muted);"><i class="fa-regular fa-eye"></i> 조회수 ${post.views || 1}</span>
+        </div>
+        <h2 style="font-family: var(--font-title); font-size: 1.6rem; color: var(--primary-color); margin-bottom: 12px;">${post.title}</h2>
+        
         <div style="display: flex; justify-content: space-between; align-items: center; color: var(--text-muted); font-size: 0.85rem; padding-bottom: 15px; border-bottom: 1px solid rgba(0,0,0,0.08); margin-bottom: 25px;">
-          <span><i class="fa-solid fa-circle-user"></i> ${post.author} (${post.authorEmail})</span>
+          <span><i class="fa-solid fa-circle-user"></i> <strong>${post.author}</strong> (${post.authorEmail})</span>
           <span>작성일: ${post.date}</span>
         </div>
-        <div style="font-size: 1rem; line-height: 1.8; color: var(--text-main); min-height: 180px; white-space: pre-line; margin-bottom: 30px;">
+        
+        <div style="font-size: 1rem; line-height: 1.8; color: var(--text-main); min-height: 160px; white-space: pre-line; margin-bottom: 25px;">
           ${post.content}
         </div>
         
-        <div style="display: flex; justify-content: space-between; border-top: 1px solid rgba(0,0,0,0.08); padding-top: 20px;">
+        <!-- 공감(좋아요) 버튼 -->
+        <div style="text-align: center; margin-bottom: 30px;">
+          <button class="btn-like" style="background: rgba(231,76,60,0.08); color: #e74c3c; border: 1px solid rgba(231,76,60,0.3); border-radius: 25px; padding: 8px 24px; font-size: 0.95rem; font-weight: 700; cursor: pointer; transition: all 0.2s ease;" onclick="Community.toggleLike('${post.id}')">
+            <i class="fa-solid fa-heart"></i> 공감해요 (${post.likes || 0})
+          </button>
+        </div>
+
+        <!-- 댓글 세션 -->
+        <div style="border-top: 2px solid rgba(0,0,0,0.06); padding-top: 20px; margin-top: 20px;">
+          <h3 style="font-size: 1.1rem; color: var(--primary-color); margin-bottom: 15px;">
+            <i class="fa-regular fa-comments"></i> 댓글 <span style="color: var(--accent-color);">${commentsList.length}</span>개
+          </h3>
+          <div class="comments-list">
+            ${commentsHtml ? commentsHtml : '<div style="color: var(--text-muted); font-size: 0.9rem; padding: 10px 0;">아직 댓글이 없습니다. 첫 번째 댓글을 달아보세요!</div>'}
+          </div>
+          ${commentFormHtml}
+        </div>
+
+        <!-- 하단 컨트롤 버튼 -->
+        <div style="display: flex; justify-content: space-between; border-top: 1px solid rgba(0,0,0,0.08); padding-top: 20px; margin-top: 30px;">
           <div>
             ${canEdit ? `
               <button class="btn-secondary" style="padding: 8px 16px; font-size: 0.85rem; margin-right: 8px;" onclick="Community.editPost('${post.id}')"><i class="fa-solid fa-pen"></i> 수정</button>
               <button class="btn-secondary" style="padding: 8px 16px; font-size: 0.85rem; color: #e74c3c; border-color: #e74c3c;" onclick="Community.deletePost('${post.id}')"><i class="fa-solid fa-trash"></i> 삭제</button>
             ` : ''}
           </div>
-          <button class="btn-primary" style="padding: 8px 20px; font-size: 0.85rem;" onclick="UI.closeModal('detail-modal')">목록으로</button>
+          <button class="btn-primary" style="padding: 8px 20px; font-size: 0.85rem;" onclick="UI.closeModal('detail-modal'); router();">목록으로</button>
         </div>
       </div>
     `;
@@ -857,12 +995,64 @@ const Community = {
     UI.openModal('detail-modal');
   },
 
+  addComment(postId) {
+    if (!state.currentUser) {
+      alert('로그인이 필요합니다.');
+      UI.openModal('google-login-modal');
+      return;
+    }
+
+    const inputEl = document.getElementById(`comment-input-${postId}`);
+    if (!inputEl) return;
+
+    const content = inputEl.value.trim();
+    if (!content) {
+      alert('댓글 내용을 입력해주세요.');
+      return;
+    }
+
+    const post = state.posts.find(p => p.id === postId);
+    if (!post) return;
+
+    if (!Array.isArray(post.commentsList)) {
+      post.commentsList = [];
+    }
+
+    const newComment = {
+      id: 'comment-' + Date.now(),
+      author: state.currentUser.name || '자연치유 회원',
+      authorEmail: state.currentUser.email,
+      content: content,
+      date: new Date().toISOString().split('T')[0]
+    };
+
+    post.commentsList.push(newComment);
+    Db.savePosts(state.posts);
+
+    this.renderDetailModal(post);
+  },
+
+  deleteComment(postId, commentId) {
+    if (!confirm('이 댓글을 삭제하시겠습니까?')) return;
+
+    const post = state.posts.find(p => p.id === postId);
+    if (!post || !Array.isArray(post.commentsList)) return;
+
+    const idx = post.commentsList.findIndex(c => c.id === commentId);
+    if (idx > -1) {
+      post.commentsList.splice(idx, 1);
+      Db.savePosts(state.posts);
+      this.renderDetailModal(post);
+    }
+  },
+
   editPost(id) {
     UI.closeModal('detail-modal');
     const post = state.posts.find(p => p.id === id);
     if (!post) return;
 
     document.getElementById('post-id-input').value = post.id;
+    document.getElementById('post-category-input').value = post.category || '체험담';
     document.getElementById('post-title-input').value = post.title;
     document.getElementById('post-content-input').value = post.content;
     document.getElementById('community-modal-title').innerText = '글 수정하기';
