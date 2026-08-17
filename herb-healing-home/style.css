@@ -1995,3 +1995,89 @@ footer {
   }
 }
 
+/* -------------------------------------- */
+/* GOOGLE LOGIN MODAL ACCOUNT CARDS       */
+/* -------------------------------------- */
+.google-accounts-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.google-account-item {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 14px 18px;
+  background: #f8f9fa;
+  border: 1px solid rgba(0,0,0,0.08);
+  border-radius: var(--border-radius-md);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.google-account-item:hover:not(.disabled-card) {
+  background: rgba(30, 63, 32, 0.06);
+  border-color: var(--primary-color);
+  transform: translateY(-2px);
+}
+
+.google-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #e2e8f0;
+  color: var(--text-main);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.google-acc-details {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.google-acc-name {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--primary-color);
+}
+
+.google-acc-email {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+/* 비활성화 카드 (권한 잠금 - 타인 계정 클릭 방지) */
+.disabled-card {
+  opacity: 0.45;
+  pointer-events: none;
+  cursor: not-allowed;
+  filter: grayscale(0.7);
+  background: #f1f3f5;
+}
+
+/* 현재 로그인된 활성 카드 */
+.active-card {
+  border: 2px solid var(--primary-color);
+  background: rgba(30, 63, 32, 0.05);
+  box-shadow: 0 4px 12px rgba(30, 63, 32, 0.1);
+}
+
+.current-user-badge {
+  background: var(--primary-color);
+  color: white;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+

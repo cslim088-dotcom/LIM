@@ -2134,6 +2134,9 @@ function renderAdmin(container) {
   Admin.render(container);
 }
 
+// 1. 관리자 이메일 목록 정의
+const ADMIN_EMAILS = ['tksqlc08@gmail.com'];
+
 // ==========================================
 // 5. 구글 로그인 및 권한 관리 (Mocking)
 // ==========================================
@@ -2145,28 +2148,27 @@ const Auth = {
     if (!authContainer) return;
 
     if (state.currentUser) {
-      // 로그인 상태
+      const isAdmin = ADMIN_EMAILS.includes(state.currentUser.email.toLowerCase()) || state.currentUser.role === 'admin';
+      
       authContainer.innerHTML = `
         <div class="user-profile">
-          <div class="user-avatar">${state.currentUser.name ? state.currentUser.name.substring(0, 1) : 'U'}</div>
+          <div class="user-avatar" style="${isAdmin ? 'background: var(--primary-color); color: white;' : ''}">${state.currentUser.name ? state.currentUser.name.substring(0, 1) : 'U'}</div>
           <div class="user-info">
-            <span class="user-name">${state.currentUser.name}님</span>
+            <span class="user-name">${state.currentUser.name}님 ${isAdmin ? '<span style="font-size:0.75rem; color:#e74c3c; font-weight:700;">[대표/관리자]</span>' : ''}</span>
             <span class="user-plan-badge">${state.currentUser.plan}</span>
           </div>
           <button class="btn-logout" onclick="Auth.logout()"><i class="fa-solid fa-right-from-bracket"></i> 로그아웃</button>
         </div>
       `;
 
-      // 관리자 메뉴 보임 여부 조절
-      if (state.currentUser.role === 'admin') {
+      if (isAdmin) {
         adminLink.style.display = 'block';
       } else {
         adminLink.style.display = 'none';
       }
     } else {
-      // 미로그인 상태
       authContainer.innerHTML = `
-        <button class="btn-google-login" onclick="UI.openModal('google-login-modal')">
+        <button class="btn-google-login" onclick="Auth.openLoginModal()">
           <svg viewBox="0 0 18 18" width="18" height="18" xmlns="http://www.w3.org/2000/svg">
             <path d="M17.64 9.2c0-.63-.06-1.25-.16-1.84H9v3.47h4.84c-.21 1.12-.84 2.07-1.79 2.7v2.24h2.9c1.7-1.57 2.69-3.88 2.69-6.57z" fill="#4285F4"/>
             <path d="M9 18c2.43 0 4.47-.8 5.96-2.2l-2.9-2.24c-.8.54-1.84.87-3.06.87-2.35 0-4.34-1.58-5.05-3.72H.96v2.3C2.44 15.97 5.48 18 9 18z" fill="#34A853"/>
@@ -2180,14 +2182,107 @@ const Auth = {
     }
   },
 
+  openLoginModal() {
+    this.renderLoginModalContent();
+    UI.openModal('google-login-modal');
+  },
+
+  renderLoginModalContent() {
+    const container = document.getElementById('google-login-modal-body');
+    if (!container) return;
+
+    const currentUserEmail = state.currentUser ? state.currentUser.email.toLowerCase() : null;
+
+    const accounts = [
+      {
+        email: 'tksqlc08@gmail.com',
+        name: '관리자 (산빛 대표/구매대행 관리자)',
+        desc: '관리자 패널 & 구매대행 대시보드 연동 권한',
+        avatar: '管',
+        isAdmin: true
+      },
+      {
+        email: 'hong@naver.com',
+        name: '홍길동 (Gold 회원)',
+        desc: '자연치유 체험나눔방 우수 활동 회원',
+        avatar: '홍',
+        isAdmin: false
+      },
+      {
+        email: 'kim@gmail.com',
+        name: '김철수 (Silver 회원)',
+        desc: '약선 힐링차 애용 회원',
+        avatar: '김',
+        isAdmin: false
+      }
+    ];
+
+    let accountsHtml = '';
+    accounts.forEach(acc => {
+      const isCurrentAccount = currentUserEmail === acc.email.toLowerCase();
+      // 로그인된 경우: 본인 계정 카드만 active (클릭 가능), 다른 사용자의 카드는 disabled (클릭/이벤트 차단)
+      const isDisabled = currentUserEmail && !isCurrentAccount;
+
+      accountsHtml += `
+        <div class="google-account-item ${isCurrentAccount ? 'active-card' : ''} ${isDisabled ? 'disabled-card' : ''}"
+             onclick="${isDisabled ? '' : `Auth.simulateGoogleLogin('${acc.email}', '${acc.name}')`}">
+          <div class="google-avatar" style="${acc.isAdmin ? 'background: var(--primary-color); color: white;' : ''}">${acc.avatar}</div>
+          <div class="google-acc-details">
+            <div style="display: flex; align-items: center; justify-content: space-between;">
+              <span class="google-acc-name">${acc.name}</span>
+              ${isCurrentAccount ? '<span class="current-user-badge"><i class="fa-solid fa-check"></i> 현재 로그인 중</span>' : ''}
+              ${isDisabled ? '<span style="font-size: 0.75rem; color: #999; font-weight: 500;">(권한 잠금 - 접속 불가)</span>' : ''}
+            </div>
+            <span class="google-acc-email">${acc.email}</span>
+          </div>
+        </div>
+      `;
+    });
+
+    let headerStatusHtml = '';
+    if (state.currentUser) {
+      headerStatusHtml = `
+        <div style="background: rgba(30,63,32,0.08); border-left: 4px solid var(--primary-color); padding: 12px 15px; border-radius: 4px; margin-bottom: 20px;">
+          <div style="font-size: 0.95rem; font-weight: 700; color: var(--primary-color);">
+            <i class="fa-solid fa-user-check"></i> 현재 [${state.currentUser.name}] (${state.currentUser.email}) 계정으로 로그인되어 있습니다.
+          </div>
+          <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 4px;">
+            보안을 위해 본인 계정 카드만 활성화되며 타 계정 접속은 차단됩니다. 다른 계정으로 접속하시려면 먼저 로그아웃을 진행해 주세요.
+          </p>
+          <button class="btn-secondary" style="margin-top: 8px; padding: 6px 14px; font-size: 0.82rem; border-color: #e74c3c; color: #e74c3c; font-weight: 600;" onclick="Auth.logoutFromModal()">
+            <i class="fa-solid fa-right-from-bracket"></i> 로그아웃 후 타 계정 접속
+          </button>
+        </div>
+      `;
+    } else {
+      headerStatusHtml = `
+        <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px;">연동할 구글 계정을 선택하거나 이메일로 접속해 보세요.</p>
+      `;
+    }
+
+    const customFormDisabled = !!currentUserEmail;
+
+    container.innerHTML = `
+      ${headerStatusHtml}
+      <div class="google-accounts-list">
+        ${accountsHtml}
+      </div>
+
+      <div style="border-top: 1px solid rgba(0,0,0,0.08); padding-top: 20px; margin-top: 20px; ${customFormDisabled ? 'opacity: 0.45; pointer-events: none; filter: grayscale(0.7);' : ''}">
+        <h4 style="font-size: 0.9rem; margin-bottom: 10px; color: var(--primary-color);">새로운 이메일로 가입/로그인하기</h4>
+        <div style="display: flex; gap: 10px;">
+          <input type="email" id="custom-google-email" placeholder="example@gmail.com" ${customFormDisabled ? 'disabled' : ''} style="flex: 1; padding: 10px; border: 1px solid #ccc; border-radius: var(--border-radius-sm); outline: none;">
+          <button class="btn-primary" style="padding: 10px 20px; font-size: 0.85rem;" ${customFormDisabled ? 'disabled' : ''} onclick="Auth.simulateCustomLogin()">접속</button>
+        </div>
+      </div>
+    `;
+  },
+
   simulateGoogleLogin(email, name) {
-    // 1. 유저 DB 내 이메일 존재 유무 매칭
+    const isAdminEmail = ADMIN_EMAILS.includes(email.toLowerCase());
     let matchedUser = state.users.find(u => u.email.toLowerCase() === email.toLowerCase());
 
-    const isAdminEmail = (email.toLowerCase() === 'tksqlc08@gmail.com');
-
     if (!matchedUser) {
-      // 새로운 계정이면 가입 처리 (tksqlc08@gmail.com은 관리자로 자동 연동)
       matchedUser = {
         id: 'user-' + Date.now(),
         email: email,
@@ -2206,35 +2301,41 @@ const Auth = {
       Db.saveUsers(state.users);
     }
 
-    // 계정 상태 체크
     if (matchedUser.status === 'Suspended') {
-      alert('해당 계정은 관리자에 의해 사용이 정지되었습니다.\n문의: tksqlc08@gmail.com');
+      alert('해당 계정은 사용이 정지되었습니다.\n문의: tksqlc08@gmail.com');
       UI.closeModal('google-login-modal');
       return;
     }
 
-    // 2. 세션에 저장
     state.currentUser = matchedUser;
     localStorage.setItem('herb_healing_session', JSON.stringify(matchedUser));
 
-    alert(`구글 연동 로그인 성공!\n반갑습니다, ${name}님.`);
     UI.closeModal('google-login-modal');
-    
-    // UI 업데이트
     this.renderAuthUI();
-    router();
+
+    if (isAdminEmail) {
+      alert(`[관리자 자동 인식] 반갑습니다, 대표님!\n관리자 패널 & 구매대행 대시보드로 이동합니다.`);
+      window.location.hash = '#admin';
+    } else {
+      alert(`구글 연동 로그인 성공!\n반갑습니다, ${matchedUser.name}님.`);
+      router();
+    }
   },
 
   simulateCustomLogin() {
-    const email = document.getElementById('custom-google-email').value;
+    const email = document.getElementById('custom-google-email').value.trim();
     if (!email || !email.includes('@')) {
       alert('올바른 형식의 이메일 주소를 입력해주세요.');
       return;
     }
 
-    // 닉네임은 이메일 앞부분 추출
     const name = email.split('@')[0];
     this.simulateGoogleLogin(email, name);
+  },
+
+  logoutFromModal() {
+    this.logout();
+    this.renderLoginModalContent();
   },
 
   logout() {
@@ -2244,7 +2345,6 @@ const Auth = {
     this.renderAuthUI();
     alert('로그아웃 처리되었습니다.');
     
-    // 만약 현재 탭이 관리자 패널이었다면 홈으로 리다이렉트
     if (window.location.hash === '#admin') {
       window.location.hash = '#home';
     } else {
@@ -2258,6 +2358,9 @@ const Auth = {
 // ==========================================
 const UI = {
   openModal(modalId) {
+    if (modalId === 'google-login-modal') {
+      Auth.renderLoginModalContent();
+    }
     const modal = document.getElementById(modalId);
     if (modal) {
       modal.classList.add('active');

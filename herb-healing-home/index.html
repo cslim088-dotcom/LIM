@@ -103,44 +103,11 @@
 
   <!-- 1. Google Auth Simulation Modal -->
   <div class="modal-overlay" id="google-login-modal">
-    <div class="modal-container">
+    <div class="modal-container" style="max-width: 520px;">
       <button class="modal-close-btn" onclick="UI.closeModal('google-login-modal')">&times;</button>
       <h3 class="modal-title"><i class="fa-brands fa-google" style="color: #4285F4;"></i> Google 계정으로 로그인</h3>
-      <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px;">연동할 구글 계정을 선택하거나 관리자 계정으로 접속해보세요.</p>
-      
-      <div class="google-accounts-list">
-        <!-- Admin Profile -->
-        <div class="google-account-item" onclick="Auth.simulateGoogleLogin('tksqlc08@gmail.com', '관리자')">
-          <div class="google-avatar" style="background: var(--primary-color); color: white;">管</div>
-          <div class="google-acc-details">
-            <span class="google-acc-name">관리자 (산빛 대표/구매대행 관리자)</span>
-            <span class="google-acc-email">tksqlc08@gmail.com (관리자 패널 & 구매대행 대시보드 연동)</span>
-          </div>
-        </div>
-        <!-- Sample User 1 -->
-        <div class="google-account-item" onclick="Auth.simulateGoogleLogin('hong@naver.com', '홍길동')">
-          <div class="google-avatar">홍</div>
-          <div class="google-acc-details">
-            <span class="google-acc-name">홍길동 (Gold 회원)</span>
-            <span class="google-acc-email">hong@naver.com</span>
-          </div>
-        </div>
-        <!-- Sample User 2 -->
-        <div class="google-account-item" onclick="Auth.simulateGoogleLogin('kim@gmail.com', '김철수')">
-          <div class="google-avatar">김</div>
-          <div class="google-acc-details">
-            <span class="google-acc-name">김철수 (Silver 회원)</span>
-            <span class="google-acc-email">kim@gmail.com</span>
-          </div>
-        </div>
-      </div>
-      
-      <div style="border-top: 1px solid rgba(0,0,0,0.08); padding-top: 20px;">
-        <h4 style="font-size: 0.9rem; margin-bottom: 10px; color: var(--primary-color);">새로운 이메일로 가입/로그인하기</h4>
-        <div style="display: flex; gap: 10px;">
-          <input type="email" id="custom-google-email" placeholder="example@gmail.com" style="flex: 1; padding: 10px; border: 1px solid #ccc; border-radius: var(--border-radius-sm); outline: none;">
-          <button class="btn-primary" style="padding: 10px 20px; font-size: 0.85rem;" onclick="Auth.simulateCustomLogin()">접속</button>
-        </div>
+      <div id="google-login-modal-body">
+        <!-- Auth.renderLoginModalContent() will dynamically inject cards here -->
       </div>
     </div>
   </div>
