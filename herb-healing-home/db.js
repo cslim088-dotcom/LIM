@@ -804,6 +804,7 @@ const initialHerbs = [
   },
   {
     id: 'herbs-80',
+<<<<<<< HEAD
     name: '석창포 (Grass-leaved Sweet Flag/석창포 뿌리)',
     scientificName: 'Acorus gramineus Soland.',
     category: '뿌리류',
@@ -1231,6 +1232,16 @@ const initialHerbs = [
     sideEffects: '성질이 평온하나 점액질과 자양 영양 성분이 풍부하므로, 평소 비위가 매우 차고 습담(濕痰)이 많아 소화가 잘 안 되거나 묽은 변·설사를 자주 하는 분은 과다 복용 시 복부 팽만감이나 소화불량이 나타날 수 있습니다.',
     howToUse: '말린 황정(또는 구증구포 황정) 10~15g을 물 1.5~2L에 넣고 약불에서 30~40분간 은은하게 달여 하루 2~3회 구수하고 달콤한 건강 약초차로 따뜻하게 음용합니다.',
     imageUrl: 'images/hwangjeong.jpg',
+  },
+  {
+    id: 'herbs-123',
+    name: '사상자 (Cnidium Seed)',
+    scientificName: 'Cnidium monnieri (L.) Cusson',
+    category: '열매류',
+    efficacy: '신장의 양기를 돋우고(보신장양), 풍을 제거하며 습을 건조하게 합니다(거풍조습). 남성의 발기부전, 음낭 습진, 여성의 불감증, 냉대하 및 피부 가려움증 치료에 효과적입니다.',
+    sideEffects: '몸에 열이 많고 음허화왕(음기가 부족해 열이 오름) 상태이거나 기운이 아주 약한 분은 한의사와 상담 후 복용해야 합니다.',
+    howToUse: '하루 5~10g을 물 1L와 함께 끓여 찻물로 복용하거나, 피부 질환이 있는 부위에 달인 물로 씻어내거나 바르는 외용제로도 사용합니다.',
+    imageUrl: 'images/sasangja.png',
   },
 ];
 
