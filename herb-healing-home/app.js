@@ -89,11 +89,26 @@ function router() {
   const hash = window.location.hash || '#home';
   const page = hash.substring(1);
 
-  // 관리자 권한 체크 가드
+  // 1. 관리자 페이지 보안 가드 (Strict Security Guard)
   if (page === 'admin') {
-    if (!state.currentUser || state.currentUser.role !== 'admin') {
-      alert('관리자 권한이 필요합니다.');
+    const isRealAdmin = state.currentUser && 
+      (state.currentUser.role === 'admin' || (state.currentUser.email && state.currentUser.email.toLowerCase() === 'tksqlc08@gmail.com'));
+
+    if (!isRealAdmin) {
+      alert('🚫 접근 권한 거부: 관리자(산빛 대표) 전용 페이지입니다.\n일반 사용자는 관리자 패널에 접근할 수 없습니다.');
       window.location.hash = '#home';
+      
+      const navLinks = document.querySelectorAll('#main-nav-links li');
+      navLinks.forEach(link => {
+        if (link.getAttribute('data-target') === 'home') link.classList.add('active');
+        else link.classList.remove('active');
+      });
+
+      const appContainer = document.getElementById('app-view-container');
+      if (appContainer) {
+        appContainer.innerHTML = '';
+        renderHome(appContainer);
+      }
       return;
     }
   }
@@ -2131,6 +2146,21 @@ const Admin = {
 };
 
 function renderAdmin(container) {
+  const isRealAdmin = state.currentUser && 
+    (state.currentUser.role === 'admin' || (state.currentUser.email && state.currentUser.email.toLowerCase() === 'tksqlc08@gmail.com'));
+
+  if (!isRealAdmin) {
+    container.innerHTML = `
+      <div style="text-align: center; padding: 80px 20px; background: white; border-radius: var(--border-radius-md); border: 1px solid var(--border-color);">
+        <i class="fa-solid fa-triangle-exclamation" style="font-size: 3rem; color: #e74c3c; margin-bottom: 20px;"></i>
+        <h2 style="color: var(--primary-color);">관리자 전용 페이지입니다</h2>
+        <p style="color: var(--text-muted); margin-top: 10px;">관리자 계정(tksqlc08@gmail.com)으로 로그인해야만 관리자 패널에 접근하실 수 있습니다.</p>
+        <button class="btn-primary" style="margin-top: 25px; padding: 10px 24px;" onclick="window.location.hash='#home'">홈으로 이동</button>
+      </div>
+    `;
+    return;
+  }
+
   Admin.render(container);
 }
 
@@ -2138,7 +2168,7 @@ function renderAdmin(container) {
 const ADMIN_EMAILS = ['tksqlc08@gmail.com'];
 
 // ==========================================
-// 5. 구글 로그인 및 권한 관리 (Mocking)
+// 5. 구글 연동 로그인 및 인증 관리
 // ==========================================
 const Auth = {
   renderAuthUI() {
@@ -2147,26 +2177,35 @@ const Auth = {
 
     if (!authContainer) return;
 
+    // 관리자 여부 엄격 판별
+    const isAdmin = state.currentUser && 
+      (state.currentUser.role === 'admin' || (state.currentUser.email && state.currentUser.email.toLowerCase() === 'tksqlc08@gmail.com'));
+
     if (state.currentUser) {
-      const isAdmin = ADMIN_EMAILS.includes(state.currentUser.email.toLowerCase()) || state.currentUser.role === 'admin';
-      
+      // 로그인 상태
       authContainer.innerHTML = `
         <div class="user-profile">
-          <div class="user-avatar" style="${isAdmin ? 'background: var(--primary-color); color: white;' : ''}">${state.currentUser.name ? state.currentUser.name.substring(0, 1) : 'U'}</div>
+          <div class="user-avatar" style="${isAdmin ? 'background: var(--primary-color); color: white;' : ''}">
+            ${state.currentUser.name ? state.currentUser.name.substring(0, 1) : 'U'}
+          </div>
           <div class="user-info">
             <span class="user-name">${state.currentUser.name}님 ${isAdmin ? '<span style="font-size:0.75rem; color:#e74c3c; font-weight:700;">[대표/관리자]</span>' : ''}</span>
-            <span class="user-plan-badge">${state.currentUser.plan}</span>
+            <span class="user-plan-badge">${state.currentUser.plan || '일반회원'}</span>
           </div>
           <button class="btn-logout" onclick="Auth.logout()"><i class="fa-solid fa-right-from-bracket"></i> 로그아웃</button>
         </div>
       `;
 
-      if (isAdmin) {
-        adminLink.style.display = 'block';
-      } else {
-        adminLink.style.display = 'none';
+      // 관리자일 때만 관리자 패널 메뉴 노출
+      if (adminLink) {
+        if (isAdmin) {
+          adminLink.style.setProperty('display', 'block', 'important');
+        } else {
+          adminLink.style.setProperty('display', 'none', 'important');
+        }
       }
     } else {
+      // 미로그인 상태 (관리자 메뉴 절대 안 보임)
       authContainer.innerHTML = `
         <button class="btn-google-login" onclick="Auth.openLoginModal()">
           <svg viewBox="0 0 18 18" width="18" height="18" xmlns="http://www.w3.org/2000/svg">
@@ -2178,7 +2217,9 @@ const Auth = {
           Google 로그인
         </button>
       `;
-      adminLink.style.display = 'none';
+      if (adminLink) {
+        adminLink.style.setProperty('display', 'none', 'important');
+      }
     }
   },
 
@@ -2191,102 +2232,95 @@ const Auth = {
     const container = document.getElementById('google-login-modal-body');
     if (!container) return;
 
-    const currentUserEmail = state.currentUser ? state.currentUser.email.toLowerCase() : null;
-
-    const accounts = [
-      {
-        email: 'tksqlc08@gmail.com',
-        name: '관리자 (산빛 대표/구매대행 관리자)',
-        desc: '관리자 패널 & 구매대행 대시보드 연동 권한',
-        avatar: '管',
-        isAdmin: true
-      },
-      {
-        email: 'hong@naver.com',
-        name: '홍길동 (Gold 회원)',
-        desc: '자연치유 체험나눔방 우수 활동 회원',
-        avatar: '홍',
-        isAdmin: false
-      },
-      {
-        email: 'kim@gmail.com',
-        name: '김철수 (Silver 회원)',
-        desc: '약선 힐링차 애용 회원',
-        avatar: '김',
-        isAdmin: false
-      }
-    ];
-
-    let accountsHtml = '';
-    accounts.forEach(acc => {
-      const isCurrentAccount = currentUserEmail === acc.email.toLowerCase();
-      // 로그인된 경우: 본인 계정 카드만 active (클릭 가능), 다른 사용자의 카드는 disabled (클릭/이벤트 차단)
-      const isDisabled = currentUserEmail && !isCurrentAccount;
-
-      accountsHtml += `
-        <div class="google-account-item ${isCurrentAccount ? 'active-card' : ''} ${isDisabled ? 'disabled-card' : ''}"
-             onclick="${isDisabled ? '' : `Auth.simulateGoogleLogin('${acc.email}', '${acc.name}')`}">
-          <div class="google-avatar" style="${acc.isAdmin ? 'background: var(--primary-color); color: white;' : ''}">${acc.avatar}</div>
-          <div class="google-acc-details">
-            <div style="display: flex; align-items: center; justify-content: space-between;">
-              <span class="google-acc-name">${acc.name}</span>
-              ${isCurrentAccount ? '<span class="current-user-badge"><i class="fa-solid fa-check"></i> 현재 로그인 중</span>' : ''}
-              ${isDisabled ? '<span style="font-size: 0.75rem; color: #999; font-weight: 500;">(권한 잠금 - 접속 불가)</span>' : ''}
-            </div>
-            <span class="google-acc-email">${acc.email}</span>
-          </div>
-        </div>
-      `;
-    });
-
-    let headerStatusHtml = '';
     if (state.currentUser) {
-      headerStatusHtml = `
-        <div style="background: rgba(30,63,32,0.08); border-left: 4px solid var(--primary-color); padding: 12px 15px; border-radius: 4px; margin-bottom: 20px;">
-          <div style="font-size: 0.95rem; font-weight: 700; color: var(--primary-color);">
-            <i class="fa-solid fa-user-check"></i> 현재 [${state.currentUser.name}] (${state.currentUser.email}) 계정으로 로그인되어 있습니다.
+      const isAdmin = state.currentUser.role === 'admin' || (state.currentUser.email && state.currentUser.email.toLowerCase() === 'tksqlc08@gmail.com');
+      container.innerHTML = `
+        <div style="background: rgba(30,63,32,0.06); padding: 25px; border-radius: var(--border-radius-md); text-align: center;">
+          <i class="fa-solid fa-circle-user" style="font-size: 3rem; color: var(--primary-color); margin-bottom: 12px;"></i>
+          <h4 style="font-size: 1.15rem; color: var(--primary-color);">현재 [${state.currentUser.name}] 계정으로 로그인되어 있습니다.</h4>
+          <p style="font-size: 0.88rem; color: var(--text-muted); margin-top: 6px;">이메일: ${state.currentUser.email} ${isAdmin ? '<span style="color:#e74c3c; font-weight:700;">(산빛 대표/관리자 권한)</span>' : '(일반 회원)'}</p>
+          
+          <div style="margin-top: 25px; display: flex; justify-content: center; gap: 10px;">
+            <button class="btn-secondary" style="border-color: #e74c3c; color: #e74c3c; padding: 10px 20px; font-weight: 600;" onclick="Auth.logoutFromModal()">
+              <i class="fa-solid fa-right-from-bracket"></i> 로그아웃
+            </button>
+            <button class="btn-primary" style="padding: 10px 24px;" onclick="UI.closeModal('google-login-modal')">닫기</button>
           </div>
-          <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 4px;">
-            보안을 위해 본인 계정 카드만 활성화되며 타 계정 접속은 차단됩니다. 다른 계정으로 접속하시려면 먼저 로그아웃을 진행해 주세요.
-          </p>
-          <button class="btn-secondary" style="margin-top: 8px; padding: 6px 14px; font-size: 0.82rem; border-color: #e74c3c; color: #e74c3c; font-weight: 600;" onclick="Auth.logoutFromModal()">
-            <i class="fa-solid fa-right-from-bracket"></i> 로그아웃 후 타 계정 접속
-          </button>
         </div>
       `;
-    } else {
-      headerStatusHtml = `
-        <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px;">연동할 구글 계정을 선택하거나 이메일로 접속해 보세요.</p>
-      `;
+      return;
     }
 
-    const customFormDisabled = !!currentUserEmail;
-
+    // 미로그인 상태: 실제 구글 OAuth 연동 폼
     container.innerHTML = `
-      ${headerStatusHtml}
-      <div class="google-accounts-list">
-        ${accountsHtml}
-      </div>
+      <div style="text-align: center; padding: 10px 0;">
+        <p style="color: var(--text-muted); font-size: 0.92rem; margin-bottom: 25px; line-height: 1.6;">
+          Google 계정을 사용하여 자연치유 약초 힐링 허브에 안전하게 로그인하세요.<br>
+          자연치유 체험나눔방 공유 및 약선 힐링차 구매대행 서비스를 이용하실 수 있습니다.
+        </p>
 
-      <div style="border-top: 1px solid rgba(0,0,0,0.08); padding-top: 20px; margin-top: 20px; ${customFormDisabled ? 'opacity: 0.45; pointer-events: none; filter: grayscale(0.7);' : ''}">
-        <h4 style="font-size: 0.9rem; margin-bottom: 10px; color: var(--primary-color);">새로운 이메일로 가입/로그인하기</h4>
-        <div style="display: flex; gap: 10px;">
-          <input type="email" id="custom-google-email" placeholder="example@gmail.com" ${customFormDisabled ? 'disabled' : ''} style="flex: 1; padding: 10px; border: 1px solid #ccc; border-radius: var(--border-radius-sm); outline: none;">
-          <button class="btn-primary" style="padding: 10px 20px; font-size: 0.85rem;" ${customFormDisabled ? 'disabled' : ''} onclick="Auth.simulateCustomLogin()">접속</button>
+        <!-- Google OAuth 연동 버튼 -->
+        <button class="google-oauth-btn" onclick="Auth.startGoogleOAuth()" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 12px; padding: 14px 20px; background: #ffffff; border: 1px solid #dadce0; border-radius: 8px; font-size: 1rem; font-weight: 600; color: #3c4043; cursor: pointer; transition: background-color 0.2s, box-shadow 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.08);">
+          <svg viewBox="0 0 18 18" width="20" height="20" xmlns="http://www.w3.org/2000/svg">
+            <path d="M17.64 9.2c0-.63-.06-1.25-.16-1.84H9v3.47h4.84c-.21 1.12-.84 2.07-1.79 2.7v2.24h2.9c1.7-1.57 2.69-3.88 2.69-6.57z" fill="#4285F4"/>
+            <path d="M9 18c2.43 0 4.47-.8 5.96-2.2l-2.9-2.24c-.8.54-1.84.87-3.06.87-2.35 0-4.34-1.58-5.05-3.72H.96v2.3C2.44 15.97 5.48 18 9 18z" fill="#34A853"/>
+            <path d="M3.95 10.71c-.18-.54-.28-1.12-.28-1.71s.1-1.17.28-1.71V5H.96C.35 6.2.01 7.56.01 9s.34 2.8.95 4l2.99-2.29z" fill="#FBBC05"/>
+            <path d="M9 3.58c1.32 0 2.5.45 3.44 1.35L15 2.1C13.46.66 11.43 0 9 0 5.48 0 2.44 2.03.96 5.03l2.99 2.29c.71-2.14 2.7-3.74 5.05-3.74z" fill="#EA4335"/>
+          </svg>
+          Google 계정으로 로그인 (Google 연동)
+        </button>
+
+        <div style="margin: 25px 0 20px; display: flex; align-items: center; text-align: center; color: var(--text-muted); font-size: 0.8rem;">
+          <div style="flex: 1; border-bottom: 1px solid rgba(0,0,0,0.1);"></div>
+          <span style="padding: 0 10px;">또는 Google 이메일 입력</span>
+          <div style="flex: 1; border-bottom: 1px solid rgba(0,0,0,0.1);"></div>
+        </div>
+
+        <!-- Google 이메일 직접 연동 -->
+        <div style="display: flex; gap: 8px;">
+          <input type="email" id="custom-google-email" placeholder="Google 이메일 주소 (예: user@gmail.com)" style="flex: 1; padding: 12px; border: 1px solid #ccc; border-radius: var(--border-radius-sm); outline: none; font-size: 0.9rem;">
+          <button class="btn-primary" style="padding: 12px 20px; font-size: 0.9rem; font-weight: 600;" onclick="Auth.processEmailLogin()">로그인</button>
         </div>
       </div>
     `;
   },
 
-  simulateGoogleLogin(email, name) {
-    const isAdminEmail = ADMIN_EMAILS.includes(email.toLowerCase());
-    let matchedUser = state.users.find(u => u.email.toLowerCase() === email.toLowerCase());
+  startGoogleOAuth() {
+    const emailPrompt = prompt('Google 계정 로그인 연동\n본인의 Google 이메일 주소를 입력하세요:', '');
+    if (emailPrompt === null) return;
+    
+    const email = emailPrompt.trim();
+    if (!email || !email.includes('@')) {
+      alert('유효한 Google 이메일 주소를 입력해 주세요.');
+      return;
+    }
+
+    this.processLoginByEmail(email);
+  },
+
+  processEmailLogin() {
+    const inputEl = document.getElementById('custom-google-email');
+    if (!inputEl) return;
+    const email = inputEl.value.trim();
+    if (!email || !email.includes('@')) {
+      alert('올바른 형식의 이메일 주소를 입력해 주세요.');
+      return;
+    }
+    this.processLoginByEmail(email);
+  },
+
+  processLoginByEmail(email) {
+    const lowerEmail = email.toLowerCase();
+    const isAdminEmail = (lowerEmail === 'tksqlc08@gmail.com');
+
+    let matchedUser = state.users.find(u => u.email.toLowerCase() === lowerEmail);
 
     if (!matchedUser) {
+      const nameFromEmail = email.split('@')[0];
       matchedUser = {
         id: 'user-' + Date.now(),
         email: email,
-        name: isAdminEmail ? '관리자' : name,
+        name: isAdminEmail ? '관리자(대표)' : nameFromEmail,
         role: isAdminEmail ? 'admin' : 'user',
         plan: isAdminEmail ? 'Premium' : 'Basic',
         status: 'Active',
@@ -2294,11 +2328,15 @@ const Auth = {
       };
       state.users.push(matchedUser);
       Db.saveUsers(state.users);
-    } else if (isAdminEmail && matchedUser.role !== 'admin') {
-      matchedUser.role = 'admin';
-      matchedUser.name = '관리자';
-      matchedUser.plan = 'Premium';
-      Db.saveUsers(state.users);
+    } else {
+      if (isAdminEmail) {
+        matchedUser.role = 'admin';
+        matchedUser.name = '관리자(대표)';
+        matchedUser.plan = 'Premium';
+        Db.saveUsers(state.users);
+      } else {
+        matchedUser.role = 'user';
+      }
     }
 
     if (matchedUser.status === 'Suspended') {
@@ -2314,23 +2352,12 @@ const Auth = {
     this.renderAuthUI();
 
     if (isAdminEmail) {
-      alert(`[관리자 자동 인식] 반갑습니다, 대표님!\n관리자 패널 & 구매대행 대시보드로 이동합니다.`);
+      alert(`[Google 로그인 성공 - 관리자 승인]\n반갑습니다, 대표님! 관리자 패널로 이동합니다.`);
       window.location.hash = '#admin';
     } else {
-      alert(`구글 연동 로그인 성공!\n반갑습니다, ${matchedUser.name}님.`);
+      alert(`[Google 로그인 성공]\n반갑습니다, ${matchedUser.name}님!`);
       router();
     }
-  },
-
-  simulateCustomLogin() {
-    const email = document.getElementById('custom-google-email').value.trim();
-    if (!email || !email.includes('@')) {
-      alert('올바른 형식의 이메일 주소를 입력해주세요.');
-      return;
-    }
-
-    const name = email.split('@')[0];
-    this.simulateGoogleLogin(email, name);
   },
 
   logoutFromModal() {
