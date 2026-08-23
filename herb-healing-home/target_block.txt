@@ -1,0 +1,216 @@
+﻿// --- BAREFOOT WALKING PAGE ---
+const Barefoot = {
+  render(container) {
+    const view = document.createElement('div');
+    view.className = 'page-view';
+
+    view.innerHTML = `
+      <!-- Hero Banner -->
+      <div class="hero-section" style="margin-bottom: 3.5rem; background: linear-gradient(135deg, rgba(30,63,32,0.85), rgba(45,94,48,0.75)), url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1200&q=80') no-repeat center center; background-size: cover; border-radius: var(--border-radius-lg); padding: 4.5rem 2rem; color: #fff; text-shadow: 0 2px 5px rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center; text-align: center; box-shadow: var(--glass-shadow);">
+        <div style="max-width: 800px; backdrop-filter: blur(8px); background: rgba(0,0,0,0.2); padding: 2.5rem; border-radius: var(--border-radius-md); border: 1px solid rgba(255,255,255,0.15);">
+          <h2 style="font-family: var(--font-title); font-size: 2.6rem; margin-bottom: 12px; font-weight: 700; color: #fff;"><i class="fa-solid fa-shoe-prints"></i> ?吏? ?듯븯??移섏쑀, 留⑤컻嫄룰린</h2>
+          <p style="font-size: 1.2rem; color: rgba(255,255,255,0.95); font-weight: 400; line-height: 1.6; font-family: var(--font-body);">?멸났???좊컻??踰쀪퀬 ?낆쓣 ?쏅뒗 ?쒓컙, ?吏??臾댄븳???뚯씠???먮꼫吏? 移섏쑀?μ씠 泥대궡濡??좎엯?⑸땲??</p>
+        </div>
+      </div>
+
+      <!-- 1. 留⑤컻嫄룰린(?댁떛,Earthing)??3? 移섏쑀?⑤뒫 -->
+      <div style="margin-bottom: 4rem;">
+        <div class="section-title-wrap">
+          <h2 class="section-title"><i class="fa-solid fa-seedling" style="color: var(--primary-color); margin-right: 10px;"></i>留⑤컻嫄룰린(?댁떛,Earthing)??3? 移섏쑀?⑤뒫</h2>
+          <p class="section-subtitle">吏援??쒕㈃???먯쑀?꾩옄瑜?吏곸젒 泥대궡濡??≪닔?섏뿬 ?좎껜 ?앹껜 由щ벉??蹂듭썝?섎뒗 3媛吏 ?듭떖 ?댁젏</p>
+        </div>
+
+        <div class="cards-grid" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); margin-bottom: 2.5rem;">
+          <!-- Card 1 -->
+          <div class="herb-card" style="background: var(--card-bg); backdrop-filter: blur(10px); border: 1px solid var(--glass-border); border-radius: var(--border-radius-md); padding: 30px; transition: var(--transition-smooth); box-shadow: var(--glass-shadow); display: flex; flex-direction: column; gap: 15px; text-align: center; align-items: center;">
+            <div style="width: 70px; height: 70px; background: rgba(30,63,32,0.08); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--primary-color); font-size: 2rem; margin-bottom: 5px;">
+              <i class="fa-solid fa-bolt"></i>
+            </div>
+            <h3 style="font-family: var(--font-title); font-size: 1.4rem; color: var(--primary-color); font-weight: 700;">?쒖꽦?곗냼 以묓솕 諛???궛???④낵</h3>
+            <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; text-align: justify; text-justify: inter-word;">吏援??쒕㈃???뚯씠???먯쑀?꾩옄)??泥대궡濡??섎윭?ㅼ뼱 嫄닿컯???댁튂???쒖꽦?곗냼瑜?以묓솕?섍퀬 留뚯꽦 ?쇱쬆 ?섏튂瑜??④낵?곸쑝濡???떠以띾땲??</p>
+          </div>
+
+          <!-- Card 2 -->
+          <div class="herb-card" style="background: var(--card-bg); backdrop-filter: blur(10px); border: 1px solid var(--glass-border); border-radius: var(--border-radius-md); padding: 30px; transition: var(--transition-smooth); box-shadow: var(--glass-shadow); display: flex; flex-direction: column; gap: 15px; text-align: center; align-items: center;">
+            <div style="width: 70px; height: 70px; background: rgba(140,98,57,0.08); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--secondary-color); font-size: 2rem; margin-bottom: 5px;">
+              <i class="fa-solid fa-heart-pulse"></i>
+            </div>
+            <h3 style="font-family: var(--font-title); font-size: 1.4rem; color: var(--secondary-color); font-weight: 700;">泥쒖뿰 ?꾩떊 吏???④낵</h3>
+            <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; text-align: justify; text-justify: inter-word;">留⑤컻濡?嫄몄쑝硫??숆낵 ?? 紐⑤옒??遺덇퇋移숉븳 ?뚭린?ㅼ씠 諛쒕컮?μ쓽 60??媛?諛섏궗援ъ? ?먯쑉?좉꼍???먭레?섏뿬 ?덉븸 ?쒗솚??媛쒖꽑?섍퀬 ?좎쭊??щ? ?뺤꽦?섍쾶 留뚮벊?덈떎.</p>
+          </div>
+
+          <!-- Card 3 -->
+          <div class="herb-card" style="background: var(--card-bg); backdrop-filter: blur(10px); border: 1px solid var(--glass-border); border-radius: var(--border-radius-md); padding: 30px; transition: var(--transition-smooth); box-shadow: var(--glass-shadow); display: flex; flex-direction: column; gap: 15px; text-align: center; align-items: center;">
+            <div style="width: 70px; height: 70px; background: rgba(212,175,55,0.08); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--accent-color); font-size: 2rem; margin-bottom: 5px;">
+              <i class="fa-solid fa-moon"></i>
+            </div>
+            <h3 style="font-family: var(--font-title); font-size: 1.4rem; color: var(--text-main); font-weight: 700;">?좉꼍 ?덉젙 諛?遺덈㈃利?洹밸났</h3>
+            <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; text-align: justify; text-justify: inter-word;">吏援ъ????묒큺???섎㈃ 諛??ㅽ듃?덉뒪 議곗젅 ?몃Ⅴ紐ъ씤 肄붾Ⅴ?곗넄 遺꾨퉬瑜??뺤긽?뷀븯???ㅽ듃?덉뒪 ?섏튂瑜??꾪솕?섍퀬 源딆? ?섎㈃(?숇㈃)???좊룄?⑸땲??</p>
+          </div>
+        </div>
+
+        <!-- Roadmap: ?щ컮瑜?留⑤컻嫄룰린 3?④퀎 -->
+        <div style="background: #fff; padding: 40px; border-radius: var(--border-radius-lg); box-shadow: var(--glass-shadow); border: 1px solid var(--glass-border);">
+          <h3 style="font-family: var(--font-title); font-size: 1.7rem; color: var(--primary-color); margin-bottom: 30px; text-align: center; font-weight:700;"><i class="fa-solid fa-route"></i> ?덉쟾?섍퀬 ?щ컮瑜?留⑤컻嫄룰린 3?④퀎</h3>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 30px;">
+            <!-- Step 1 -->
+            <div style="position: relative; padding-top: 20px;">
+              <div style="position: absolute; top: -15px; left: 0; background: var(--primary-color); color:#fff; width:35px; height:35px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:1.1rem; box-shadow:0 3px 6px rgba(0,0,0,0.16);">1</div>
+              <h4 style="font-family: var(--font-title); font-size: 1.15rem; color: var(--primary-color); margin-bottom: 10px; font-weight:700; border-bottom:1px solid rgba(0,0,0,0.06); padding-bottom:5px;">?덉쟾???숆만 ?먯깋</h4>
+              <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.6;">?뚮ł?대굹 源⑥쭊 ?좊━媛 ?녿뒗 ?뺣룉???⑺넗 ?꾩슜湲? 遺?쒕윭???붾뵒, ?꿸만 ?뱀? 諛붾떣媛 紐⑤옒?ъ옣 ?깆뿉???쒖옉?섎뒗 寃껋씠 媛???덉쟾?⑸땲??</p>
+            </div>
+            <!-- Step 2 -->
+            <div style="position: relative; padding-top: 20px;">
+              <div style="position: absolute; top: -15px; left: 0; background: var(--secondary-color); color:#fff; width:35px; height:35px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:1.1rem; box-shadow:0 3px 6px rgba(0,0,0,0.16);">2</div>
+              <h4 style="font-family: var(--font-title); font-size: 1.15rem; color: var(--secondary-color); margin-bottom: 10px; font-weight:700; border-bottom:1px solid rgba(0,0,0,0.06); padding-bottom:5px;">諛붾Ⅸ 蹂댄뻾 ?먯꽭</h4>
+              <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.6;">?쒖꽑? ?꾨갑 3~4誘명꽣瑜??묒떆???μ븷臾쇱쓣 媛먯??섍퀬, 諛쒕뮘轅덉튂遺??吏硫댁뿉 ?우? ??諛쒕컮???꾩껜, 諛쒓????쒖꽌濡??섏씠 ?먮Ⅴ?꾨줉 嫄룹뒿?덈떎.</p>
+            </div>
+            <!-- Step 3 -->
+            <div style="position: relative; padding-top: 20px;">
+              <div style="position: absolute; top: -15px; left: 0; background: var(--accent-color); color:#fff; width:35px; height:35px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:1.1rem; box-shadow:0 3px 6px rgba(0,0,0,0.16);">3</div>
+              <h4 style="font-family: var(--font-title); font-size: 1.15rem; color: var(--text-main); margin-bottom: 10px; font-weight:700; border-bottom:1px solid rgba(0,0,0,0.06); padding-bottom:5px;">泥좎???留덈Т由??몄쿃</h4>
+              <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.6;">蹂댄뻾??留덉튇 吏곹썑?먮뒗 李щЪ?대굹 誘몄삩?섎줈 諛쒖쓣 源⑤걮???살뼱?닿퀬 瑗쇨세?섍쾶 嫄댁“???? 蹂댁뒿?쒕? 諛쒕씪 ?쇰? 嫄댁“ ?꾩긽???덈갑?⑸땲??</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. ?ш퀎???덉뼱???⑺넗蹂?吏???꾨줈洹몃옩 -->
+      <div style="margin-bottom: 4rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 40px; align-items: center; background: #fff; padding: 40px; border-radius: var(--border-radius-lg); box-shadow: var(--glass-shadow); border: 1px solid var(--glass-border);">
+        <div style="border-radius: var(--border-radius-md); overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.08);">
+          <img src="images/indoor_earthing.jpg" alt="?ㅻ궡 ?⑺넗蹂??댁떛 泥댄뿕" style="width: 100%; height: auto; display: block; object-fit: cover;">
+        </div>
+        <div>
+          <span style="font-size: 0.85rem; background: var(--primary-color); color: #fff; padding: 4px 10px; border-radius: 20px; font-weight:700; font-family: var(--font-body);">?ㅻ궡 ?댁떛 ?뚮씪??/span>
+          <h3 style="font-family: var(--font-title); font-size: 1.8rem; color: var(--primary-color); margin: 10px 0 15px 0; font-weight:700;">?ш퀎???덉뼱???⑺넗蹂?吏???꾨줈洹몃옩</h3>
+          <p style="font-size: 0.95rem; color: var(--text-main); line-height: 1.7; margin-bottom: 15px; text-align: justify; text-justify: inter-word;">
+            湲곗삩 蹂?붽? ?ы븳 怨꾩젅?대굹 ?몃? ?쒕룞???대젮???좎뿉???ㅻ궡?먯꽌 苡뚯쟻?섍쾶 ?먯뿰 移섏쑀瑜??댁뼱媛????덈뒗 <strong>?곕튆 ?ㅻ궡 ?⑺넗蹂??댁떛 吏??泥댄뿕</strong>?낅땲?? 
+            ?먯쟻?몄꽑???띾???泥쒖뿰 ?앺솴?좊? ?숆??숆??섍쾶 媛怨듯븯??嫄댁“???⑺넗蹂?踰좊뱶??諛쒖쓣 ?닿렇怨?諛잛쓬?쇰줈?? 諛쒕컮???꾩껜??寃쏀삁??怨좊（ 吏?뺥븯怨??꾩떊???덉븸 ?쒗솚怨?湲곗큹 泥댁삩???곕쑜?섍쾶 ?좎???以띾땲??
+          </p>
+          <ul style="list-style: none; padding: 0; font-size: 0.9rem; color: var(--text-muted); display: flex; flex-direction: column; gap: 8px;">
+            <li><i class="fa-solid fa-circle-check" style="color: var(--primary-color); margin-right: 8px;"></i> <strong>100% ?쒖닔 泥쒖뿰 ?⑺넗</strong>濡?媛怨듯빐 ??臾대룆???⑺넗蹂??ъ슜</li>
+            <li><i class="fa-solid fa-circle-check" style="color: var(--primary-color); margin-right: 8px;"></i> ?좎뵪? 怨듦컙 ?쒖빟 ?녿뒗 <strong>?덉쟾?섍퀬 泥?껐???ㅻ궡 ?댁떛</strong></li>
+            <li><i class="fa-solid fa-circle-check" style="color: var(--primary-color); margin-right: 8px;"></i> ?꾨Ц 紐낆긽 吏?꾩궗??媛?대뱶瑜??듯븳 <strong>?명씉 ?댁셿 ?붾쾿 ?숉뻾</strong></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- 3. 留⑤컻嫄룰린 ?꾩닔 ?덉쟾 ?섏튃 -->
+      <div style="background: rgba(231,76,60,0.04); border-left: 5px solid #e74c3c; border-radius: var(--border-radius-md); padding: 25px; display: flex; gap: 20px; align-items: flex-start; box-shadow: 0 4px 15px rgba(231,76,60,0.05); margin-bottom: 4rem;">
+        <div style="color: #e74c3c; font-size: 2rem;"><i class="fa-solid fa-triangle-exclamation"></i></div>
+        <div>
+          <h4 style="color: #e74c3c; font-weight: 700; font-size: 1.2rem; margin-bottom: 8px;">留⑤컻嫄룰린 ?꾩닔 ?덉쟾 ?섏튃</h4>
+          <p style="font-size: 0.95rem; color: var(--text-main); line-height: 1.7;">
+            諛쒕컮?μ뿉 ?ш퀬 ?묒? ?곸쿂媛 ?덉쓣 ?뚮뒗 ?멸퇏 媛먯뿼(?뚯긽???? ?곕젮媛 ?щ?濡?留⑤컻 嫄룰린瑜??쇨??섏떗?쒖삤. 
+            ?뱁엳 <strong>?밸눊 ?섏옄</strong>??寃쎌슦 ?좉꼍 ?먯긽 諛?誘몄꽭 ?곸쿂濡??명븳 ?밸눊蹂묒꽦 議깅?沅ㅼ뼇 ?꾪뿕???덉쑝誘濡?留⑤컻 ?몄텧??理쒖냼?뷀븯怨? ?댁떛 ?덉쫰??媛二??묒? ?좊컻???쒖슜?섏떆??寃껋쓣 媛뺣젰??沅뚯옣?⑸땲??
+          </p>
+        </div>
+      </div>
+
+      <!-- 4. ?⑺넗留⑤컻嫄룰린 二쇱슂肄붿뒪 諛??몄쓽?쒖꽕 ('留⑤컻嫄룰린 ?꾩닔 ?덉쟾?섏튃' ?꾨옒) -->
+      <div style="margin-top: 2rem; margin-bottom: 4rem;">
+        <div class="section-title-wrap">
+          <h2 class="section-title"><i class="fa-solid fa-mountain-sun" style="color: var(--secondary-color); margin-right: 10px;"></i>?⑺넗留⑤컻嫄룰린 二쇱슂肄붿뒪 諛??몄쓽?쒖꽕</h2>
+          <p class="section-subtitle">?몄갹???뀁냽 ?먮쭅 ?⑺넗湲멸낵 ?덉쟾?섍퀬 ?몃━???댁떛 異⑹쟾??遺??쒖꽕</p>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px;">
+          
+          <!-- Card 1 -->
+          <div class="herb-card" style="background: var(--card-bg); backdrop-filter: blur(10px); border: 1px solid var(--glass-border); border-radius: var(--border-radius-md); overflow: hidden; box-shadow: var(--glass-shadow); transition: var(--transition-smooth); display: flex; flex-direction: column;">
+            <div style="position: relative; width: 100%; height: 250px; overflow: hidden;">
+              <img src="images/barefoot_path1.jpg" alt="?뀁냽 ?⑺넗留⑤컻嫄룰린 湲? style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease;" onmouseover="this.style.transform='scale(1.06)'" onmouseout="this.style.transform='scale(1)'">
+              <span style="position: absolute; top: 12px; left: 12px; background: rgba(30,63,32,0.85); color: #fff; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; backdrop-filter: blur(4px); box-shadow: 0 2px 5px rgba(0,0,0,0.2);">
+                <i class="fa-solid fa-tree"></i> ?⑺넗留⑤컻嫄룰린 ?곗콉濡?              </span>
+            </div>
+            <div style="padding: 22px; display: flex; flex-direction: column; flex-grow: 1; justify-content: space-between;">
+              <div>
+                <h3 style="font-family: var(--font-title); font-size: 1.3rem; color: var(--primary-color); font-weight: 700; margin-bottom: 10px;">
+                  ?몄갹???뀁냽 ?⑺넗留⑤컻嫄룰린 湲?                </h3>
+                <p style="color: var(--text-muted); font-size: 0.92rem; line-height: 1.65; text-align: justify; text-justify: inter-word;">
+                  ?몄갹???뚮굹臾????ъ씠???ㅼ졇吏?怨좎슫 泥쒖뿰 ?⑺넗 ?곗콉濡쒖엯?덈떎. 諛쒕컮?μ쑝濡??먭뺨吏???곗뒪?섍퀬 遺?쒕윭???숈쓽 媛먯큺怨??④퍡 ?뀁쓽 ?쇳넠移섎뱶瑜??명씉?섎ŉ 嫄몄쓣 ???덉뒿?덈떎.
+                </p>
+              </div>
+              <div style="margin-top: 15px; padding-top: 12px; border-top: 1px dashed rgba(0,0,0,0.08); font-size: 0.85rem; color: var(--secondary-color); font-weight: 600; display: flex; align-items: center; gap: 6px;">
+                <i class="fa-solid fa-location-dot"></i> ?뀁냽 濡쒖뺄 ?⑺넗 ?곗콉濡?援ш컙
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 2 -->
+          <div class="herb-card" style="background: var(--card-bg); backdrop-filter: blur(10px); border: 1px solid var(--glass-border); border-radius: var(--border-radius-md); overflow: hidden; box-shadow: var(--glass-shadow); transition: var(--transition-smooth); display: flex; flex-direction: column;">
+            <div style="position: relative; width: 100%; height: 250px; overflow: hidden;">
+              <img src="images/barefoot_path2.jpg" alt="?먯뿰 移쒗솕???⑺넗 肄붿뒪" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease;" onmouseover="this.style.transform='scale(1.06)'" onmouseout="this.style.transform='scale(1)'">
+              <span style="position: absolute; top: 12px; left: 12px; background: rgba(140,98,57,0.85); color: #fff; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; backdrop-filter: blur(4px); box-shadow: 0 2px 5px rgba(0,0,0,0.2);">
+                <i class="fa-solid fa-route"></i> ?먮쭅 ?섎젅湲?肄붿뒪
+              </span>
+            </div>
+            <div style="padding: 22px; display: flex; flex-direction: column; flex-grow: 1; justify-content: space-between;">
+              <div>
+                <h3 style="font-family: var(--font-title); font-size: 1.3rem; color: var(--secondary-color); font-weight: 700; margin-bottom: 10px;">
+                  ?먯뿰 ?섍꼍???⑺넗 ?먮쭅 肄붿뒪
+                </h3>
+                <p style="color: var(--text-muted); font-size: 0.92rem; line-height: 1.65; text-align: justify; text-justify: inter-word;">
+                  ?먯뿰 吏?뺤쓣 ?대┛ 遺?쒕윭??怨≪꽑???⑺넗 ?섎젅湲몄엯?덈떎. 諛곗닔 ?쒖꽕怨??쇱옄 硫띿꽍???덉쟾?섍쾶 ?뺣퉬?섏뼱 ?덉뼱 ?꾧뎄???몄븞?섍쾶 嫄몄쑝硫?吏援ъ쓽 ?먮꼫吏瑜??꾪빐諛쏆뒿?덈떎.
+                </p>
+              </div>
+              <div style="margin-top: 15px; padding-top: 12px; border-top: 1px dashed rgba(0,0,0,0.08); font-size: 0.85rem; color: var(--secondary-color); font-weight: 600; display: flex; align-items: center; gap: 6px;">
+                <i class="fa-solid fa-location-dot"></i> 移쒗솚寃??숆만 ?섎젅 肄붿뒪
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 3 -->
+          <div class="herb-card" style="background: var(--card-bg); backdrop-filter: blur(10px); border: 1px solid var(--glass-border); border-radius: var(--border-radius-md); overflow: hidden; box-shadow: var(--glass-shadow); transition: var(--transition-smooth); display: flex; flex-direction: column;">
+            <div style="position: relative; width: 100%; height: 250px; overflow: hidden;">
+              <img src="images/outdoor_earthing.jpg" alt="?⑺넗 ?쇱쇅 ?댁떛?? style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease;" onmouseover="this.style.transform='scale(1.06)'" onmouseout="this.style.transform='scale(1)'">
+              <span style="position: absolute; top: 12px; left: 12px; background: rgba(212,175,55,0.9); color: #fff; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; backdrop-filter: blur(4px); box-shadow: 0 2px 5px rgba(0,0,0,0.2);">
+                <i class="fa-solid fa-spa"></i> ?⑺넗 ?쇱쇅 ?댁떛??              </span>
+            </div>
+            <div style="padding: 22px; display: flex; flex-direction: column; flex-grow: 1; justify-content: space-between;">
+              <div>
+                <h3 style="font-family: var(--font-title); font-size: 1.3rem; color: var(--primary-color); font-weight: 700; margin-bottom: 10px;">
+                  吏묒쨷 移섏쑀 ?⑺넗 ?쇱쇅 ?댁떛??                </h3>
+                <p style="color: var(--text-muted); font-size: 0.92rem; line-height: 1.65; text-align: justify; text-justify: inter-word;">
+                  ?섎ぉ??援ш컙 ?댁뿉 珥됱큺??泥쒖뿰 ?앺솴?좊? ?띾??섍쾶 梨꾩썙?볦? ?꾩슜 ?쇱쇅 ?댁떛?μ엯?덈떎. ?숈쓽 誘몃꽕?꾧낵 ?먯쑀?꾩옄瑜?吏곸젒 ?≪닔?섏뿬 ?댁떛 吏???④낵瑜?洹밸??뷀빀?덈떎.
+                </p>
+              </div>
+              <div style="margin-top: 15px; padding-top: 12px; border-top: 1px dashed rgba(0,0,0,0.08); font-size: 0.85rem; color: var(--secondary-color); font-weight: 600; display: flex; align-items: center; gap: 6px;">
+                <i class="fa-solid fa-location-dot"></i> ?⑺넗 泥댄뿕 ?꾩슜 ?쇱쇅 ?댁떛議?              </div>
+            </div>
+          </div>
+
+          <!-- Card 4 -->
+          <div class="herb-card" style="background: var(--card-bg); backdrop-filter: blur(10px); border: 1px solid var(--glass-border); border-radius: var(--border-radius-md); overflow: hidden; box-shadow: var(--glass-shadow); transition: var(--transition-smooth); display: flex; flex-direction: column;">
+            <div style="position: relative; width: 100%; height: 250px; overflow: hidden;">
+              <img src="images/barefoot_facilities.jpg" alt="議깆슃??쨌 ?몃컻??쨌 癒쇱??몄씠湲?Zone" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease;" onmouseover="this.style.transform='scale(1.06)'" onmouseout="this.style.transform='scale(1)'">
+              <span style="position: absolute; top: 12px; left: 12px; background: rgba(52,152,219,0.9); color: #fff; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; backdrop-filter: blur(4px); box-shadow: 0 2px 5px rgba(0,0,0,0.2);">
+                <i class="fa-solid fa-shower"></i> 泥?껐 & 遺??쒖꽕
+              </span>
+            </div>
+            <div style="padding: 22px; display: flex; flex-direction: column; flex-grow: 1; justify-content: space-between;">
+              <div>
+                <h3 style="font-family: var(--font-title); font-size: 1.3rem; color: var(--secondary-color); font-weight: 700; margin-bottom: 10px;">
+                  議깆슃??쨌 ?몃컻??쨌 癒쇱??몄씠湲?Zone
+                </h3>
+                <p style="color: var(--text-muted); font-size: 0.92rem; line-height: 1.65; text-align: justify; text-justify: inter-word;">
+                  ?낃뎄??留덈젴??醫낇빀 遺??쒖꽕 援ш컙?낅땲?? ?먯뼱嫄?癒쇱??몄씠 遺꾩궗湲? 肄붿뒪 ?덈궡?? 洹몃━怨?留⑤컻嫄룰린 ??泥?껐?섍쾶 ?살쓣 ???덈뒗 議깆슃?κ낵 ?몃컻 ?쒖꽕????媛뽰텛?댁졇 ?덉뒿?덈떎.
+                </p>
+              </div>
+              <div style="margin-top: 15px; padding-top: 12px; border-top: 1px dashed rgba(0,0,0,0.08); font-size: 0.85rem; color: var(--secondary-color); font-weight: 600; display: flex; align-items: center; gap: 6px;">
+                <i class="fa-solid fa-circle-info"></i> ?낃뎄 議깆슃??諛?遺??쒖꽕 援ш컙
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+`;
+
+    container.appendChild(view);
+  }
+};
+
+function renderBarefoot(container) {
+  Barefoot.render(container);
+}

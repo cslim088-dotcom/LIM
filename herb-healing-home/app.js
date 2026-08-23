@@ -1365,7 +1365,7 @@ const Barefoot = {
       </div>
 
       <!-- Indoor Earthing Section -->
-      <div style="margin-bottom: 4rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 40px; align-items: center; background: #fff; padding: 40px; border-radius: var(--border-radius-lg); box-shadow: var(--glass-shadow); border: 1px solid var(--glass-border);">
+      <div style="margin-bottom: 3rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 40px; align-items: center; background: #fff; padding: 40px; border-radius: var(--border-radius-lg); box-shadow: var(--glass-shadow); border: 1px solid var(--glass-border);">
         <div style="border-radius: var(--border-radius-md); overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.08);">
           <img src="images/indoor_earthing.jpg" alt="실내 황토볼 어싱 체험" style="width: 100%; height: auto; display: block; object-fit: cover;">
         </div>
@@ -1381,6 +1381,51 @@ const Barefoot = {
             <li><i class="fa-solid fa-circle-check" style="color: var(--primary-color); margin-right: 8px;"></i> 날씨와 공간 제약 없는 **안전하고 청결한 실내 어싱**</li>
             <li><i class="fa-solid fa-circle-check" style="color: var(--primary-color); margin-right: 8px;"></i> 연구원 명상 지도사의 가이드를 통한 **심신 이완 요법 병행**</li>
           </ul>
+        </div>
+      </div>
+
+      <!-- Outdoor Hwangto Path & Earthing Pit Section -->
+      <div style="margin-bottom: 4rem; background: #fff; padding: 40px; border-radius: var(--border-radius-lg); box-shadow: var(--glass-shadow); border: 1px solid var(--glass-border);">
+        <div style="text-align: center; margin-bottom: 30px;">
+          <span style="font-size: 0.85rem; background: var(--secondary-color); color: #fff; padding: 4px 10px; border-radius: 20px; font-weight:700; font-family: var(--font-body);">야외 어싱 코스</span>
+          <h3 style="font-family: var(--font-title); font-size: 1.8rem; color: var(--secondary-color); margin: 10px 0 10px 0; font-weight:700;"><i class="fa-solid fa-tree"></i> 황토 맨발걷기길 & 황토 어싱장</h3>
+          <p style="font-size: 0.95rem; color: var(--text-muted);">대지의 기운을 온몸으로 느끼는 울창한 숲속 황토 흙길과 프라이빗 황토 어싱 전용 공간</p>
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px;">
+          <!-- 황토 맨발걷기길 -->
+          <div style="background: var(--card-bg); border-radius: var(--border-radius-md); overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.06); border: 1px solid var(--glass-border); transition: var(--transition-smooth);">
+            <div style="height: 280px; overflow: hidden; position: relative;">
+              <img src="images/hwangto_barefoot_path.jpg" alt="황토 맨발걷기길" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease;">
+              <span style="position: absolute; top: 15px; left: 15px; background: rgba(30,63,32,0.85); color: #fff; padding: 5px 14px; border-radius: 20px; font-size: 0.82rem; font-weight: 700; backdrop-filter: blur(4px); box-shadow: 0 2px 5px rgba(0,0,0,0.2);">
+                <i class="fa-solid fa-person-walking"></i> 황토 맨발걷기길
+              </span>
+            </div>
+            <div style="padding: 25px;">
+              <h4 style="font-family: var(--font-title); font-size: 1.3rem; color: var(--primary-color); font-weight: 700; margin-bottom: 10px; display: flex; align-items: center; gap: 8px;">
+                <i class="fa-solid fa-shoe-prints" style="color: var(--secondary-color);"></i> 숲속 황토 맨발걷기길
+              </h4>
+              <p style="font-size: 0.92rem; color: var(--text-main); line-height: 1.7; text-align: justify; text-justify: inter-word;">
+                소나무가 병풍처럼 둘러싸인 정돈된 천연 황토길입니다. 발바닥에 와닿는 푹신하고 시원한 생황토의 감각을 느끼며 피톤치드가 가득한 숲속 산림욕과 맨발 걷기를 동시에 즐기실 수 있습니다.
+              </p>
+            </div>
+          </div>
+          <!-- 황토 어싱장 -->
+          <div style="background: var(--card-bg); border-radius: var(--border-radius-md); overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.06); border: 1px solid var(--glass-border); transition: var(--transition-smooth);">
+            <div style="height: 280px; overflow: hidden; position: relative;">
+              <img src="images/hwangto_earthing_pit.jpg" alt="황토 어싱장" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease;">
+              <span style="position: absolute; top: 15px; left: 15px; background: rgba(140,98,57,0.85); color: #fff; padding: 5px 14px; border-radius: 20px; font-size: 0.82rem; font-weight: 700; backdrop-filter: blur(4px); box-shadow: 0 2px 5px rgba(0,0,0,0.2);">
+                <i class="fa-solid fa-layer-group"></i> 황토 어싱장
+              </span>
+            </div>
+            <div style="padding: 25px;">
+              <h4 style="font-family: var(--font-title); font-size: 1.3rem; color: var(--secondary-color); font-weight: 700; margin-bottom: 10px; display: flex; align-items: center; gap: 8px;">
+                <i class="fa-solid fa-spa" style="color: var(--primary-color);"></i> 야외 전용 황토 어싱장
+              </h4>
+              <p style="font-size: 0.92rem; color: var(--text-main); line-height: 1.7; text-align: justify; text-justify: inter-word;">
+                벽돌 구조물로 아늑하게 마련된 황토 어싱 전용 체류 공간입니다. 적당한 수분을 머금은 촉촉한 황토 흙에 발을 딛고 머물며 자유전자 흡수를 통한 몸속 유해 산소 중화와 깊은 항염 치유 효과를 제공합니다.
+              </p>
+            </div>
+          </div>
         </div>
       </div>
 
