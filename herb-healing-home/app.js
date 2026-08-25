@@ -1161,10 +1161,10 @@ const Academy = {
       <!-- Section 1: 대상별 운영 -->
       <div class="section-title-wrap">
         <h2 class="section-title">교육 대상별 과정 운영</h2>
-        <p class="section-subtitle">배움의 깊이와 목적에 맞춰 선택할 수 있는 두 가지 맞춤형 교육 트랙</p>
+        <p class="section-subtitle">배움의 깊이와 목적에 맞춰 선택할 수 있는 맞춤형 교육 트랙</p>
       </div>
 
-      <div class="cards-grid" style="grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 30px; margin-bottom: 5rem;">
+      <div class="cards-grid" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin-bottom: 5rem;">
         <!-- 취미반 -->
         <div class="herb-card" style="background: var(--card-bg); backdrop-filter: blur(10px); border: 1px solid var(--glass-border); border-radius: var(--border-radius-md); padding: 35px; transition: var(--transition-smooth); box-shadow: var(--glass-shadow); display: flex; flex-direction: column; gap: 20px; position: relative; overflow: hidden; border-top: 5px solid var(--primary-light);">
           <div style="position: absolute; right: -20px; top: -20px; font-size: 8rem; color: rgba(30,63,32,0.03); font-weight: 900; pointer-events: none;">01</div>
@@ -1196,6 +1196,23 @@ const Academy = {
             <li style="display: flex; align-items: center; gap: 8px;"><i class="fa-solid fa-circle-check" style="color: var(--secondary-color);"></i> 초급 · 중급 · 고급의 체계적 연계 커리큘럼</li>
             <li style="display: flex; align-items: center; gap: 8px;"><i class="fa-solid fa-circle-check" style="color: var(--secondary-color);"></i> 민간 공인 자격증 <strong>‘약초꽃차관리사’</strong> 수여</li>
             <li style="display: flex; align-items: center; gap: 8px;"><i class="fa-solid fa-circle-check" style="color: var(--secondary-color);"></i> 수료 후 아카데미 강사 및 전문가 활동 연계</li>
+          </ul>
+        </div>
+
+        <!-- 원데이 클래스 -->
+        <div class="herb-card" style="background: var(--card-bg); backdrop-filter: blur(10px); border: 1px solid var(--glass-border); border-radius: var(--border-radius-md); padding: 35px; transition: var(--transition-smooth); box-shadow: var(--glass-shadow); display: flex; flex-direction: column; gap: 20px; position: relative; overflow: hidden; border-top: 5px solid #27ae60;">
+          <div style="position: absolute; right: -20px; top: -20px; font-size: 8rem; color: rgba(39,174,96,0.04); font-weight: 900; pointer-events: none;">03</div>
+          <div style="width: 60px; height: 60px; background: rgba(39,174,96,0.1); border-radius: 15px; display: flex; align-items: center; justify-content: center; color: #27ae60; font-size: 1.8rem;">
+            <i class="fa-solid fa-clock"></i>
+          </div>
+          <div>
+            <h3 style="font-family: var(--font-body); font-size: 1.5rem; color: #27ae60; font-weight: 700; margin-bottom: 8px;">원데이(one-day) 수업 <span style="font-size: 0.75rem; background: #27ae60; color: #fff; padding: 2px 8px; border-radius: 10px; vertical-align: middle; margin-left: 5px;">하루 완성</span></h3>
+            <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.6;">하루수업으로 건강이 내손에! 나와 가족에게 필요한 예방과 건강을 위해 하루수업을 듣고 한약탕, 환, 차 등을 직접 만들어 먹을 수 있는 맞춤형 일일 과정입니다.</p>
+          </div>
+          <ul style="list-style: none; padding: 0; display: flex; flex-direction: column; gap: 10px; font-size: 0.9rem; color: var(--text-main); margin-top: auto;">
+            <li style="display: flex; align-items: center; gap: 8px;"><i class="fa-solid fa-circle-check" style="color: #27ae60;"></i> 나와 가족을 위한 건강 맞춤 하루 클래스</li>
+            <li style="display: flex; align-items: center; gap: 8px;"><i class="fa-solid fa-circle-check" style="color: #27ae60;"></i> 한약탕, 환, 한방차 직접 조제 및 실습</li>
+            <li style="display: flex; align-items: center; gap: 8px;"><i class="fa-solid fa-circle-check" style="color: #27ae60;"></i> 특화 약재손질로 깨끗하게 방제된 한약 제조</li>
           </ul>
         </div>
       </div>
@@ -1277,6 +1294,26 @@ const Academy = {
               <p style="background: rgba(30,63,32,0.03); border-radius: 8px; padding: 12px 15px; font-size: 0.88rem; color: var(--text-main); border-left: 4px solid var(--primary-color);">
                 <i class="fa-solid fa-circle-info" style="color: var(--primary-color); margin-right: 6px;"></i> <strong>방제 가감 처방 교육:</strong> 기본 방제에 안주하지 않고, 증상에 따라 약재 종류나 분량을 직접 추가하거나 줄여서 나만의 특별한 건강 레시피를 만드는 실전 활용법이 병행됩니다.
               </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 4: 원데이(one-day) 수업 -->
+        <div style="display: grid; grid-template-columns: 100px 1fr; gap: 30px; background: var(--card-bg); border: 1px solid var(--glass-border); border-radius: var(--border-radius-lg); padding: 30px; box-shadow: var(--glass-shadow); align-items: center; transition: var(--transition-smooth);">
+          <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px;">
+            <span style="font-size: 1.8rem; font-weight: 800; color: #27ae60;">1Day</span>
+            <span style="background: rgba(39,174,96,0.1); color: #27ae60; font-size: 0.75rem; font-weight: 700; padding: 2px 10px; border-radius: 10px;">원데이 수업</span>
+          </div>
+          <div style="border-left: 2px dashed rgba(39,174,96,0.25); padding-left: 30px;">
+            <h4 style="font-size: 1.3rem; font-weight: 700; color: #27ae60; margin-bottom: 10px;">원데이(one-day) 수업 : 하루수업으로 건강이 내손에</h4>
+            <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; margin-bottom: 12px;">
+              하루수업으로 건강이 내손에<br>
+              나 또는 가족에게 필요한 예방과 건강을 위해 하루수업을 듣고 한약탕, 환, 차 등을 만들어 먹을 수 있도록 하는 작업. 우리 연구원의 특화된 약재손질을 통해 깨끗하게 방제된 한약을 만들어 먹을 수 있는 것이 특징.
+            </p>
+            <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 15px;">
+              <span style="background: rgba(39,174,96,0.06); border: 1px solid rgba(39,174,96,0.2); color: var(--text-main); font-size: 0.8rem; padding: 4px 12px; border-radius: 20px;"><i class="fa-solid fa-clock" style="color: #27ae60; margin-right: 5px;"></i> 하루 맞춤 수업</span>
+              <span style="background: rgba(39,174,96,0.06); border: 1px solid rgba(39,174,96,0.2); color: var(--text-main); font-size: 0.8rem; padding: 4px 12px; border-radius: 20px;"><i class="fa-solid fa-mortar-pestle" style="color: #27ae60; margin-right: 5px;"></i> 한약탕 · 환 · 차 조제 실습</span>
+              <span style="background: rgba(212,175,55,0.08); border: 1px solid rgba(212,175,55,0.3); color: var(--text-main); font-size: 0.8rem; padding: 4px 12px; border-radius: 20px; font-weight: 600;"><i class="fa-solid fa-star" style="color: var(--accent-color); margin-right: 5px;"></i> [연구원 특화] 깨끗하게 방제된 특화 약재</span>
             </div>
           </div>
         </div>
