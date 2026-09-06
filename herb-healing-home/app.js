@@ -1536,8 +1536,27 @@ const Meditation = {
         </div>
       </div>
 
+      <!-- 틱낫한 스님의 걷기 명상 -->
+      <div style="background: linear-gradient(135deg, rgba(30,63,32,0.05), rgba(140,98,57,0.08)); border-radius: var(--border-radius-lg); padding: 40px; border: 1px solid var(--glass-border); box-shadow: var(--glass-shadow); margin-top: 4.5rem; margin-bottom: 3.5rem; text-align: center;">
+        <span style="background: var(--primary-color); color: #fff; padding: 5px 16px; border-radius: 20px; font-size: 0.85rem; font-weight: 700; margin-bottom: 15px; display: inline-block; box-shadow: 0 2px 8px rgba(30,63,32,0.2);">
+          <i class="fa-solid fa-quote-left" style="margin-right: 6px;"></i> 걷기 명상의 가르침
+        </span>
+        <h2 style="font-family: var(--font-title); font-size: 2rem; color: var(--primary-color); margin-bottom: 22px; font-weight: 700;">틱낫한 스님의 걷기 명상</h2>
+        <div style="max-width: 760px; margin: 0 auto; background: rgba(255,255,255,0.95); backdrop-filter: blur(10px); padding: 32px 36px; border-radius: var(--border-radius-md); box-shadow: 0 8px 25px rgba(0,0,0,0.04); border: 1px solid rgba(30,63,32,0.12); font-family: var(--font-body); font-size: 1.05rem; line-height: 1.95; color: var(--text-main); text-align: center;">
+          <p style="margin-bottom: 12px; font-weight: 500;">
+            먼저 발을 올려 숨을 들이쉽니다. 그리고 발을 앞으로 내어 놓습니다.<br>
+            먼저 발뒤꿈치가 땅에 닿고, 그다음에 발가락이 닿습니다.<br>
+            숨을 내쉽니다. 발이 단단히 땅에 닿았음을 느껴봅니다.<br>
+            <strong style="display: block; margin-top: 10px; font-size: 1.2rem; color: var(--primary-color); font-weight: 700;">나는 이미 도착했습니다.</strong>
+          </p>
+          <p style="margin-top: 20px; font-size: 0.88rem; color: var(--text-muted); border-top: 1px dashed rgba(0,0,0,0.12); padding-top: 14px;">
+            &lt;출처:틱낫한, 걷기명상(How to walk), 한빛비즈(주)&gt;
+          </p>
+        </div>
+      </div>
+
       <!-- Section 3: 양반걷기명상 -->
-      <div class="section-title-wrap" style="margin-top: 5rem;">
+      <div class="section-title-wrap" style="margin-top: 4rem;">
         <h2 class="section-title">산빛 특화: 양반걷기명상</h2>
         <p class="section-subtitle">틱낫한 스님의 평온과 한국 전통 '양반걸음'의 여유가 융합된 본원 독자 개발 명상법</p>
       </div>
