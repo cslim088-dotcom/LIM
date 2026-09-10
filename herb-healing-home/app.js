@@ -1552,6 +1552,17 @@ const Meditation = {
           <p style="margin-top: 20px; font-size: 0.88rem; color: var(--text-muted); border-top: 1px dashed rgba(0,0,0,0.12); padding-top: 14px;">
             &lt;출처:틱낫한, 걷기명상(How to walk), 한빛비즈(주)&gt;
           </p>
+
+          <!-- 틱낫한 스님 걷기명상 도서 사진 -->
+          <div style="margin-top: 25px; display: flex; flex-direction: column; align-items: center;">
+            <div style="max-width: 440px; width: 100%; border-radius: 14px; overflow: hidden; box-shadow: 0 8px 24px rgba(0,0,0,0.08); border: 1px solid rgba(30,63,32,0.12); background: #fff; transition: transform 0.3s ease, box-shadow 0.3s ease;" onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 12px 28px rgba(0,0,0,0.12)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 8px 24px rgba(0,0,0,0.08)';">
+              <img src="images/thich_nhat_hanh_books.jpg" alt="틱낫한 스님의 걷기명상 도서 (한빛비즈)" style="width: 100%; height: auto; display: block; object-fit: cover;">
+              <div style="padding: 12px 16px; background: rgba(30,63,32,0.03); border-top: 1px solid rgba(30,63,32,0.08); font-size: 0.88rem; color: var(--text-muted); text-align: center; line-height: 1.5;">
+                <i class="fa-solid fa-book-open" style="color: var(--primary-color); margin-right: 6px;"></i>
+                <strong>틱낫한 스님의 명상 시리즈</strong> (앉기 명상 · 걷기 명상 · 쉬기 명상)
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
