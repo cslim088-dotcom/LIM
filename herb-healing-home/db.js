@@ -804,7 +804,6 @@ const initialHerbs = [
   },
   {
     id: 'herbs-80',
-<<<<<<< HEAD
     name: '석창포 (Grass-leaved Sweet Flag/석창포 뿌리)',
     scientificName: 'Acorus gramineus Soland.',
     category: '뿌리류',
