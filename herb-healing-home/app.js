@@ -77,10 +77,8 @@ function updateBrandText() {
   if (brandSubEl && state.settings.subTitle) {
     brandSubEl.innerText = state.settings.subTitle;
   }
-  // 푸터 이메일/전화번호 연동
-  const footerEmailEl = document.querySelector('.footer-email');
+  // 푸터 전화번호 연동
   const footerPhoneEl = document.querySelector('.footer-phone');
-    if (footerEmailEl) footerEmailEl.innerText = state.settings.contactEmail || 'tksqlc08@gmail.com';
   if (footerPhoneEl) footerPhoneEl.innerText = state.settings.contactPhone || '031-942-0545(산빛약초꽃차)';
 }
 
@@ -904,6 +902,7 @@ const Community = {
     }
 
     Db.savePosts(state.posts);
+    Db.syncRemotePosts();
     UI.closeModal('community-modal');
     router();
   },

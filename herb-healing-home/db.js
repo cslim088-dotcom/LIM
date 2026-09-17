@@ -1610,8 +1610,9 @@ const Db = {
     setLocalStorage(STORAGE_KEYS.SETTINGS, settings);
     getLocalStorage(STORAGE_KEYS.INQUIRIES, []);
 
-    // 원격 클라우드 게시글 동기화 실행
+    // 원격 클라우드 게시글 동기화 및 실시간 자동 폴링 실행
     Db.syncRemotePosts();
+    Db.startAutoSync();
   },
 
   // Herbs
@@ -1646,26 +1647,89 @@ const Db = {
     setLocalStorage(STORAGE_KEYS.USERS, users);
   },
 
+  // Smart Merge for Posts
+  mergePosts(localPosts, remotePosts) {
+    if (!Array.isArray(localPosts)) localPosts = [];
+    if (!Array.isArray(remotePosts)) remotePosts = [];
+
+    const map = new Map();
+
+    // 1) Remote posts 기본 매핑
+    remotePosts.forEach(rp => {
+      if (rp && rp.id) {
+        map.set(rp.id, Object.assign({}, rp));
+      }
+    });
+
+    // 2) Local posts 스마트 병합
+    localPosts.forEach(lp => {
+      if (!lp || !lp.id) return;
+      if (!map.has(lp.id)) {
+        map.set(lp.id, Object.assign({}, lp));
+      } else {
+        const existing = map.get(lp.id);
+
+        // 댓글 병합
+        const cMap = new Map();
+        (Array.isArray(existing.commentsList) ? existing.commentsList : []).forEach(c => {
+          if (c && c.id) cMap.set(c.id, c);
+        });
+        (Array.isArray(lp.commentsList) ? lp.commentsList : []).forEach(c => {
+          if (c && c.id) cMap.set(c.id, c);
+        });
+
+        const mergedComments = Array.from(cMap.values());
+
+        map.set(lp.id, Object.assign({}, existing, lp, {
+          commentsList: mergedComments,
+          views: Math.max(existing.views || 0, lp.views || 0),
+          likes: Math.max(existing.likes || 0, lp.likes || 0)
+        }));
+      }
+    });
+
+    const result = Array.from(map.values());
+    // 날짜 및 ID 기준 정렬
+    result.sort((a, b) => {
+      if (a.date !== b.date) {
+        return b.date.localeCompare(a.date);
+      }
+      return String(b.id).localeCompare(String(a.id));
+    });
+    return result;
+  },
+
   // Posts
   getPosts() {
     return getLocalStorage(STORAGE_KEYS.POSTS, initialPosts);
   },
-  savePosts(posts) {
+  savePosts(posts, skipCloudPush) {
+    if (!Array.isArray(posts)) posts = [];
     setLocalStorage(STORAGE_KEYS.POSTS, posts);
     if (window.state) {
       window.state.posts = posts;
     }
-    // 전역 클라우드 데이터베이스 업링크 동기화 (모든 사용자/브라우저에 공유)
-    try {
-      fetch('https://extendsclass.com/api/json-storage/bin/dedabdd', {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ posts: posts })
-      }).catch(function(err) {
-        console.warn('Cloud sync save warning:', err);
-      });
-    } catch (e) {
-      console.warn('Cloud sync save exception:', e);
+
+    // 1) 멀티 탭 / 멀티 창 즉시 알림 (BroadcastChannel)
+    if (window._postsBroadcastChannel) {
+      try {
+        window._postsBroadcastChannel.postMessage({ type: 'POSTS_UPDATED', posts: posts });
+      } catch (e) {}
+    }
+
+    if (!skipCloudPush) {
+      // 2) 전역 클라우드 데이터베이스 업링크 동기화
+      try {
+        fetch('https://extendsclass.com/api/json-storage/bin/dedabdd', {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ posts: posts })
+        }).catch(function(err) {
+          console.warn('Cloud sync save warning:', err);
+        });
+      } catch (e) {
+        console.warn('Cloud sync save exception:', e);
+      }
     }
   },
   syncRemotePosts(callback) {
@@ -1676,16 +1740,39 @@ const Db = {
           return res.json();
         })
         .then(function(data) {
-          if (data && Array.isArray(data.posts) && data.posts.length > 0) {
-            var currentStr = JSON.stringify(getLocalStorage(STORAGE_KEYS.POSTS, []));
-            var newStr = JSON.stringify(data.posts);
-            setLocalStorage(STORAGE_KEYS.POSTS, data.posts);
+          const remotePosts = (data && Array.isArray(data.posts)) ? data.posts : [];
+          const localPosts = getLocalStorage(STORAGE_KEYS.POSTS, initialPosts);
+
+          const merged = Db.mergePosts(localPosts, remotePosts);
+          const localStr = JSON.stringify(localPosts);
+          const mergedStr = JSON.stringify(merged);
+          const remoteStr = JSON.stringify(remotePosts);
+
+          // 1) 로컬과 병합 결과가 다르면 로컬/State 갱신 및 UI 콜백
+          if (localStr !== mergedStr) {
+            setLocalStorage(STORAGE_KEYS.POSTS, merged);
             if (window.state) {
-              window.state.posts = data.posts;
+              window.state.posts = merged;
             }
-            if (currentStr !== newStr && typeof callback === 'function') {
-              callback(data.posts);
+            if (window._postsBroadcastChannel) {
+              try {
+                window._postsBroadcastChannel.postMessage({ type: 'POSTS_UPDATED', posts: merged });
+              } catch(e) {}
             }
+            if (typeof callback === 'function') {
+              callback(merged);
+            }
+          }
+
+          // 2) 원격 서버와 병합 결과가 다르면 (내 로컬에 새로 쓴 글이 있는 경우) 원격에도 PUT 업데이트
+          if (mergedStr !== remoteStr && merged.length > 0) {
+            fetch('https://extendsclass.com/api/json-storage/bin/dedabdd', {
+              method: 'PUT',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ posts: merged })
+            }).catch(function(err) {
+              console.warn('Cloud push-back failed:', err);
+            });
           }
         })
         .catch(function(err) {
@@ -1694,6 +1781,16 @@ const Db = {
     } catch (e) {
       console.warn('Cloud sync exception:', e);
     }
+  },
+  startAutoSync() {
+    if (this._syncTimer) clearInterval(this._syncTimer);
+    this._syncTimer = setInterval(function() {
+      Db.syncRemotePosts(function() {
+        if (window.location.hash === '#community' && typeof window.router === 'function') {
+          window.router();
+        }
+      });
+    }, 4000);
   },
 
   // Settings
@@ -1713,6 +1810,36 @@ const Db = {
   }
 };
 
+// 7. 실시간 멀티 브라우저/탭 통신 채널 & Storage Event Listener 초기화
+if (typeof BroadcastChannel !== 'undefined') {
+  window._postsBroadcastChannel = new BroadcastChannel('herb_healing_posts_sync');
+  window._postsBroadcastChannel.onmessage = function(e) {
+    if (e.data && e.data.type === 'POSTS_UPDATED' && Array.isArray(e.data.posts)) {
+      if (window.state) {
+        window.state.posts = e.data.posts;
+      }
+      if (window.location.hash === '#community' && typeof window.router === 'function') {
+        window.router();
+      }
+    }
+  };
+}
+
+window.addEventListener('storage', function(e) {
+  if (e.key === STORAGE_KEYS.POSTS) {
+    try {
+      const parsed = JSON.parse(e.newValue);
+      if (Array.isArray(parsed) && window.state) {
+        window.state.posts = parsed;
+        if (window.location.hash === '#community' && typeof window.router === 'function') {
+          window.router();
+        }
+      }
+    } catch(err) {}
+  }
+});
+
 // 모듈 스크립트로 동작할 때와 일반 스크립트로 동작할 때 모두 대응할 수 있도록 전역 객체 바인딩 처리
 window.Db = Db;
 Db.init();
+
