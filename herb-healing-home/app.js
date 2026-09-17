@@ -35,13 +35,15 @@ function initApp() {
 
   // 라우터 연결
   window.addEventListener('hashchange', router);
-  window.addEventListener('load', router);
 
   // 글로벌 이벤트 리스너 등록
   Auth.renderAuthUI();
 
   // 맨 위로 이동 버튼 이벤트 등록
   initScrollToTop();
+
+  // 최초 페이지 접속 시 렌더링 즉시 실행
+  router();
 }
 
 // 맨 위로 이동(Scroll to Top) 기능 초기화
@@ -2691,6 +2693,8 @@ function renderLocation(container) {
 }
 
 // 전역 객체 바인딩 (HTML에서 onclick 등으로 호출하기 위함)
+window.state = state;
+window.router = router;
 window.Auth = Auth;
 window.UI = UI;
 window.Encyclopedia = Encyclopedia;
@@ -2703,5 +2707,9 @@ window.Meditation = Meditation;
 window.Directions = Directions;
 
 
-// 앱 구동 시작
-document.addEventListener('DOMContentLoaded', initApp);
+// 앱 구동 시작 (DOM 상태를 확인하여 즉시 또는 이벤트로 안전하게 구동)
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initApp);
+} else {
+  initApp();
+}
