@@ -2221,7 +2221,7 @@ const Admin = {
     container.innerHTML = `
       <h3 class="admin-sec-title">약선차 구매대행 신청 및 접수 조회</h3>
       <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom: 20px;">
-        회원들이 가상으로 신청한 약선 힐링차의 구매 대행 현황입니다. 쿠팡 연결 상태나 배송지 정보를 기반으로 전화 상담 후 대행을 조율할 수 있습니다.
+        회원들이 가상으로 신청한 약선 힐링차의 구매 대행 현황입니다. 네이버 스마트 스토어 연결 상태나 배송지 정보를 기반으로 전화 상담 후 대행을 조율할 수 있습니다.
       </p>
 
       <div class="admin-table-wrap">
