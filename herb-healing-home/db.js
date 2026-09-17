@@ -8,6 +8,8 @@ const STORAGE_KEYS = {
   POSTS: 'herb_healing_posts',
   SETTINGS: 'herb_healing_settings',
   INQUIRIES: 'herb_healing_inquiries',
+  DELETED_POSTS: 'herb_healing_deleted_posts',
+  DELETED_COMMENTS: 'herb_healing_deleted_comments',
 };
 
 // 1. 초기 약초 데이터 (농사로 참고)
@@ -1645,6 +1647,30 @@ const Db = {
   },
   saveUsers(users) {
     setLocalStorage(STORAGE_KEYS.USERS, users);
+  // Deleted tracking
+  getDeletedPostIds() {
+    return getLocalStorage(STORAGE_KEYS.DELETED_POSTS, []);
+  },
+  addDeletedPostId(id) {
+    if (!id) return;
+    const list = this.getDeletedPostIds();
+    const strId = String(id);
+    if (!list.includes(strId)) {
+      list.push(strId);
+      setLocalStorage(STORAGE_KEYS.DELETED_POSTS, list);
+    }
+  },
+  getDeletedCommentIds() {
+    return getLocalStorage(STORAGE_KEYS.DELETED_COMMENTS, []);
+  },
+  addDeletedCommentId(id) {
+    if (!id) return;
+    const list = this.getDeletedCommentIds();
+    const strId = String(id);
+    if (!list.includes(strId)) {
+      list.push(strId);
+      setLocalStorage(STORAGE_KEYS.DELETED_COMMENTS, list);
+    }
   },
 
   // Smart Merge for Posts
@@ -1652,36 +1678,59 @@ const Db = {
     if (!Array.isArray(localPosts)) localPosts = [];
     if (!Array.isArray(remotePosts)) remotePosts = [];
 
+    const deletedPosts = this.getDeletedPostIds();
+    const deletedComments = this.getDeletedCommentIds();
+
     const map = new Map();
 
-    // 1) Remote posts 기본 매핑
+    // 1) Remote posts 기본 매핑 (삭제된 글 제외)
     remotePosts.forEach(rp => {
-      if (rp && rp.id) {
-        map.set(rp.id, Object.assign({}, rp));
+      if (rp && rp.id && !deletedPosts.includes(String(rp.id))) {
+        map.set(String(rp.id), Object.assign({}, rp));
       }
     });
 
-    // 2) Local posts 스마트 병합
+    // 2) Local posts 스마트 병합 (삭제된 글 제외)
     localPosts.forEach(lp => {
       if (!lp || !lp.id) return;
-      if (!map.has(lp.id)) {
-        map.set(lp.id, Object.assign({}, lp));
+      const lpIdStr = String(lp.id);
+      if (deletedPosts.includes(lpIdStr)) return;
+
+      const filterComments = (cList) => {
+        if (!Array.isArray(cList)) return [];
+        return cList.filter((c, idx) => {
+          if (!c) return false;
+          const cId = c.id ? String(c.id) : ('comment-idx-' + idx);
+          return !deletedComments.includes(cId);
+        });
+      };
+
+      const cleanLpComments = filterComments(lp.commentsList);
+      lp.commentsList = cleanLpComments;
+      lp.comments = cleanLpComments.length;
+
+      if (!map.has(lpIdStr)) {
+        map.set(lpIdStr, Object.assign({}, lp));
       } else {
-        const existing = map.get(lp.id);
+        const existing = map.get(lpIdStr);
+        const cleanExistingComments = filterComments(existing.commentsList);
 
         // 댓글 병합
         const cMap = new Map();
-        (Array.isArray(existing.commentsList) ? existing.commentsList : []).forEach(c => {
-          if (c && c.id) cMap.set(c.id, c);
+        cleanExistingComments.forEach((c, idx) => {
+          const cId = c.id ? String(c.id) : ('comment-idx-' + idx);
+          cMap.set(cId, c);
         });
-        (Array.isArray(lp.commentsList) ? lp.commentsList : []).forEach(c => {
-          if (c && c.id) cMap.set(c.id, c);
+        cleanLpComments.forEach((c, idx) => {
+          const cId = c.id ? String(c.id) : ('comment-idx-' + idx);
+          cMap.set(cId, c);
         });
 
         const mergedComments = Array.from(cMap.values());
 
-        map.set(lp.id, Object.assign({}, existing, lp, {
+        map.set(lpIdStr, Object.assign({}, existing, lp, {
           commentsList: mergedComments,
+          comments: mergedComments.length,
           views: Math.max(existing.views || 0, lp.views || 0),
           likes: Math.max(existing.likes || 0, lp.likes || 0)
         }));
@@ -1692,7 +1741,7 @@ const Db = {
     // 날짜 및 ID 기준 정렬
     result.sort((a, b) => {
       if (a.date !== b.date) {
-        return b.date.localeCompare(a.date);
+        return (b.date || '').localeCompare(a.date || '');
       }
       return String(b.id).localeCompare(String(a.id));
     });
@@ -1701,19 +1750,35 @@ const Db = {
 
   // Posts
   getPosts() {
-    return getLocalStorage(STORAGE_KEYS.POSTS, initialPosts);
+    const posts = getLocalStorage(STORAGE_KEYS.POSTS, initialPosts);
+    const deletedPosts = this.getDeletedPostIds();
+    const deletedComments = this.getDeletedCommentIds();
+
+    return posts.filter(p => p && p.id && !deletedPosts.includes(String(p.id))).map(p => {
+      if (Array.isArray(p.commentsList)) {
+        p.commentsList = p.commentsList.filter((c, idx) => {
+          const cId = c && c.id ? String(c.id) : ('comment-idx-' + idx);
+          return !deletedComments.includes(cId);
+        });
+        p.comments = p.commentsList.length;
+      }
+      return p;
+    });
   },
   savePosts(posts, skipCloudPush) {
     if (!Array.isArray(posts)) posts = [];
-    setLocalStorage(STORAGE_KEYS.POSTS, posts);
+    const deletedPosts = this.getDeletedPostIds();
+    const filtered = posts.filter(p => p && p.id && !deletedPosts.includes(String(p.id)));
+
+    setLocalStorage(STORAGE_KEYS.POSTS, filtered);
     if (window.state) {
-      window.state.posts = posts;
+      window.state.posts = filtered;
     }
 
     // 1) 멀티 탭 / 멀티 창 즉시 알림 (BroadcastChannel)
     if (window._postsBroadcastChannel) {
       try {
-        window._postsBroadcastChannel.postMessage({ type: 'POSTS_UPDATED', posts: posts });
+        window._postsBroadcastChannel.postMessage({ type: 'POSTS_UPDATED', posts: filtered });
       } catch (e) {}
     }
 
@@ -1723,7 +1788,7 @@ const Db = {
         fetch('https://extendsclass.com/api/json-storage/bin/dedabdd', {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ posts: posts })
+          body: JSON.stringify({ posts: filtered })
         }).catch(function(err) {
           console.warn('Cloud sync save warning:', err);
         });
@@ -1764,7 +1829,7 @@ const Db = {
             }
           }
 
-          // 2) 원격 서버와 병합 결과가 다르면 (내 로컬에 새로 쓴 글이 있는 경우) 원격에도 PUT 업데이트
+          // 2) 원격 서버와 병합 결과가 다르면 (내 로컬에 새로 쓴 글이나 삭제 내역이 있는 경우) 원격에도 PUT 업데이트
           if (mergedStr !== remoteStr && merged.length > 0) {
             fetch('https://extendsclass.com/api/json-storage/bin/dedabdd', {
               method: 'PUT',
@@ -1786,7 +1851,9 @@ const Db = {
     if (this._syncTimer) clearInterval(this._syncTimer);
     this._syncTimer = setInterval(function() {
       Db.syncRemotePosts(function() {
-        if (window.location.hash === '#community' && typeof window.router === 'function') {
+        const detailModal = document.getElementById('detail-modal');
+        const isDetailOpen = detailModal && detailModal.classList.contains('active');
+        if (window.location.hash === '#community' && !isDetailOpen && typeof window.router === 'function') {
           window.router();
         }
       });
@@ -1818,7 +1885,9 @@ if (typeof BroadcastChannel !== 'undefined') {
       if (window.state) {
         window.state.posts = e.data.posts;
       }
-      if (window.location.hash === '#community' && typeof window.router === 'function') {
+      const detailModal = document.getElementById('detail-modal');
+      const isDetailOpen = detailModal && detailModal.classList.contains('active');
+      if (window.location.hash === '#community' && !isDetailOpen && typeof window.router === 'function') {
         window.router();
       }
     }
@@ -1831,7 +1900,9 @@ window.addEventListener('storage', function(e) {
       const parsed = JSON.parse(e.newValue);
       if (Array.isArray(parsed) && window.state) {
         window.state.posts = parsed;
-        if (window.location.hash === '#community' && typeof window.router === 'function') {
+        const detailModal = document.getElementById('detail-modal');
+        const isDetailOpen = detailModal && detailModal.classList.contains('active');
+        if (window.location.hash === '#community' && !isDetailOpen && typeof window.router === 'function') {
           window.router();
         }
       }

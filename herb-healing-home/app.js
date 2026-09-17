@@ -89,8 +89,7 @@ function router() {
 
   // 1. 관리자 페이지 보안 가드 (Strict Security Guard)
   if (page === 'admin') {
-    const isRealAdmin = state.currentUser && 
-      (state.currentUser.role === 'admin' || (state.currentUser.email && state.currentUser.email.toLowerCase() === 'tksqlc08@gmail.com'));
+    const isRealAdmin = Auth.isAdminUser(state.currentUser);
 
     if (!isRealAdmin) {
       alert('🚫 접근 권한 거부: 관리자(산빛 대표) 전용 페이지입니다.\n일반 사용자는 관리자 패널에 접근할 수 없습니다.');
@@ -765,6 +764,7 @@ const Community = {
     });
 
     let tableRowsHtml = '';
+    const isAdmin = Auth.isAdminUser(state.currentUser);
     filteredPosts.forEach(post => {
       const commentCount = Array.isArray(post.commentsList) ? post.commentsList.length : (post.comments || 0);
       const viewCount = typeof post.views === 'number' ? post.views : 0;
@@ -783,6 +783,7 @@ const Community = {
             <span class="post-stat"><i class="fa-regular fa-eye"></i> ${viewCount}</span>
             <span class="post-stat"><i class="fa-regular fa-comment-dots"></i> ${commentCount}</span>
             <span class="post-stat" style="color: #e74c3c;"><i class="fa-regular fa-heart"></i> ${likeCount}</span>
+            ${isAdmin ? `<button class="btn-secondary" style="padding: 2px 8px; font-size: 0.75rem; color: #e74c3c; border-color: #e74c3c; margin-left: 8px;" onclick="event.stopPropagation(); Community.deletePost('${post.id}')"><i class="fa-solid fa-trash"></i> 삭제</button>` : ''}
           </div>
         </div>
       `;
@@ -875,9 +876,9 @@ const Community = {
     }
 
     if (id) {
-      const postIndex = state.posts.findIndex(p => p.id === id);
+      const postIndex = state.posts.findIndex(p => p.id === id || String(p.id) === String(id));
       if (postIndex > -1) {
-        if (state.posts[postIndex].authorEmail !== state.currentUser.email && state.currentUser.role !== 'admin') {
+        if (state.posts[postIndex].authorEmail !== state.currentUser.email && !Auth.isAdminUser(state.currentUser)) {
           alert('수정 권한이 없습니다.');
           return;
         }
@@ -896,6 +897,7 @@ const Community = {
         date: new Date().toISOString().split('T')[0],
         views: 1,
         likes: 0,
+        comments: 0,
         commentsList: []
       };
       state.posts.unshift(newPost);
@@ -908,7 +910,7 @@ const Community = {
   },
 
   viewPostDetail(id) {
-    const post = state.posts.find(p => p.id === id);
+    const post = state.posts.find(p => p.id === id || String(p.id) === String(id));
     if (!post) return;
 
     // 조회수 증가
@@ -920,7 +922,7 @@ const Community = {
   },
 
   toggleLike(id) {
-    const post = state.posts.find(p => p.id === id);
+    const post = state.posts.find(p => p.id === id || String(p.id) === String(id));
     if (!post) return;
 
     if (typeof post.likes !== 'number') post.likes = 0;
@@ -931,12 +933,12 @@ const Community = {
   },
 
   renderDetailModal(post) {
-    const canEdit = state.currentUser && (state.currentUser.email === post.authorEmail || state.currentUser.role === 'admin');
+    const canEdit = state.currentUser && (state.currentUser.email === post.authorEmail || Auth.isAdminUser(state.currentUser));
     const commentsList = Array.isArray(post.commentsList) ? post.commentsList : [];
 
     let commentsHtml = '';
     commentsList.forEach(cmt => {
-      const canDeleteCmt = state.currentUser && (state.currentUser.email === cmt.authorEmail || state.currentUser.role === 'admin');
+      const canDeleteCmt = state.currentUser && (state.currentUser.email === cmt.authorEmail || Auth.isAdminUser(state.currentUser));
       commentsHtml += `
         <div class="comment-item" style="padding: 12px 0; border-bottom: 1px dashed rgba(0,0,0,0.08);">
           <div style="display: flex; justify-content: space-between; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 4px;">
@@ -1020,7 +1022,7 @@ const Community = {
 
   addComment(postId) {
     if (!state.currentUser) {
-      alert('로그인이 필요합니다.');
+      alert('댓글을 작성하려면 로그인이 필요합니다.');
       UI.openModal('google-login-modal');
       return;
     }
@@ -1034,15 +1036,18 @@ const Community = {
       return;
     }
 
-    const post = state.posts.find(p => p.id === postId);
-    if (!post) return;
+    const post = state.posts.find(p => p.id === postId || String(p.id) === String(postId));
+    if (!post) {
+      alert('게시글 정보를 찾을 수 없습니다.');
+      return;
+    }
 
     if (!Array.isArray(post.commentsList)) {
       post.commentsList = [];
     }
 
     const newComment = {
-      id: 'comment-' + Date.now(),
+      id: 'comment-' + Date.now() + '-' + Math.floor(Math.random() * 1000),
       author: state.currentUser.name || '자연치유 회원',
       authorEmail: state.currentUser.email,
       content: content,
@@ -1050,7 +1055,11 @@ const Community = {
     };
 
     post.commentsList.push(newComment);
+    post.comments = post.commentsList.length;
+
     Db.savePosts(state.posts);
+
+    inputEl.value = '';
 
     this.renderDetailModal(post);
   },
@@ -1058,12 +1067,28 @@ const Community = {
   deleteComment(postId, commentId) {
     if (!confirm('이 댓글을 삭제하시겠습니까?')) return;
 
-    const post = state.posts.find(p => p.id === postId);
+    const post = state.posts.find(p => p.id === postId || String(p.id) === String(postId));
     if (!post || !Array.isArray(post.commentsList)) return;
 
-    const idx = post.commentsList.findIndex(c => c.id === commentId);
+    const idx = post.commentsList.findIndex(c => c && (c.id === commentId || String(c.id) === String(commentId)));
     if (idx > -1) {
+      const cmt = post.commentsList[idx];
+      const canDelete = state.currentUser && (
+        state.currentUser.email === cmt.authorEmail || 
+        Auth.isAdminUser(state.currentUser)
+      );
+
+      if (!canDelete) {
+        alert('댓글 삭제 권한이 없습니다.');
+        return;
+      }
+
+      const deletedId = cmt.id || commentId;
+      Db.addDeletedCommentId(deletedId);
+
       post.commentsList.splice(idx, 1);
+      post.comments = post.commentsList.length;
+
       Db.savePosts(state.posts);
       this.renderDetailModal(post);
     }
@@ -1071,7 +1096,7 @@ const Community = {
 
   editPost(id) {
     UI.closeModal('detail-modal');
-    const post = state.posts.find(p => p.id === id);
+    const post = state.posts.find(p => p.id === id || String(p.id) === String(id));
     if (!post) return;
 
     document.getElementById('post-id-input').value = post.id;
@@ -1086,8 +1111,20 @@ const Community = {
   deletePost(id) {
     if (!confirm('정말로 이 글을 삭제하시겠습니까?')) return;
 
-    const postIndex = state.posts.findIndex(p => p.id === id);
+    const postIndex = state.posts.findIndex(p => p.id === id || String(p.id) === String(id));
     if (postIndex > -1) {
+      const post = state.posts[postIndex];
+      const canDelete = state.currentUser && (
+        state.currentUser.email === post.authorEmail || 
+        Auth.isAdminUser(state.currentUser)
+      );
+
+      if (!canDelete) {
+        alert('게시글 삭제 권한이 없습니다.');
+        return;
+      }
+
+      Db.addDeletedPostId(post.id || id);
       state.posts.splice(postIndex, 1);
       Db.savePosts(state.posts);
       UI.closeModal('detail-modal');
@@ -1800,6 +1837,9 @@ const Admin = {
           <button class="admin-menu-btn ${state.activeAdminTab === 'media' ? 'active' : ''}" onclick="Admin.switchTab('media')">
             <i class="fa-solid fa-photo-film"></i> 그림 & 영상 관리
           </button>
+          <button class="admin-menu-btn ${state.activeAdminTab === 'posts' ? 'active' : ''}" onclick="Admin.switchTab('posts')">
+            <i class="fa-solid fa-comments"></i> 게시글 관리
+          </button>
           <button class="admin-menu-btn ${state.activeAdminTab === 'plans' ? 'active' : ''}" onclick="Admin.switchTab('plans')">
             <i class="fa-solid fa-credit-card"></i> 회원요금제 관리
           </button>
@@ -1826,7 +1866,6 @@ const Admin = {
     btns.forEach(btn => {
       btn.classList.remove('active');
     });
-    // 현재 누른 탭에 active 부여는 돔 갱신되면서 자연스레 됨.
     router();
   },
 
@@ -1846,6 +1885,9 @@ const Admin = {
       case 'media':
         this.renderMediaManagement(subContainer);
         break;
+      case 'posts':
+        this.renderPostsManagement(subContainer);
+        break;
       case 'plans':
         this.renderPlanManagement(subContainer);
         break;
@@ -1853,6 +1895,54 @@ const Admin = {
         this.renderOrdersManagement(subContainer);
         break;
     }
+  },
+
+  // 6) 커뮤니티 게시글 관리 탭
+  renderPostsManagement(container) {
+    let rowsHtml = '';
+    state.posts.forEach(post => {
+      const cmtCount = Array.isArray(post.commentsList) ? post.commentsList.length : (post.comments || 0);
+      rowsHtml += `
+        <tr>
+          <td><span class="post-badge">${post.category || '체험담'}</span></td>
+          <td><strong style="color:var(--primary-color); cursor:pointer;" onclick="Community.viewPostDetail('${post.id}')">${post.title}</strong></td>
+          <td>${post.author} (${post.authorEmail || '비공개'})</td>
+          <td>${post.date}</td>
+          <td><i class="fa-regular fa-comment-dots"></i> ${cmtCount}개</td>
+          <td><i class="fa-regular fa-eye"></i> ${post.views || 0}회</td>
+          <td>
+            <button class="btn-secondary" style="padding: 4px 8px; font-size: 0.75rem; color: #fff; background: #e74c3c; border:none; cursor:pointer;" onclick="Community.deletePost('${post.id}')">
+              게시글 삭제
+            </button>
+          </td>
+        </tr>
+      `;
+    });
+
+    container.innerHTML = `
+      <h3 class="admin-sec-title">커뮤니티 자연치유 체험 나눔방 게시글 관리</h3>
+      <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom: 20px;">
+        등록된 모든 커뮤니티 체험담 및 질문 게시글을 조회하고, 부적절한 게시글을 관리자 권한으로 삭제 처리할 수 있습니다.
+      </p>
+      <div class="admin-table-wrap">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>분류</th>
+              <th>제목</th>
+              <th>작성자</th>
+              <th>작성일</th>
+              <th>댓글</th>
+              <th>조회수</th>
+              <th>관리 조치</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${rowsHtml ? rowsHtml : '<tr><td colspan="7" style="text-align:center; padding:30px; color:var(--text-muted);">등록된 게시글이 없습니다.</td></tr>'}
+          </tbody>
+        </table>
+      </div>
+    `;
   },
 
   // 1) 회원관리 탭
@@ -2266,8 +2356,7 @@ const Admin = {
 };
 
 function renderAdmin(container) {
-  const isRealAdmin = state.currentUser && 
-    (state.currentUser.role === 'admin' || (state.currentUser.email && state.currentUser.email.toLowerCase() === 'tksqlc08@gmail.com'));
+  const isRealAdmin = Auth.isAdminUser(state.currentUser);
 
   if (!isRealAdmin) {
     container.innerHTML = `
@@ -2291,6 +2380,12 @@ const ADMIN_EMAILS = ['tksqlc08@gmail.com'];
 // 5. 구글 연동 로그인 및 인증 관리
 // ==========================================
 const Auth = {
+  isAdminUser(user) {
+    if (!user) return false;
+    const email = (user.email || '').toLowerCase();
+    return user.role === 'admin' || email === 'tksqlc08@gmail.com' || ADMIN_EMAILS.map(e => e.toLowerCase()).includes(email);
+  },
+
   renderAuthUI() {
     const authContainer = document.getElementById('auth-ui-container');
     const adminLink = document.getElementById('nav-admin-link');
@@ -2298,8 +2393,7 @@ const Auth = {
     if (!authContainer) return;
 
     // 관리자 여부 엄격 판별
-    const isAdmin = state.currentUser && 
-      (state.currentUser.role === 'admin' || (state.currentUser.email && state.currentUser.email.toLowerCase() === 'tksqlc08@gmail.com'));
+    const isAdmin = this.isAdminUser(state.currentUser);
 
     if (state.currentUser) {
       // 로그인 상태
