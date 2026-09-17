@@ -1609,6 +1609,9 @@ const Db = {
     }
     setLocalStorage(STORAGE_KEYS.SETTINGS, settings);
     getLocalStorage(STORAGE_KEYS.INQUIRIES, []);
+
+    // 원격 클라우드 게시글 동기화 실행
+    Db.syncRemotePosts();
   },
 
   // Herbs
@@ -1649,6 +1652,48 @@ const Db = {
   },
   savePosts(posts) {
     setLocalStorage(STORAGE_KEYS.POSTS, posts);
+    if (window.state) {
+      window.state.posts = posts;
+    }
+    // 전역 클라우드 데이터베이스 업링크 동기화 (모든 사용자/브라우저에 공유)
+    try {
+      fetch('https://extendsclass.com/api/json-storage/bin/dedabdd', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ posts: posts })
+      }).catch(function(err) {
+        console.warn('Cloud sync save warning:', err);
+      });
+    } catch (e) {
+      console.warn('Cloud sync save exception:', e);
+    }
+  },
+  syncRemotePosts(callback) {
+    try {
+      fetch('https://extendsclass.com/api/json-storage/bin/dedabdd')
+        .then(function(res) {
+          if (!res.ok) throw new Error('HTTP ' + res.status);
+          return res.json();
+        })
+        .then(function(data) {
+          if (data && Array.isArray(data.posts) && data.posts.length > 0) {
+            var currentStr = JSON.stringify(getLocalStorage(STORAGE_KEYS.POSTS, []));
+            var newStr = JSON.stringify(data.posts);
+            setLocalStorage(STORAGE_KEYS.POSTS, data.posts);
+            if (window.state) {
+              window.state.posts = data.posts;
+            }
+            if (currentStr !== newStr && typeof callback === 'function') {
+              callback(data.posts);
+            }
+          }
+        })
+        .catch(function(err) {
+          console.warn('Cloud sync fetch error:', err);
+        });
+    } catch (e) {
+      console.warn('Cloud sync exception:', e);
+    }
   },
 
   // Settings

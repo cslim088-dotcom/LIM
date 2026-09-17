@@ -743,6 +743,15 @@ const Community = {
   searchQuery: '',
 
   render(container) {
+    // 실시간 클라우드 동기화 (다른 브라우저/사용자 글 업데이트)
+    if (window.Db && typeof window.Db.syncRemotePosts === 'function') {
+      window.Db.syncRemotePosts(function() {
+        if (window.location.hash === '#community' && typeof window.router === 'function') {
+          window.router();
+        }
+      });
+    }
+
     const view = document.createElement('div');
     view.className = 'page-view';
 
