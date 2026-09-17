@@ -15,35 +15,45 @@ const state = {
 
 // 2. 초기화 함수
 function initApp() {
-  // DB에서 데이터 로드
-  state.herbs = Db.getHerbs();
-  state.teas = Db.getTeas();
-  state.media = Db.getMedia();
-  state.users = Db.getUsers();
-  state.posts = Db.getPosts();
-  state.settings = Db.getSettings();
-  state.inquiries = Db.getInquiries();
+  try {
+    // DB에서 데이터 로드
+    state.herbs = (typeof Db !== 'undefined' && typeof Db.getHerbs === 'function') ? Db.getHerbs() : [];
+    state.teas = (typeof Db !== 'undefined' && typeof Db.getTeas === 'function') ? Db.getTeas() : [];
+    state.media = (typeof Db !== 'undefined' && typeof Db.getMedia === 'function') ? Db.getMedia() : [];
+    state.users = (typeof Db !== 'undefined' && typeof Db.getUsers === 'function') ? Db.getUsers() : [];
+    state.posts = (typeof Db !== 'undefined' && typeof Db.getPosts === 'function') ? Db.getPosts() : [];
+    state.settings = (typeof Db !== 'undefined' && typeof Db.getSettings === 'function') ? Db.getSettings() : {};
+    state.inquiries = (typeof Db !== 'undefined' && typeof Db.getInquiries === 'function') ? Db.getInquiries() : [];
 
-  // 로그인 세션 확인
-  const session = localStorage.getItem('herb_healing_session');
-  if (session) {
-    state.currentUser = JSON.parse(session);
+    // 로그인 세션 확인
+    try {
+      const session = localStorage.getItem('herb_healing_session');
+      if (session) {
+        state.currentUser = JSON.parse(session);
+      }
+    } catch (e) {
+      console.warn('Session load failed:', e);
+    }
+
+    // 브랜드 텍스트 초기 적용
+    updateBrandText();
+
+    // 라우터 연결
+    window.addEventListener('hashchange', router);
+
+    // 글로벌 이벤트 리스너 등록
+    if (typeof Auth !== 'undefined' && typeof Auth.renderAuthUI === 'function') {
+      Auth.renderAuthUI();
+    }
+
+    // 맨 위로 이동 버튼 이벤트 등록
+    initScrollToTop();
+
+    // 최초 페이지 접속 시 렌더링 즉시 실행
+    router();
+  } catch (err) {
+    console.error('initApp error:', err);
   }
-
-  // 브랜드 텍스트 초기 적용
-  updateBrandText();
-
-  // 라우터 연결
-  window.addEventListener('hashchange', router);
-
-  // 글로벌 이벤트 리스너 등록
-  Auth.renderAuthUI();
-
-  // 맨 위로 이동 버튼 이벤트 등록
-  initScrollToTop();
-
-  // 최초 페이지 접속 시 렌더링 즉시 실행
-  router();
 }
 
 // 맨 위로 이동(Scroll to Top) 기능 초기화
@@ -124,45 +134,52 @@ function router() {
 
   // 콘텐츠 렌더링 컨테이너 비우기
   const appContainer = document.getElementById('app-view-container');
+  if (!appContainer) return;
   appContainer.innerHTML = '';
 
-  // 라우팅 스위치
-  switch (page) {
-    case 'home':
-      renderHome(appContainer);
-      break;
-    case 'encyclopedia':
-      renderEncyclopedia(appContainer);
-      break;
-    case 'teas':
-      renderTeas(appContainer);
-      break;
-    case 'academy':
-      renderAcademy(appContainer);
-      break;
-    case 'community':
-      renderCommunity(appContainer);
-      break;
-    case 'location':
-      renderLocation(appContainer);
-      break;
-    case 'media':
-      renderMedia(appContainer);
-      break;
-    case 'barefoot':
-      renderBarefoot(appContainer);
-      break;
-    case 'meditation':
-      renderMeditation(appContainer);
-      break;
-    case 'pricing':
-      renderPricing(appContainer);
-      break;
-    case 'admin':
-      renderAdmin(appContainer);
-      break;
-    default:
-      renderHome(appContainer);
+  try {
+    // 라우팅 스위치
+    switch (page) {
+      case 'home':
+        renderHome(appContainer);
+        break;
+      case 'encyclopedia':
+        renderEncyclopedia(appContainer);
+        break;
+      case 'teas':
+        renderTeas(appContainer);
+        break;
+      case 'academy':
+        renderAcademy(appContainer);
+        break;
+      case 'community':
+        renderCommunity(appContainer);
+        break;
+      case 'location':
+        renderLocation(appContainer);
+        break;
+      case 'media':
+        renderMedia(appContainer);
+        break;
+      case 'barefoot':
+        renderBarefoot(appContainer);
+        break;
+      case 'meditation':
+        renderMeditation(appContainer);
+        break;
+      case 'pricing':
+        renderPricing(appContainer);
+        break;
+      case 'admin':
+        renderAdmin(appContainer);
+        break;
+      default:
+        renderHome(appContainer);
+        break;
+    }
+  } catch (err) {
+    console.error('Router error:', err);
+    renderHome(appContainer);
   }
 }
 
@@ -172,16 +189,22 @@ function router() {
 
 // --- HOME PAGE ---
 function renderHome(container) {
+  if (!container) return;
   const homeView = document.createElement('div');
   homeView.className = 'page-view';
+
+  const settings = state.settings || {};
+  const mainTitle = settings.mainTitle || '자연의 숨결로 건강한 삶을 추구하는';
+  const subTitle = settings.subTitle || '산빛약초꽃차문화연구원';
+  const introContent = settings.introContent || '우리는 대자연의 치유력을 믿습니다. 예로부터 전해 내려온 신비로운 약초의 효능을 현대적인 관점에서 해석하고, 일상 속에서 가장 쉽고 아름답게 섭취할 수 있는 수제 약선 힐링차를 제안합니다. 몸과 마음의 균형을 되찾아주는 자연치유 라이프스타일을 만나보세요.';
 
   // 히어로 섹션
   const heroHtml = `
     <section class="hero-section">
       <div class="hero-text">
-        <h2>${state.settings.mainTitle}</h2>
-        <p class="subtitle">${state.settings.subTitle}</p>
-        <p class="intro">${state.settings.introContent}</p>
+        <h2>${mainTitle}</h2>
+        <p class="subtitle">${subTitle}</p>
+        <p class="intro">${introContent}</p>
         <div class="hero-buttons">
           <a href="#encyclopedia" class="btn-primary"><i class="fa-solid fa-leaf"></i> 약초 사전 알아보기</a>
           <a href="#teas" class="btn-secondary"><i class="fa-solid fa-mug-hot"></i> 힐링차 상품 보기</a>
@@ -199,15 +222,16 @@ function renderHome(container) {
 
   // 추천 약초 3개
   let herbCardsHtml = '';
-  state.herbs.slice(0, 3).forEach(herb => {
+  (state.herbs || []).slice(0, 3).forEach(herb => {
+    if (!herb) return;
     herbCardsHtml += `
       <div class="herb-card">
-        <img src="${herb.imageUrl}" alt="${herb.name}" class="herb-card-img">
+        <img src="${herb.imageUrl || 'images/ginseng.jpg'}" alt="${herb.name || ''}" class="herb-card-img">
         <div class="herb-card-content">
-          <span class="herb-card-cat">${herb.category}</span>
-          <h3 class="herb-card-title">${herb.name}</h3>
-          <span class="herb-card-sci">${herb.scientificName}</span>
-          <p class="herb-card-desc">${herb.efficacy}</p>
+          <span class="herb-card-cat">${herb.category || ''}</span>
+          <h3 class="herb-card-title">${herb.name || ''}</h3>
+          <span class="herb-card-sci">${herb.scientificName || ''}</span>
+          <p class="herb-card-desc">${herb.efficacy || ''}</p>
           <button class="btn-card-more" onclick="Encyclopedia.openDetail('${herb.id}')">효능 & 복용법 보기 <i class="fa-solid fa-arrow-right"></i></button>
         </div>
       </div>
@@ -216,19 +240,21 @@ function renderHome(container) {
 
   // 추천 약선차 2개
   let teaCardsHtml = '';
-  state.teas.slice(0, 2).forEach(tea => {
-    const isPremium = tea.price >= 30000;
+  (state.teas || []).slice(0, 2).forEach(tea => {
+    if (!tea) return;
+    const priceNum = typeof tea.price === 'number' ? tea.price : (parseInt(tea.price, 10) || 0);
+    const formattedPrice = priceNum.toLocaleString();
     teaCardsHtml += `
       <div class="tea-card">
         <div class="tea-card-img-wrap">
-          <img src="${tea.imageUrl}" alt="${tea.name}" class="tea-card-img">
-          <span class="tea-price-badge">${tea.price.toLocaleString()}원</span>
+          <img src="${tea.imageUrl || 'images/tea1.jpg'}" alt="${tea.name || ''}" class="tea-card-img">
+          <span class="tea-price-badge">${formattedPrice}원</span>
         </div>
         <div class="tea-card-content">
-          <h3 class="tea-card-title">${tea.name}</h3>
-          <p class="tea-card-desc">${tea.description}</p>
+          <h3 class="tea-card-title">${tea.name || ''}</h3>
+          <p class="tea-card-desc">${tea.description || ''}</p>
           <div class="tea-card-actions">
-            <a href="${tea.naverUrl}" target="_blank" class="btn-naver-buy"><i class="fa-solid fa-cart-shopping"></i> 네이버 구매</a>
+            <a href="${tea.naverUrl || '#'}" target="_blank" class="btn-naver-buy"><i class="fa-solid fa-cart-shopping"></i> 네이버 구매</a>
             ${tea.agentBuyAvailable 
               ? `<button class="btn-agent-buy" onclick="Teas.openAgentBuyModal('${tea.id}')"><i class="fa-solid fa-paper-plane"></i> 구매대행</button>` 
               : `<button class="btn-agent-buy btn-disabled" disabled><i class="fa-solid fa-ban"></i> 대행 불가</button>`

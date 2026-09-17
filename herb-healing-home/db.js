@@ -1475,20 +1475,28 @@ const initialPosts = [
 
 // LocalStorage Helper Functions
 const getLocalStorage = (key, initialValue) => {
-  const value = localStorage.getItem(key);
-  if (value === null) {
-    localStorage.setItem(key, JSON.stringify(initialValue));
-    return initialValue;
-  }
   try {
-    return JSON.parse(value);
+    const value = localStorage.getItem(key);
+    if (value === null || value === undefined) {
+      try { localStorage.setItem(key, JSON.stringify(initialValue)); } catch (e) {}
+      return initialValue;
+    }
+    const parsed = JSON.parse(value);
+    if (typeof initialValue === 'object' && initialValue !== null && !Array.isArray(initialValue)) {
+      return Object.assign({}, initialValue, parsed);
+    }
+    return parsed;
   } catch (e) {
     return initialValue;
   }
 };
 
 const setLocalStorage = (key, value) => {
-  localStorage.setItem(key, JSON.stringify(value));
+  try {
+    localStorage.setItem(key, JSON.stringify(value));
+  } catch (e) {
+    console.warn('LocalStorage set failed:', e);
+  }
 };
 
 // 데이터 허브 인스턴스
