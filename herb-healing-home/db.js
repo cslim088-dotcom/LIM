@@ -8,8 +8,6 @@ const STORAGE_KEYS = {
   POSTS: 'herb_healing_posts',
   SETTINGS: 'herb_healing_settings',
   INQUIRIES: 'herb_healing_inquiries',
-  DELETED_POSTS: 'herb_healing_deleted_posts',
-  DELETED_COMMENTS: 'herb_healing_deleted_comments',
 };
 
 // 1. 초기 약초 데이터 (농사로 참고)
@@ -806,6 +804,7 @@ const initialHerbs = [
   },
   {
     id: 'herbs-80',
+<<<<<<< HEAD
     name: '석창포 (Grass-leaved Sweet Flag/석창포 뿌리)',
     scientificName: 'Acorus gramineus Soland.',
     category: '뿌리류',
@@ -1473,21 +1472,30 @@ const initialPosts = [
   }
 ];
 
+
 // LocalStorage Helper Functions
 const getLocalStorage = (key, initialValue) => {
   try {
     const value = localStorage.getItem(key);
     if (value === null || value === undefined) {
       try { localStorage.setItem(key, JSON.stringify(initialValue)); } catch (e) {}
-      return initialValue;
+      return Array.isArray(initialValue) ? initialValue.map(item => ({ ...item })) : initialValue;
     }
     const parsed = JSON.parse(value);
-    if (typeof initialValue === 'object' && initialValue !== null && !Array.isArray(initialValue)) {
+    if (Array.isArray(initialValue) && initialValue.length > 0) {
+      if (!Array.isArray(parsed) || parsed.length === 0) {
+        const fresh = initialValue.map(item => ({ ...item }));
+        try { localStorage.setItem(key, JSON.stringify(fresh)); } catch (e) {}
+        return fresh;
+      }
+      return parsed;
+    }
+    if (typeof initialValue === 'object' && initialValue !== null) {
       return Object.assign({}, initialValue, parsed);
     }
     return parsed;
   } catch (e) {
-    return initialValue;
+    return Array.isArray(initialValue) ? initialValue.map(item => ({ ...item })) : initialValue;
   }
 };
 
@@ -1513,7 +1521,7 @@ const Db = {
         updated = true;
       } else {
         // 기존 데이터 중 Unsplash 이미지가 있는 경우 실물 이미지 경로로 마이그레이션
-        if (existing.imageUrl.includes('unsplash') && !ih.imageUrl.includes('unsplash')) {
+        if (existing.imageUrl && existing.imageUrl.includes('unsplash') && ih.imageUrl && !ih.imageUrl.includes('unsplash')) {
           existing.imageUrl = ih.imageUrl;
           updated = true;
         }
@@ -1580,6 +1588,7 @@ const Db = {
       }
     });
     setLocalStorage(STORAGE_KEYS.MEDIA, media);
+
     const users = getLocalStorage(STORAGE_KEYS.USERS, initialUsers);
     let usersUpdated = false;
     const adminUser = users.find(u => u.id === 'user-admin' || u.role === 'admin' || u.email === 'admin@nature.com' || u.email === 'tksqlc08@gmail.com');
@@ -1609,6 +1618,7 @@ const Db = {
     if (postsUpdated) {
       setLocalStorage(STORAGE_KEYS.POSTS, posts);
     }
+
     const settings = getLocalStorage(STORAGE_KEYS.SETTINGS, initialSettings);
     settings.contactEmail = 'tksqlc08@gmail.com';
     settings.contactPhone = '031-942-0545(산빛약초꽃차)';
@@ -1625,9 +1635,51 @@ const Db = {
     Db.startAutoSync();
   },
 
+  resetToDefault(showNotification = true) {
+    try {
+      const herbs = initialHerbs.map(item => ({ ...item }));
+      const teas = initialTeas.map(item => ({ ...item }));
+      const media = initialMedia.map(item => ({ ...item }));
+      const settings = Object.assign({}, initialSettings);
+      const users = initialUsers.map(item => ({ ...item }));
+
+      setLocalStorage(STORAGE_KEYS.HERBS, herbs);
+      setLocalStorage(STORAGE_KEYS.TEAS, teas);
+      setLocalStorage(STORAGE_KEYS.MEDIA, media);
+      setLocalStorage(STORAGE_KEYS.SETTINGS, settings);
+      setLocalStorage(STORAGE_KEYS.USERS, users);
+
+      if (window.state) {
+        window.state.herbs = herbs;
+        window.state.teas = teas;
+        window.state.media = media;
+        window.state.settings = settings;
+        window.state.users = users;
+      }
+
+      if (showNotification && typeof alert === 'function') {
+        alert('✅ 약초, 약선차, 미디어 원본 데이터가 성공적으로 초기화 및 복구되었습니다!');
+      }
+
+      if (window.Encyclopedia && typeof window.Encyclopedia.renderHerbCards === 'function') {
+        window.Encyclopedia.renderHerbCards();
+      }
+      if (typeof window.router === 'function') {
+        window.router();
+      }
+    } catch(e) {
+      console.error('resetToDefault error:', e);
+    }
+  },
+
   // Herbs
   getHerbs() {
-    return getLocalStorage(STORAGE_KEYS.HERBS, initialHerbs);
+    let herbs = getLocalStorage(STORAGE_KEYS.HERBS, initialHerbs);
+    if (!Array.isArray(herbs) || herbs.length === 0) {
+      herbs = initialHerbs.map(item => ({ ...item }));
+      setLocalStorage(STORAGE_KEYS.HERBS, herbs);
+    }
+    return herbs;
   },
   saveHerbs(herbs) {
     setLocalStorage(STORAGE_KEYS.HERBS, herbs);
@@ -1635,7 +1687,12 @@ const Db = {
 
   // Teas
   getTeas() {
-    return getLocalStorage(STORAGE_KEYS.TEAS, initialTeas);
+    let teas = getLocalStorage(STORAGE_KEYS.TEAS, initialTeas);
+    if (!Array.isArray(teas) || teas.length === 0) {
+      teas = initialTeas.map(item => ({ ...item }));
+      setLocalStorage(STORAGE_KEYS.TEAS, teas);
+    }
+    return teas;
   },
   saveTeas(teas) {
     setLocalStorage(STORAGE_KEYS.TEAS, teas);
@@ -1643,7 +1700,12 @@ const Db = {
 
   // Media
   getMedia() {
-    return getLocalStorage(STORAGE_KEYS.MEDIA, initialMedia);
+    let media = getLocalStorage(STORAGE_KEYS.MEDIA, initialMedia);
+    if (!Array.isArray(media) || media.length === 0) {
+      media = initialMedia.map(item => ({ ...item }));
+      setLocalStorage(STORAGE_KEYS.MEDIA, media);
+    }
+    return media;
   },
   saveMedia(media) {
     setLocalStorage(STORAGE_KEYS.MEDIA, media);
@@ -1655,6 +1717,8 @@ const Db = {
   },
   saveUsers(users) {
     setLocalStorage(STORAGE_KEYS.USERS, users);
+  },
+
   // Deleted tracking
   getDeletedPostIds() {
     return getLocalStorage(STORAGE_KEYS.DELETED_POSTS, []);
@@ -1691,7 +1755,7 @@ const Db = {
 
     const map = new Map();
 
-    // 1) Remote posts 기본 매핑 (삭제된 글 제외)
+    // 1) Remote posts (삭제된 글 제외)
     remotePosts.forEach(rp => {
       if (rp && rp.id && !deletedPosts.includes(String(rp.id))) {
         map.set(String(rp.id), Object.assign({}, rp));
@@ -1921,4 +1985,3 @@ window.addEventListener('storage', function(e) {
 // 모듈 스크립트로 동작할 때와 일반 스크립트로 동작할 때 모두 대응할 수 있도록 전역 객체 바인딩 처리
 window.Db = Db;
 Db.init();
-

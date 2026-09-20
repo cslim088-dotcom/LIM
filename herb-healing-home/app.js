@@ -16,7 +16,12 @@ const state = {
 // 2. 초기화 함수
 function initApp() {
   try {
-    // DB에서 데이터 로드
+    // 1. DB 초기화 실행 (로컬스토리지 자동 치유 및 복구)
+    if (typeof Db !== 'undefined' && typeof Db.init === 'function') {
+      Db.init();
+    }
+
+    // 2. DB에서 데이터 로드
     state.herbs = (typeof Db !== 'undefined' && typeof Db.getHerbs === 'function') ? Db.getHerbs() : [];
     state.teas = (typeof Db !== 'undefined' && typeof Db.getTeas === 'function') ? Db.getTeas() : [];
     state.media = (typeof Db !== 'undefined' && typeof Db.getMedia === 'function') ? Db.getMedia() : [];
@@ -24,6 +29,15 @@ function initApp() {
     state.posts = (typeof Db !== 'undefined' && typeof Db.getPosts === 'function') ? Db.getPosts() : [];
     state.settings = (typeof Db !== 'undefined' && typeof Db.getSettings === 'function') ? Db.getSettings() : {};
     state.inquiries = (typeof Db !== 'undefined' && typeof Db.getInquiries === 'function') ? Db.getInquiries() : [];
+
+    // 만약 데이터가 비어있는 경우 자가 치유(Self-Healing) 및 GitHub 원본 복구
+    if (!Array.isArray(state.herbs) || state.herbs.length === 0 ||
+        !Array.isArray(state.teas) || state.teas.length === 0 ||
+        !Array.isArray(state.media) || state.media.length === 0) {
+      if (typeof Db !== 'undefined' && typeof Db.resetToDefault === 'function') {
+        Db.resetToDefault(false);
+      }
+    }
 
     // 로그인 세션 확인
     try {
@@ -405,7 +419,18 @@ const Encyclopedia = {
     const herbsContainer = document.getElementById('herbs-list-container');
     if (!herbsContainer) return;
 
-    let filtered = state.herbs;
+    if (!Array.isArray(state.herbs) || state.herbs.length === 0) {
+      if (typeof Db !== 'undefined' && typeof Db.getHerbs === 'function') {
+        state.herbs = Db.getHerbs();
+      }
+    }
+    if (!Array.isArray(state.herbs) || state.herbs.length === 0) {
+      if (typeof Db !== 'undefined' && typeof Db.resetToDefault === 'function') {
+        Db.resetToDefault(false);
+      }
+    }
+
+    let filtered = Array.isArray(state.herbs) ? state.herbs : [];
 
     // 카테고리 필터링
     if (this.activeCategory !== '전체') {
@@ -426,7 +451,25 @@ const Encyclopedia = {
     }
 
     if (filtered.length === 0) {
-      herbsContainer.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 50px; color: var(--text-muted);">검색 조건에 맞는 약초 데이터가 없습니다.</div>`;
+      if (this.searchQuery || this.activeCategory !== '전체') {
+        herbsContainer.innerHTML = `
+          <div style="grid-column: 1/-1; text-align: center; padding: 50px; color: var(--text-muted);">
+            <p style="font-size: 1.1rem; margin-bottom: 15px;">검색 조건에 맞는 약초 데이터가 없습니다.</p>
+            <button onclick="Encyclopedia.search(''); Encyclopedia.setCategory('전체');" class="btn-secondary" style="padding: 8px 18px; font-weight:600; cursor:pointer;">
+              <i class="fa-solid fa-rotate-left"></i> 전체 카테고리 보기
+            </button>
+          </div>
+        `;
+      } else {
+        herbsContainer.innerHTML = `
+          <div style="grid-column: 1/-1; text-align: center; padding: 50px; color: var(--text-muted);">
+            <p style="font-size: 1.1rem; margin-bottom: 15px;">약초 데이터가 브라우저에 로드되지 않았습니다.</p>
+            <button onclick="Db.resetToDefault(true); if (typeof Encyclopedia !== 'undefined') Encyclopedia.renderHerbCards();" class="btn-primary" style="padding: 10px 22px; font-weight:700; cursor:pointer;">
+              <i class="fa-solid fa-cloud-arrow-down"></i> GitHub 원본 약초 데이터 즉시 불러오기
+            </button>
+          </div>
+        `;
+      }
       return;
     }
 
@@ -510,8 +553,14 @@ const Teas = {
     const view = document.createElement('div');
     view.className = 'page-view';
 
+    if (!Array.isArray(state.teas) || state.teas.length === 0) {
+      if (typeof Db !== 'undefined' && typeof Db.getTeas === 'function') {
+        state.teas = Db.getTeas();
+      }
+    }
+
     let cardsHtml = '';
-    state.teas.forEach(tea => {
+    (state.teas || []).forEach(tea => {
       cardsHtml += `
         <div class="tea-card">
           <div class="tea-card-img-wrap">
@@ -1171,8 +1220,19 @@ const Media = {
     const view = document.createElement('div');
     view.className = 'page-view';
 
+    if (!Array.isArray(state.media) || state.media.length === 0) {
+      if (typeof Db !== 'undefined' && typeof Db.getMedia === 'function') {
+        state.media = Db.getMedia();
+      }
+    }
+    if (!Array.isArray(state.media) || state.media.length === 0) {
+      if (typeof Db !== 'undefined' && typeof Db.resetToDefault === 'function') {
+        Db.resetToDefault(false);
+      }
+    }
+
     let cardsHtml = '';
-    state.media.forEach(item => {
+    (state.media || []).forEach(item => {
       let previewHtml = '';
       if (item.type === 'video') {
         previewHtml = `<iframe src="${item.url}" allowfullscreen></iframe>`;
@@ -1203,7 +1263,14 @@ const Media = {
       </div>
 
       <div class="cards-grid">
-        ${cardsHtml ? cardsHtml : '<div style="grid-column:1/-1; text-align:center; padding: 50px; color:var(--text-muted);">미디어 라이브러리가 비어 있습니다.</div>'}
+        ${cardsHtml ? cardsHtml : `
+          <div style="grid-column:1/-1; text-align:center; padding: 50px; color:var(--text-muted);">
+            <p style="font-size: 1.1rem; margin-bottom: 15px;">미디어 라이브러리가 비어 있습니다.</p>
+            <button onclick="Db.resetToDefault()" class="btn-primary" style="padding: 10px 22px; font-weight:700; cursor:pointer;">
+              <i class="fa-solid fa-cloud-arrow-down"></i> GitHub 원본 미디어 데이터 즉시 불러오기
+            </button>
+          </div>
+        `}
       </div>
     `;
 
@@ -2435,6 +2502,7 @@ const Auth = {
             <span class="user-plan-badge">${state.currentUser.plan || '일반회원'}</span>
           </div>
           <button class="btn-logout" onclick="Auth.logout()"><i class="fa-solid fa-right-from-bracket"></i> 로그아웃</button>
+          <button class="btn-secondary" onclick="Db.resetToDefault()" style="font-size: 0.78rem; padding: 6px 12px; margin-left: 6px; border-radius: 4px; display: inline-flex; align-items: center; gap: 4px; cursor: pointer;" title="GitHub 원본 데이터를 가져와 브라우저 데이터를 복원합니다"><i class="fa-solid fa-rotate"></i> 데이터 원본 복원</button>
         </div>
       `;
 
@@ -2449,15 +2517,18 @@ const Auth = {
     } else {
       // 미로그인 상태 (관리자 메뉴 절대 안 보임)
       authContainer.innerHTML = `
-        <button class="btn-google-login" onclick="Auth.openLoginModal()">
-          <svg viewBox="0 0 18 18" width="18" height="18" xmlns="http://www.w3.org/2000/svg">
-            <path d="M17.64 9.2c0-.63-.06-1.25-.16-1.84H9v3.47h4.84c-.21 1.12-.84 2.07-1.79 2.7v2.24h2.9c1.7-1.57 2.69-3.88 2.69-6.57z" fill="#4285F4"/>
-            <path d="M9 18c2.43 0 4.47-.8 5.96-2.2l-2.9-2.24c-.8.54-1.84.87-3.06.87-2.35 0-4.34-1.58-5.05-3.72H.96v2.3C2.44 15.97 5.48 18 9 18z" fill="#34A853"/>
-            <path d="M3.95 10.71c-.18-.54-.28-1.12-.28-1.71s.1-1.17.28-1.71V5H.96C.35 6.2.01 7.56.01 9s.34 2.8.95 4l2.99-2.29z" fill="#FBBC05"/>
-            <path d="M9 3.58c1.32 0 2.5.45 3.44 1.35L15 2.1C13.46.66 11.43 0 9 0 5.48 0 2.44 2.03.96 5.03l2.99 2.29c.71-2.14 2.7-3.74 5.05-3.74z" fill="#EA4335"/>
-          </svg>
-          Google 로그인
-        </button>
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <button class="btn-google-login" onclick="Auth.openLoginModal()">
+            <svg viewBox="0 0 18 18" width="18" height="18" xmlns="http://www.w3.org/2000/svg">
+              <path d="M17.64 9.2c0-.63-.06-1.25-.16-1.84H9v3.47h4.84c-.21 1.12-.84 2.07-1.79 2.7v2.24h2.9c1.7-1.57 2.69-3.88 2.69-6.57z" fill="#4285F4"/>
+              <path d="M9 18c2.43 0 4.47-.8 5.96-2.2l-2.9-2.24c-.8.54-1.84.87-3.06.87-2.35 0-4.34-1.58-5.05-3.72H.96v2.3C2.44 15.97 5.48 18 9 18z" fill="#34A853"/>
+              <path d="M3.95 10.71c-.18-.54-.28-1.12-.28-1.71s.1-1.17.28-1.71V5H.96C.35 6.2.01 7.56.01 9s.34 2.8.95 4l2.99-2.29z" fill="#FBBC05"/>
+              <path d="M9 3.58c1.32 0 2.5.45 3.44 1.35L15 2.1C13.46.66 11.43 0 9 0 5.48 0 2.44 2.03.96 5.03l2.99 2.29c.71-2.14 2.7-3.74 5.05-3.74z" fill="#EA4335"/>
+            </svg>
+            Google 로그인
+          </button>
+          <button class="btn-secondary" onclick="Db.resetToDefault()" style="font-size: 0.78rem; padding: 8px 12px; border-radius: 4px; display: inline-flex; align-items: center; gap: 4px; cursor: pointer; border: 1px solid #ccc; background: #fff; color: #333;" title="GitHub 원본 데이터를 가져와 브라우저 데이터를 복원합니다"><i class="fa-solid fa-rotate"></i> 데이터 원본 복원</button>
+        </div>
       `;
       if (adminLink) {
         adminLink.style.setProperty('display', 'none', 'important');
