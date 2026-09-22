@@ -1,0 +1,97 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e1b18" />
+      <stop offset="50%" stop-color="#2a241e" />
+      <stop offset="100%" stop-color="#141210" />
+    </linearGradient>
+    
+    <radialGradient id="plateGrad" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#3d3226" />
+      <stop offset="85%" stop-color="#261e16" />
+      <stop offset="100%" stop-color="#1a140e" />
+    </radialGradient>
+
+    <!-- 황금 절편 내부 노란 단면 그라디언트 -->
+    <radialGradient id="yellowSliceGrad" cx="45%" cy="45%" r="55%">
+      <stop offset="0%" stop-color="#FEF08A" />
+      <stop offset="40%" stop-color="#FACC15" />
+      <stop offset="80%" stop-color="#EAB308" />
+      <stop offset="100%" stop-color="#CA8A04" />
+    </radialGradient>
+
+    <!-- 황금 뿌리 외피 그라디언트 -->
+    <linearGradient id="barkGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#9A3412" />
+      <stop offset="50%" stop-color="#78350F" />
+      <stop offset="100%" stop-color="#451A03" />
+    </linearGradient>
+
+    <filter id="dropShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="12" stdDeviation="15" flood-color="#000000" flood-opacity="0.6"/>
+    </filter>
+  </defs>
+
+  <!-- 배경 -->
+  <rect width="800" height="600" fill="url(#bgGrad)" />
+  
+  <!-- 배경 한지/약재 트레이 효과 -->
+  <ellipse cx="400" cy="330" rx="330" ry="210" fill="url(#plateGrad)" filter="url(#dropShadow)" stroke="#524334" stroke-width="3"/>
+  <ellipse cx="400" cy="330" rx="310" ry="190" fill="none" stroke="#3d3226" stroke-width="1.5" stroke-dasharray="6,4"/>
+
+  <!-- 타이틀 / 본초학 정보 -->
+  <text x="400" y="55" text-anchor="middle" fill="#FACC15" font-family="'Noto Serif KR', serif" font-size="28" font-weight="700" letter-spacing="2">약재 사전 조사 : 황금 (黃芩)</text>
+  <text x="400" y="85" text-anchor="middle" fill="#A1A1AA" font-family="sans-serif" font-size="14" letter-spacing="1">Scutellariae Radix | Scutellaria baicalensis Georgi</text>
+  <line x1="250" y1="98" x2="550" y2="98" stroke="#CA8A04" stroke-width="1" opacity="0.4"/>
+
+  <!-- 약재 그래픽 그룹 (황금 뿌리 절편 & 덩어리) -->
+  <g filter="url(#dropShadow)">
+    
+    <!-- 메인 슬라이스 1 (중앙 굵은 절편) -->
+    <g transform="translate(360, 310) rotate(-12)">
+      <!-- 타원형 외피 -->
+      <ellipse cx="0" cy="0" rx="110" ry="80" fill="url(#barkGrad)" stroke="#451A03" stroke-width="6"/>
+      <!-- 노란 단면 -->
+      <ellipse cx="0" cy="0" rx="98" ry="70" fill="url(#yellowSliceGrad)" stroke="#B45309" stroke-width="2"/>
+      
+      <!-- 황금 특유의 방사상 무늬 & 속이 약간 헐거운 고금(枯琴) 중앙 테두리 -->
+      <ellipse cx="0" cy="0" rx="45" ry="30" fill="none" stroke="#CA8A04" stroke-width="2" stroke-dasharray="4,3" opacity="0.7"/>
+      <ellipse cx="-5" cy="-2" rx="20" ry="12" fill="#B45309" opacity="0.3"/>
+      
+      <!-- 방사상 나뭇결 라인 -->
+      <path d="M 0,0 L -80,-30 M 0,0 L 80,30 M 0,0 L -70,45 M 0,0 L 70,-45 M 0,0 L 0,-65 M 0,0 L 0,65 M 0,0 L -90,10 M 0,0 L 90,-10" stroke="#A16207" stroke-width="1.5" opacity="0.6" stroke-dasharray="3,2"/>
+    </g>
+
+    <!-- 메인 슬라이스 2 (좌측 비스듬한 절편) -->
+    <g transform="translate(230, 340) rotate(25)">
+      <ellipse cx="0" cy="0" rx="85" ry="60" fill="url(#barkGrad)" stroke="#351603" stroke-width="5"/>
+      <ellipse cx="0" cy="0" rx="76" ry="51" fill="url(#yellowSliceGrad)" stroke="#B45309" stroke-width="1.5"/>
+      <ellipse cx="0" cy="0" rx="30" ry="20" fill="none" stroke="#CA8A04" stroke-width="1.5" opacity="0.7"/>
+      <!-- 나뭇결 -->
+      <path d="M -60,0 L 60,0 M 0,-40 L 0,40 M -40,-30 L 40,30 M -40,30 L 40,-30" stroke="#A16207" stroke-width="1.2" opacity="0.5"/>
+    </g>
+
+    <!-- 메인 슬라이스 3 (우측 절편) -->
+    <g transform="translate(500, 330) rotate(-35)">
+      <ellipse cx="0" cy="0" rx="75" ry="55" fill="url(#barkGrad)" stroke="#451A03" stroke-width="4"/>
+      <ellipse cx="0" cy="0" rx="66" ry="47" fill="url(#yellowSliceGrad)" stroke="#B45309" stroke-width="1.5"/>
+      <ellipse cx="0" cy="0" rx="25" ry="16" fill="none" stroke="#CA8A04" stroke-width="1.5" opacity="0.7"/>
+      <path d="M -50,0 L 50,0 M 0,-35 L 0,35 M -35,-25 L 35,25" stroke="#A16207" stroke-width="1" opacity="0.5"/>
+    </g>
+
+    <!-- 통 뿌리 조각 (배경 배치) -->
+    <g transform="translate(390, 210) rotate(65)">
+      <rect x="-120" y="-22" width="240" height="44" rx="20" fill="url(#barkGrad)" stroke="#260e02" stroke-width="3"/>
+      <!-- 주름 세로선 -->
+      <path d="M -100,-15 C -50,-20 50,-10 100,-15 M -110,0 C -40,5 40,-5 110,0 M -90,15 C -30,10 30,20 90,15" stroke="#451A03" stroke-width="2" fill="none" opacity="0.8"/>
+      <!-- 자른 노란 단면 끝부분 -->
+      <ellipse cx="120" cy="0" rx="8" ry="21" fill="url(#yellowSliceGrad)"/>
+    </g>
+
+  </g>
+
+  <!-- 약재 전문가 설명 캡션 뱃지 -->
+  <rect x="150" y="480" width="500" height="75" rx="10" fill="#18181b" opacity="0.9" stroke="#EAB308" stroke-width="1.5"/>
+  <text x="400" y="508" text-anchor="middle" fill="#FACC15" font-family="'Noto Sans KR', sans-serif" font-size="15" font-weight="700">★ 본초학 전문가 감수 포인트</text>
+  <text x="400" y="533" text-anchor="middle" fill="#E4E4E7" font-family="'Noto Sans KR', sans-serif" font-size="13">황금의 뿌리는 외피가 갈색이며, 단면을 절단했을 때 맑고 선명한 황색(노란색)을 띱니다.</text>
+</svg>
