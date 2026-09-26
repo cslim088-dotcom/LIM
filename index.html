@@ -49,7 +49,6 @@
       <li data-target="barefoot"><a href="#barefoot"><i class="fa-solid fa-shoe-prints"></i> 맨발걷기</a></li>
       <li data-target="meditation"><a href="#meditation"><i class="fa-solid fa-spa"></i> 걷기명상</a></li>
       <li><a href="https://blog.naver.com/cslim088" target="_blank"><i class="fa-solid fa-blog"></i> 블로그</a></li>
-      <li data-target="community"><a href="#community"><i class="fa-solid fa-users"></i> 커뮤니티</a></li>
       <li data-target="location"><a href="#location"><i class="fa-solid fa-map-location-dot"></i> 오시는 길</a></li>
       <!-- Admin Panel Menu (Only visible to authenticated admin) -->
       <li data-target="admin" id="nav-admin-link" style="display: none !important;"><a href="#admin" style="color: #e74c3c; font-weight: 700;"><i class="fa-solid fa-toolbox"></i> 관리자 패널</a></li>
@@ -84,9 +83,14 @@
         <p><i class="fa-solid fa-file-invoice"></i> <span class="footer-license">통신판매신고번호 제2020-경기 파주-1451호</span></p>
       </div>
     </div>
-    <div class="footer-bottom">
-      <p>&copy; 2026 자연치유 약초 힐링 허브. All Rights Reserved. (산빛약초꽃차문화연구원)</p>
-      <p>Designed with Nature & Care</p>
+    <div class="footer-bottom" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
+      <div>
+        <p>&copy; 2026 자연치유 약초 힐링 허브. All Rights Reserved. (산빛약초꽃차문화연구원)</p>
+        <p>Designed with Nature & Care</p>
+      </div>
+      <button onclick="window.scrollTo({top: 0, behavior: 'smooth'});" class="btn-footer-top" style="background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.3); color: #ffffff; padding: 8px 18px; border-radius: 20px; cursor: pointer; font-size: 0.9rem; font-weight: 600; display: flex; align-items: center; gap: 6px; transition: all 0.3s ease;">
+        <i class="fa-solid fa-arrow-up"></i> 맨 위로
+      </button>
     </div>
   </footer>
 

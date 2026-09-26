@@ -116,21 +116,28 @@ function initScrollToTop() {
   const scrollTopBtn = document.getElementById('scroll-to-top');
   if (!scrollTopBtn) return;
 
-  // 일정 높이 이상 스크롤 시 버튼 표시
-  window.addEventListener('scroll', () => {
-    if (window.scrollY > 200) {
+  const handleScroll = () => {
+    const scrollY = window.scrollY || window.pageYOffset || document.documentElement.scrollTop || 0;
+    if (scrollY > 80) {
       scrollTopBtn.classList.add('show');
     } else {
       scrollTopBtn.classList.remove('show');
     }
-  });
+  };
 
-  // 클릭 시 최상단으로 부드럽게 이동
-  scrollTopBtn.addEventListener('click', () => {
+  window.addEventListener('scroll', handleScroll, { passive: true });
+  handleScroll();
+
+  scrollTopBtn.addEventListener('click', (e) => {
+    e.preventDefault();
     window.scrollTo({
       top: 0,
       behavior: 'smooth'
     });
+    try {
+      document.documentElement.scrollTo({ top: 0, behavior: 'smooth' });
+      document.body.scrollTo({ top: 0, behavior: 'smooth' });
+    } catch (err) {}
   });
 }
 
